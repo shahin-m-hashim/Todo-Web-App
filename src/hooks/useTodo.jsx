@@ -2,12 +2,13 @@ import { useContext } from "react";
 import TodoContext from "../contexts/TodoProvider";
 
 const useTodo = () => {
-  const { addTodo, deleteTodo, updateTodo, errorRef } = useContext(TodoContext);
+  const { addTodo, deleteTodo, updateTodo, todoErrorRef } =
+    useContext(TodoContext);
 
   const handleAddTodo = (nameInputRef, descInputRef) => {
     {
       if (!nameInputRef.current.value || !descInputRef.current.value) {
-        errorRef.current.classList.remove("hidden");
+        todoErrorRef.current.classList.remove("hidden");
         return;
       }
 
@@ -20,7 +21,7 @@ const useTodo = () => {
       nameInputRef.current.value = "";
       descInputRef.current.value = "";
 
-      errorRef.current.classList.add("hidden");
+      todoErrorRef.current.classList.add("hidden");
     }
   };
 
@@ -31,14 +32,14 @@ const useTodo = () => {
     const newDesc = newTodoDescRef.current.value;
 
     if (!newName || !newDesc) {
-      errorRef.current.classList.remove("hidden");
+      todoErrorRef.current.classList.remove("hidden");
       return false;
     }
 
     updateTodo(id, newName, newDesc);
     newTodoNameRef.current.value = "";
     newTodoDescRef.current.value = "";
-    errorRef.current.classList.add("hidden");
+    todoErrorRef.current.classList.add("hidden");
     return true;
   };
 

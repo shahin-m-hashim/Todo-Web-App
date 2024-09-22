@@ -4,7 +4,7 @@ import { createContext, useEffect, useRef, useState } from "react";
 const TodoContext = createContext();
 
 export const TodoProvider = ({ children }) => {
-  const errorRef = useRef();
+  const todoErrorRef = useRef();
   const [todos, setTodos] = useState([]);
 
   useEffect(() => console.log(todos), [todos]);
@@ -26,7 +26,7 @@ export const TodoProvider = ({ children }) => {
 
   return (
     <TodoContext.Provider
-      value={{ todos, errorRef, addTodo, deleteTodo, updateTodo }}
+      value={{ todos, todoErrorRef, addTodo, deleteTodo, updateTodo }}
     >
       {children}
     </TodoContext.Provider>

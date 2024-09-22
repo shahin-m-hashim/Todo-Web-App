@@ -1,16 +1,19 @@
 /* eslint-disable react/prop-types */
-export default function EditTodoForm({ newTodoNameRef, newTodoDescRef }) {
+export default function EditTodoForm({
+  newTodoNameInputRef,
+  newTodoDescInputRef,
+}) {
   return (
     <>
       <input
         type="text"
-        ref={newTodoNameRef}
+        ref={newTodoNameInputRef}
         className="flex-1 p-2 border-2 border-blue-500 rounded"
         placeholder="Enter new name"
       />
       <input
         type="text"
-        ref={newTodoDescRef}
+        ref={newTodoDescInputRef}
         className="flex-1 p-2 border-2 border-blue-500 rounded"
         placeholder="Enter new description"
       />

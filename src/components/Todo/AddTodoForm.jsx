@@ -1,18 +1,15 @@
+import { useRef } from "react";
 import useTodo from "../../hooks/useTodo";
-import { useContext, useRef } from "react";
-import TodoContext from "../../contexts/TodoProvider";
 
 export default function AddTodoForm() {
   const nameInputRef = useRef();
   const descInputRef = useRef();
-
   const { handleAddTodo } = useTodo();
-  const { errorRef } = useContext(TodoContext);
 
   return (
     <>
       <div className="flex items-center justify-center p-2">
-        <div className="flex items-center justify-center w-1/2 gap-2 p-2 bg-zinc-500">
+        <div className="flex items-center justify-center lg:w-1/2 gap-2 p-2 bg-zinc-500">
           <input
             type="text"
             ref={nameInputRef}
@@ -26,19 +23,13 @@ export default function AddTodoForm() {
             placeholder="Enter todo description"
           />
           <button
-            onClick={() => handleAddTodo(nameInputRef, descInputRef, errorRef)}
+            onClick={() => handleAddTodo(nameInputRef, descInputRef)}
             className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
           >
             Add Todo
           </button>
         </div>
       </div>
-      <p
-        ref={errorRef}
-        className="hidden text-2xl font-semibold text-center text-red-500"
-      >
-        Invalid Inputs
-      </p>
     </>
   );
 }

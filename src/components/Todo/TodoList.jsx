@@ -6,13 +6,16 @@ export default function TodoList() {
   const { todos } = useContext(TodoContext);
 
   return (
-    <div className="w-1/2 h-auto p-2 mx-auto my-4 bg-red-300 rounded-md">
-      <div className="flex">
-        <div className="flex-1 p-1 text-center bg-green-300 border-2 border-r-0 border-red-500">
+    <div className="w-1/2 p-2 mx-auto my-4 bg-red-300 rounded-md">
+      <div className="grid grid-cols-[1fr,1fr,100px]">
+        <div className="p-1 text-center bg-green-300 border-2 border-r-0 border-red-500">
           Name
         </div>
-        <div className="flex-1 p-1 text-center bg-green-300 border-2 border-red-500">
+        <div className="p-1 text-center bg-green-300 border-2 border-r-0 border-red-500">
           Description
+        </div>
+        <div className="p-1 text-center bg-green-300 border-2 border-red-500">
+          Actions
         </div>
       </div>
       {todos.length ? (
