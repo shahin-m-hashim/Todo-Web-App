@@ -1,0 +1,54 @@
+1. Minimize State Usage:
+   - Avoid using state wherever possible. Instead, use DOM references (`refs`) when managing the UI 
+   and direct interactions with elements.
+   
+2. Do Not Recreate Backend Data:
+   - It’s inefficient to fetch data from the backend and then store it in state unnecessarily. Treat the 
+     backend as the single source of truth.
+   - Storing backend data in state leads to increased complexity, potential bugs, and makes the app slower,
+     especially when the frontend and backend become out of sync.
+
+3. Handle Asynchronous Data with Libraries:
+   - For complex asynchronous data flows, use external libraries like TanStack Query (React Query) to 
+     handle fetching, caching, and synchronization.
+   
+4. Backend as the Source of Truth:
+   - Whenever you need to process data, utilize backend APIs. Use the fresh response from the backend to 
+     update the UI.
+   - Avoid implementing backend logic or functionality in the frontend. It’s a waste of time and mental 
+     effort, offering negligible performance gains.
+   - In modern applications, network latency is rarely a bottleneck, and syncing frontend state for minor 
+     speed improvements isn’t worth it.
+
+5. Error Handling in Asynchronous Data:
+   - If you try to sync frontend state before receiving backend responses, errors can occur. It’s better 
+     to wait for the backend response before updating the frontend. Otherwise, resetting the UI back to 
+     its previous state becomes tricky and error-prone.
+
+6. Keep the Frontend Simple:
+   - Over complicating frontend state management makes development harder and introduces more bugs. Focus 
+     on what frontend is really for: displaying data and providing a smooth user experience across devices.
+
+7. Use Context Appropriately:
+   - Use context when a piece of state is needed by multiple components. For isolated state needs, use props.
+   - Context acts like a global variable but should be used wisely to avoid unnecessary re-renders 
+     and complexity.
+
+8. Dynamic Components and State Management:
+   - In cases like a Todo app, separate the UI from state management. Don’t initialize state 
+     and references for actions (like updating or deleting) when the app first loads.
+   - Instead, create custom hooks for dynamic components that need their own isolated states 
+     and references. This ensures that each dynamic component (e.g., a Todo item) has its own fresh
+     and independent state management.
+
+9. Generalize Components:
+   - Avoid creating components that are too specific to a single use case. Instead, create 
+     generalized components that can be reused across the application.
+   - For example, a `Error` component can be used in multiple places with different text, 
+     styles, and click handlers. A loading spinner can be used in multiple places with different
+     sizes, colors, and animations.
+
+### Conclusion:
+The goal is to reduce unnecessary complexity in frontend development, especially when the backend 
+can handle much of the heavy lifting. By treating the backend as the source of truth and minimizing 
+state, you can build fast, maintainable, and bug-free applications.

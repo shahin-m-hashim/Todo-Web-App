@@ -17,6 +17,7 @@ const useTodo = () => {
         name: nameInputRef.current.value,
         description: descInputRef.current.value,
       };
+
       addTodo(newTodo);
       nameInputRef.current.value = "";
       descInputRef.current.value = "";
@@ -27,23 +28,22 @@ const useTodo = () => {
 
   const handleDeleteTodo = (id) => removeTodo(id);
 
-  const handleUpdateTodo = (id, newTodoNameRef, newTodoDescRef) => {
-    const newName = newTodoNameRef.current.value;
-    const newDesc = newTodoDescRef.current.value;
-
-    if (!newName || !newDesc) {
+  const handleUpdateTodo = (id, newTodoName, newTodoDesc) => {
+    if (!newTodoName || !newTodoDesc) {
       todoErrorRef.current.classList.remove("hidden");
       return false;
     }
-
-    updateTodo(id, newName, newDesc);
-    newTodoNameRef.current.value = "";
-    newTodoDescRef.current.value = "";
+    updateTodo(id, newTodoName, newTodoDesc);
     todoErrorRef.current.classList.add("hidden");
     return true;
   };
 
-  return { handleAddTodo, handleDeleteTodo, handleUpdateTodo };
+  return {
+    todoErrorRef,
+    handleAddTodo,
+    handleDeleteTodo,
+    handleUpdateTodo,
+  };
 };
 
 export default useTodo;
