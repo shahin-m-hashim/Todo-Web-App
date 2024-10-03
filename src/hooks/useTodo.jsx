@@ -2,7 +2,7 @@ import { useContext } from "react";
 import TodoContext from "../contexts/TodoProvider";
 
 const useTodo = () => {
-  const { addTodo, deleteTodo, updateTodo, todoErrorRef } =
+  const { addTodo, updateTodo, removeTodo, todoErrorRef } =
     useContext(TodoContext);
 
   const handleAddTodo = (nameInputRef, descInputRef) => {
@@ -25,7 +25,7 @@ const useTodo = () => {
     }
   };
 
-  const handleDeleteTodo = (id) => deleteTodo(id);
+  const handleDeleteTodo = (id) => removeTodo(id);
 
   const handleUpdateTodo = (id, newTodoNameRef, newTodoDescRef) => {
     const newName = newTodoNameRef.current.value;

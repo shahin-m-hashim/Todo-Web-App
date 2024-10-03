@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import TodoContext from "../../contexts/TodoProvider";
 
-export default function TodoError() {
+export default function TodoInputsError() {
   const { todoErrorRef } = useContext(TodoContext);
 
   return (

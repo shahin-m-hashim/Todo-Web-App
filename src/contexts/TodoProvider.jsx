@@ -1,32 +1,84 @@
 /* eslint-disable react/prop-types */
-import { createContext, useEffect, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+
+import { SpinnerContext } from "../components/LoadingSpinner";
+import { deleteTodo, getTodos, postTodo, putTodo } from "../backend/todo";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const TodoContext = createContext();
 
 export const TodoProvider = ({ children }) => {
-  const todoErrorRef = useRef();
-  const [todos, setTodos] = useState([]);
+  const todoErrorRef = useRef(null);
+  const setShowSpinner = useContext(SpinnerContext);
 
-  useEffect(() => console.log(todos), [todos]);
+  const [todos, setTodos] = useState({
+    data: null,
+    error: null,
+  });
 
-  const addTodo = (todo) => setTodos([...todos, todo]);
+  const handleError = (error) =>
+    setTodos((prev) => ({ ...prev, error: error.message }));
 
-  const deleteTodo = (id) => setTodos(todos.filter((todo) => todo.id !== id));
-
-  const updateTodo = (id, new_name, new_desc) => {
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, name: new_name, description: new_desc };
-        }
-        return todo;
-      })
-    );
+  const fetchTodos = async () => {
+    try {
+      const res = await getTodos();
+      setTodos((prev) => ({ ...prev, data: res.data, error: null }));
+    } catch (e) {
+      handleError(e);
+    } finally {
+      setShowSpinner("hidden");
+    }
   };
+
+  const addTodo = async (newTodo) => {
+    try {
+      setShowSpinner("flex");
+      const res = await postTodo(newTodo);
+      setTodos((prev) => ({ ...prev, data: res.data, error: null }));
+    } catch (e) {
+      handleError(e);
+    } finally {
+      setShowSpinner("hidden");
+    }
+  };
+
+  const updateTodo = async (id, new_name, new_desc) => {
+    try {
+      setShowSpinner("flex");
+      const res = await putTodo(id, new_name, new_desc);
+      setTodos((prev) => ({ ...prev, data: res.data, error: null }));
+    } catch (e) {
+      handleError(e);
+    } finally {
+      setShowSpinner("hidden");
+    }
+  };
+
+  const removeTodo = async (id) => {
+    try {
+      setShowSpinner("flex");
+      const res = await deleteTodo(id);
+      setTodos((prev) => ({ ...prev, data: res.data, error: null }));
+    } catch (e) {
+      handleError(e);
+    } finally {
+      setShowSpinner("hidden");
+    }
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   return (
     <TodoContext.Provider
-      value={{ todos, todoErrorRef, addTodo, deleteTodo, updateTodo }}
+      value={{
+        todos,
+        addTodo,
+        updateTodo,
+        removeTodo,
+        todoErrorRef,
+      }}
     >
       {children}
     </TodoContext.Provider>
