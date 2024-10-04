@@ -6,11 +6,9 @@ const SpinnerContext = createContext();
 export default function LoadingSpinner({ children }) {
   const [showSpinner, setShowSpinner] = useState(true);
 
-  const disable = false;
-
   return (
     <SpinnerContext.Provider value={setShowSpinner}>
-      {disable && (
+      {showSpinner && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center backdrop-blur-sm size-full">
           <svg
             aria-hidden="true"
