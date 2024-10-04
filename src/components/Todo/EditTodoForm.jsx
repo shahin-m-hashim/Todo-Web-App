@@ -2,45 +2,38 @@
 
 import { useState } from "react";
 import SaveTodoBtn from "./SaveTodoBtn";
-import useTodo from "../../hooks/useTodo";
 import CancelTodoEditBtn from "./CancelTodoEditBtn";
 
 export default function EditTodoForm({ id, name, description, setIsEditing }) {
-  const { todoErrorRef, handleUpdateTodo } = useTodo();
-
   const [inputs, setInputs] = useState({
-    name,
-    description,
+    newName: name,
+    newDesc: description,
   });
 
   return (
     <>
       <input
         type="text"
-        value={inputs.name}
+        value={inputs.newName}
         placeholder="Enter todo name"
         className="flex-1 p-2 border-2 border-blue-500 rounded"
-        onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
+        onChange={(e) => setInputs({ ...inputs, newName: e.target.value })}
       />
       <input
         type="text"
-        value={inputs.description}
+        value={inputs.newDesc}
         placeholder="Enter todo description"
         className="flex-1 p-2 border-2 border-blue-500 rounded"
-        onChange={(e) => setInputs({ ...inputs, description: e.target.value })}
+        onChange={(e) => setInputs({ ...inputs, newDesc: e.target.value })}
       />
       <SaveTodoBtn
         id={id}
-        newName={inputs.name}
+        newName={inputs.newName}
+        newDesc={inputs.newDesc}
         setIsEditing={setIsEditing}
-        newDesc={inputs.description}
-        handleUpdateTodo={handleUpdateTodo}
       />
 
-      <CancelTodoEditBtn
-        setIsEditing={setIsEditing}
-        todoErrorRef={todoErrorRef}
-      />
+      <CancelTodoEditBtn setIsEditing={setIsEditing} />
     </>
   );
 }

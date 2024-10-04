@@ -1,12 +1,9 @@
-import { useContext } from "react";
-import useTodo from "../../hooks/useTodo";
-import TodoContext from "../../contexts/TodoProvider";
+import { useRef } from "react";
+import AddTodoBtn from "./AddTodoBtn";
 
 export default function AddTodoForm() {
-  const { handleAddTodo } = useTodo();
-
-  const { nameInputRef, descInputRef, addBtnDisabled } =
-    useContext(TodoContext);
+  const nameInputRef = useRef();
+  const descInputRef = useRef();
 
   return (
     <>
@@ -24,13 +21,11 @@ export default function AddTodoForm() {
             placeholder="Enter todo description"
             className="flex-1 p-2 border-2 border-blue-500 rounded"
           />
-          <button
-            disabled={addBtnDisabled}
-            onClick={() => handleAddTodo(nameInputRef, descInputRef)}
-            className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
-          >
-            Add Todo
-          </button>
+          <AddTodoBtn
+            nameInputRef={nameInputRef}
+            descInputRef={descInputRef}
+            styles="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700"
+          />
         </div>
       </div>
     </>

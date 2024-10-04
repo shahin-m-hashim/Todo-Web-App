@@ -7,6 +7,10 @@
      backend as the single source of truth.
    - Storing backend data in state leads to increased complexity, potential bugs, and makes the app slower,
      especially when the frontend and backend become out of sync.
+   - So, if you are building a backend or request the backend dev to always return back the fresh processed 
+     data from the backend and update state using that. Also, always make use of prev state when updating 
+     the state else if someone does multiple operations even though with unique components, the update 
+     will be out of sync.
 
 3. Handle Asynchronous Data with Libraries:
    - For complex asynchronous data flows, use external libraries like TanStack Query (React Query) to 
@@ -47,6 +51,30 @@
    - For example, a `Error` component can be used in multiple places with different text, 
      styles, and click handlers. A loading spinner can be used in multiple places with different
      sizes, colors, and animations.
+
+10. Create As Many Components as Necessary:
+    - Break down your application into as many components as necessary, even for something as small 
+      as a button. If there's complex functionality involved, it's best to create a dedicated component. 
+    - This approach ensures better reusability, cleaner code, and makes debugging easier. In React, 
+      components are the core building blocks, and splitting up complex logic into individual components 
+      helps in maintaining clarity and organization.
+
+11. Managing Race Conditions:
+
+    - Even though we are making use of prev state using the functional setState, there are still
+      chances that the state might get out of sync when multiple operations are performed.
+    - Eg: if the todos, each unique with its own delete and update etc, are performed simultaneously
+      then the state may get out of sync, especially in the case of delete operation.
+    - To handle such cases, we can make use of the `useReducer` hook which is a more powerful alternative
+      to the `useState` hook. It allows you to define a reducer function that receives the current state 
+      and an action, and returns a new state. This way, you can handle complex state updates more 
+      efficiently.
+    - other option is to introduce a slight custom delay to the fn
+        eg: const removeTodo = (id) => {
+            setTodos((prev) => prev.filter((todo) => todo.id !== id));
+            setTimeout(() => {}, 100);  // Adjust the delay as needed
+          };
+    
 
 ### Conclusion:
 The goal is to reduce unnecessary complexity in frontend development, especially when the backend 

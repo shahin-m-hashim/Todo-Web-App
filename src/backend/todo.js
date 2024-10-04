@@ -23,7 +23,7 @@ const postTodo = (todo) => {
     localStorage.setItem("todos", JSON.stringify(todos));
     setTimeout(() => {
       resolve({
-        data: todos,
+        data: true,
         status: 200,
       });
     }, 500);
@@ -42,7 +42,7 @@ const putTodo = (id, new_name, new_desc) => {
     localStorage.setItem("todos", JSON.stringify(todos));
     setTimeout(() => {
       resolve({
-        data: todos,
+        data: true,
         status: 200,
       });
     }, 500);
@@ -57,7 +57,7 @@ const deleteTodo = (id) => {
     localStorage.setItem("todos", JSON.stringify(todos));
     setTimeout(() => {
       resolve({
-        data: todos,
+        data: true,
         status: 200,
       });
     }, 500);

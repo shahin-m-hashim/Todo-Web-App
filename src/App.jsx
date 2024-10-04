@@ -1,10 +1,10 @@
 import "./index.css";
 
 import TodoList from "./components/Todo/TodoList";
-import { TodoProvider } from "./contexts/TodoProvider";
+import TodosError from "./components/Todo/TodosError";
 import AddTodoForm from "./components/Todo/AddTodoForm";
 import LoadingSpinner from "./components/LoadingSpinner";
-import TodoInputsError from "./components/Todo/TodoInputsError";
+import { TodoProvider } from "./providers/TodosProvider";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <TodoProvider>
           <TodoList />
           <AddTodoForm />
-          <TodoInputsError />
+          <TodosError />
         </TodoProvider>
       </div>
     </LoadingSpinner>

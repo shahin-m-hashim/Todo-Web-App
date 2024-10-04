@@ -1,19 +1,11 @@
 import TodoRow from "./TodoRow";
 import { useContext } from "react";
-import TodoContext from "../../contexts/TodoProvider";
+import TodoContext from "../../providers/TodosProvider";
 
 export default function TodoList() {
   const { todos } = useContext(TodoContext);
 
-  if (todos.error) {
-    return (
-      <div className="w-1/2 p-2 mx-auto my-4 text-center bg-red-300 rounded-md">
-        <h1>{todos.error}</h1>
-      </div>
-    );
-  }
-
-  if (todos.data) {
+  if (todos) {
     return (
       <>
         <div className="w-1/2 p-2 mx-auto my-4 bg-red-300 rounded-md">
@@ -28,8 +20,8 @@ export default function TodoList() {
               Actions
             </div>
           </div>
-          {todos.data.length ? (
-            todos.data.map((todo) => <TodoRow key={todo.id} {...todo} />)
+          {todos.length ? (
+            todos.map((todo) => <TodoRow key={todo.id} {...todo} />)
           ) : (
             <div className="flex items-center justify-center h-40 text-2xl place-items-center">
               <p>Currently, there are no todos to display.</p>
