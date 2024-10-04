@@ -9,7 +9,7 @@ import validateTodoInputs from "../../utils/todoValidator";
 export default function SaveTodoBtn({ id, newName, newDesc, setIsEditing }) {
   const [isSaving, setIsSaving] = useState(false);
   const setShowSpinner = useContext(SpinnerContext);
-  const { updateTodo, handleError, todoErrorRef } = useContext(TodoContext);
+  const { setTodos, handleError, todoErrorRef } = useContext(TodoContext);
 
   const handleUpdateTodo = async () => {
     try {
@@ -17,8 +17,8 @@ export default function SaveTodoBtn({ id, newName, newDesc, setIsEditing }) {
         setIsSaving(true);
         setShowSpinner(true);
 
-        await putTodo(id, newName, newDesc);
-        updateTodo(id, newName, newDesc);
+        const { data } = await putTodo(id, newName, newDesc);
+        setTodos(data);
         setIsEditing(false);
         todoErrorRef.current.innerText = "";
       } else {

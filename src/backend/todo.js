@@ -23,9 +23,10 @@ const postTodo = (todo) => {
     localStorage.setItem("todos", JSON.stringify(todos));
     setTimeout(() => {
       resolve({
-        data: true,
+        data: todos,
         status: 200,
       });
+      // reject(new Error("error occurred while adding"));
     }, 500);
   });
 };
@@ -42,9 +43,10 @@ const putTodo = (id, new_name, new_desc) => {
     localStorage.setItem("todos", JSON.stringify(todos));
     setTimeout(() => {
       resolve({
-        data: true,
+        data: todos,
         status: 200,
       });
+      // reject(new Error("error occurred while updating"));
     }, 500);
   });
 };
@@ -57,9 +59,10 @@ const deleteTodo = (id) => {
     localStorage.setItem("todos", JSON.stringify(todos));
     setTimeout(() => {
       resolve({
-        data: true,
+        data: todos,
         status: 200,
       });
+      // reject(new Error("error occurred while deleting"));
     }, 500);
   });
 };

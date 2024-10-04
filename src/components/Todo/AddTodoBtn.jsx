@@ -9,7 +9,7 @@ import validateTodoInputs from "../../utils/todoValidator";
 export default function AddTodoBtn({ nameInputRef, descInputRef, styles }) {
   const [isAdding, setIsAdding] = useState(false);
   const setShowSpinner = useContext(SpinnerContext);
-  const { addTodo, todoErrorRef, handleError } = useContext(TodoContext);
+  const { setTodos, todoErrorRef, handleError } = useContext(TodoContext);
 
   const handleAddTodo = async () => {
     try {
@@ -22,12 +22,13 @@ export default function AddTodoBtn({ nameInputRef, descInputRef, styles }) {
 
         const newTodo = { id: Date.now(), name, description };
 
+        const { data } = await postTodo(newTodo);
+
         nameInputRef.current.value = "";
         descInputRef.current.value = "";
         todoErrorRef.current.innerText = "";
 
-        await postTodo(newTodo);
-        addTodo(newTodo);
+        setTodos(data);
       } else {
         todoErrorRef.current.innerText = "Invalid Inputs.";
       }

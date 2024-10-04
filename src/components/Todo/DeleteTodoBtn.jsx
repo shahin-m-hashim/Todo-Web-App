@@ -8,14 +8,14 @@ import TodoContext from "../../providers/TodosProvider";
 export default function DeleteTodoBtn({ id }) {
   const setShowSpinner = useContext(SpinnerContext);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { removeTodo, handleError } = useContext(TodoContext);
+  const { setTodos, handleError } = useContext(TodoContext);
 
   const handleDeleteTodo = async () => {
     try {
       setIsDeleting(true);
       setShowSpinner(true);
-      await deleteTodo(id);
-      removeTodo(id);
+      const { data } = await deleteTodo(id);
+      setTodos(data);
     } catch (e) {
       handleError(e);
     } finally {

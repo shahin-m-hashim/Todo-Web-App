@@ -16,52 +16,30 @@ const TodoContext = createContext();
 
 const todoReducer = (state, action) => {
   switch (action.type) {
-    case "FETCH_TODOS":
+    case "SET_TODOS":
       return action.payload;
-    case "ADD_TODO":
-      return [...state, action.payload];
-    case "UPDATE_TODO":
-      return state.map((todo) =>
-        todo.id === action.payload.id
-          ? {
-              ...todo,
-              name: action.payload.new_name,
-              description: action.payload.new_desc,
-            }
-          : todo
-      );
-    case "REMOVE_TODO":
-      return state.filter((todo) => todo.id !== action.payload);
     default:
-      return state;
+      return state || [];
   }
 };
 
 export const TodoProvider = ({ children }) => {
   const todoErrorRef = useRef(null);
   const setShowSpinner = useContext(SpinnerContext);
-  const [todos, dispatch] = useReducer(todoReducer, []);
+  const [todos, dispatch] = useReducer(todoReducer, null);
 
   const handleError = (error) =>
     (todoErrorRef.current.innerText = error.message);
 
-  const addTodo = (newTodo) => {
-    dispatch({ type: "ADD_TODO", payload: newTodo });
-  };
-
-  const updateTodo = (id, new_name, new_desc) => {
-    dispatch({ type: "UPDATE_TODO", payload: { id, new_name, new_desc } });
-  };
-
-  const removeTodo = (id) => {
-    dispatch({ type: "REMOVE_TODO", payload: id });
+  const setTodos = (todos) => {
+    dispatch({ type: "SET_TODOS", payload: todos });
   };
 
   const fetchTodos = async () => {
     try {
       setShowSpinner(true);
       const res = await getTodos();
-      dispatch({ type: "FETCH_TODOS", payload: res.data || [] });
+      dispatch({ type: "SET_TODOS", payload: res.data });
     } catch (e) {
       handleError(e);
     } finally {
@@ -77,9 +55,7 @@ export const TodoProvider = ({ children }) => {
     <TodoContext.Provider
       value={{
         todos,
-        addTodo,
-        updateTodo,
-        removeTodo,
+        setTodos,
         handleError,
         todoErrorRef,
       }}
