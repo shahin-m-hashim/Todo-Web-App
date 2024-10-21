@@ -2,10 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-body,
-#root {
+.theme-light {
+  /* colors */
+  --text-color: black;
+  --text-btn: white;
+
+  /* background colors */
+  --bg-color: hsl(32, 67%, 82%);
+  --bg-btn: hsl(29, 25%, 23%);
+  --bg-btn-hover: hsl(29, 25%, 13%);
+}
+
+.theme-dark {
+  /* colors */
+  --text-color: white;
+  --text-btn: black;
+
+  /* background colors */
+  --bg-color: hsl(207, 26%, 17%);
+  --bg-btn: hsl(200, 60%, 40%);
+  --bg-btn-hover: hsl(200, 60%, 30%);
+}
+
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+.app,
+#root {
   min-width: 320px;
   min-height: 100vh;
 }

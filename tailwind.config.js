@@ -2,7 +2,18 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        color: "var(--text-color)",
+        btn: "var(--text-btn)",
+        "btn-hover": "var(--text-btn-hover)",
+      },
+      backgroundColor: {
+        btn: "var(--bg-btn)",
+        color: "var(--bg-color)",
+        "btn-hover": "var(--bg-btn-hover)",
+      },
+    },
   },
   plugins: [],
 };

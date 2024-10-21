@@ -1,3 +1,18 @@
+How to build a fast, maintainable, and bug-free frontend in React:
+
+1. Create your webpages in one single component first
+2. Make the webpage responsive using tailwind css and test it
+3. Now start breaking down the webpage into smaller components.
+
+Why this is  very important ?
+  If you create components from the get go , it will be extremely difficult to 
+  make the webpage responsive. You will most likely waste your time in debugging
+  and managing state across multiple components rather than actually focusing on
+  the most important part - a responsive frontend. 
+
+# Once you done the above steps and have a responsive webpage, 
+# you can now go on with the react way of doing things as below:
+
 1. Minimize State Usage:
    - Avoid using state wherever possible. Instead, use DOM references (`refs`) when managing the UI 
    and direct interactions with elements.
