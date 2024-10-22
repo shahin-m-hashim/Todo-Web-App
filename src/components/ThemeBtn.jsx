@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 
-export default function ThemeBtn({ setTheme, theme, color }) {
+export default function ThemeBtn({ setTheme, theme, backgroundColor }) {
   return (
     <button
       onClick={() => setTheme(theme)}
-      style={{ backgroundColor: color }}
-      className="p-3 bg-white rounded-full"
+      style={{ backgroundColor }}
+      className="p-3 border-2 rounded-full"
     ></button>
   );
 }

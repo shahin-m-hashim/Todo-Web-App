@@ -30,11 +30,24 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
+html,
 body,
 .app,
 #root {
+  height: 100vh;
   min-width: 320px;
-  min-height: 100vh;
+  scrollbar-width: none;
+}
+
+button {
+  cursor: pointer;
+  padding: 0.5em 1em;
+  border-radius: 0.2em;
+}
+
+textarea {
+  resize: none;
 }
