@@ -28,6 +28,7 @@
 *::before,
 *::after {
   margin: 0;
+  z-index: 0;
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
