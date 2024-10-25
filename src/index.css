@@ -52,3 +52,9 @@ button {
 textarea {
   resize: none;
 }
+
+.dragging {
+  opacity: 0.5;
+  border: 2px dashed black;
+  background-color: var(--bg-color);
+}

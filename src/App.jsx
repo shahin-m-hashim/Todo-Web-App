@@ -2,19 +2,136 @@ import "./index.css";
 import { cn } from "./utils/cn";
 import ThemeBtn from "./components/ThemeBtn";
 import ThemeContext from "./providers/ThemeContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 function App() {
   const { theme, setTheme } = useContext(ThemeContext);
 
-  const [expandedTodo, setExpandedTodo] = useState(null);
+  const [todos, setTodos] = useState([
+    {
+      id: "123",
+      completed: false,
+      due: "2022-07-05",
+      created: "2022-06-31",
+      description: "Testing",
+      name: "Learn Front End Development",
+    },
+    {
+      id: "256",
+      completed: true,
+      due: "2022-07-05",
+      created: "2022-06-31",
+      description: "Testing",
+      name: "Play War",
+    },
+    {
+      id: "789",
+      completed: false,
+      due: "2022-07-05",
+      created: "2022-06-31",
+      description: "Testing",
+      name: "Learn Tailwind CSS",
+    },
+    {
+      id: "462",
+      completed: false,
+      due: "2022-07-05",
+      created: "2022-06-31",
+      description: "Testing",
+      name: "Learn Back End Development",
+    },
+    {
+      id: "as1",
+      completed: true,
+      due: "2022-07-05",
+      created: "2022-06-31",
+      description: "Testing",
+      name: "Learn Express Back End",
+    },
+    {
+      id: "456",
+      completed: false,
+      due: "2022-08-10",
+      created: "2022-07-30",
+      description: "Learn the basics of React",
+      name: "React Basics",
+    },
+    {
+      id: "321",
+      completed: false,
+      due: "2022-09-15",
+      created: "2022-09-01",
+      description: "Implement state management with Redux",
+      name: "Redux Implementation",
+    },
+    {
+      id: "654",
+      completed: true,
+      due: "2022-06-20",
+      created: "2022-06-15",
+      description: "Complete the Node.js API project",
+      name: "Node.js API Project",
+    },
+    {
+      id: "987",
+      completed: false,
+      due: "2022-10-05",
+      created: "2022-09-25",
+      description: "Create a responsive web design for the portfolio",
+      name: "Portfolio Design",
+    },
+    {
+      id: "135",
+      completed: true,
+      due: "2022-07-25",
+      created: "2022-07-20",
+      description: "Finish writing the blog post about JavaScript",
+      name: "JavaScript Blog Post",
+    },
+  ]);
 
+  const [expandedTodo, setExpandedTodo] = useState(null);
   const [showAddTodoForm, setShowAddTodoForm] = useState(false);
+  const [showTodoListOptions, setShowTodoListOptions] = useState(true);
 
   const [editTodo, setEditTodo] = useState({
     id: null,
     isEditing: false,
   });
+
+  const draggedTodoId = useRef(null);
+  const [reOrderTodos, setReOrderTodos] = useState(false);
+
+  const handleDragStart = (e, id) => {
+    draggedTodoId.current = id;
+    e.target.classList.add("dragging");
+  };
+
+  const handleDragOver = (e, id) => {
+    e.preventDefault();
+
+    const draggedOverTodo = todos.find((todo) => todo.id === id);
+
+    if (draggedOverTodo.id === draggedTodoId.current) {
+      return;
+    }
+
+    const draggingTodo = todos.find(
+      (todo) => todo.id === draggedTodoId.current
+    );
+
+    const updatedTodos = todos.filter((todo) => todo.id !== draggingTodo.id);
+
+    const index = updatedTodos.indexOf(draggedOverTodo);
+    updatedTodos.splice(index, 0, draggingTodo);
+
+    setTodos(updatedTodos);
+  };
+
+  const handleDragEnd = (e) => {
+    draggedTodoId.current = null;
+    e.target.classList.remove("dragging");
+  };
 
   const toggleExpand = (id) => {
     if (editTodo.isEditing) {
@@ -24,8 +141,6 @@ function App() {
 
     setExpandedTodo(expandedTodo === id ? null : id);
   };
-
-  const [showTodoListOptions, setShowTodoListOptions] = useState(false);
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
@@ -40,119 +155,6 @@ function App() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [editTodo.isEditing]);
-
-  const [todos, setTodos] = useState([
-    {
-      id: "123",
-      name: "Learn Front End Development",
-      created: "2022-06-31",
-      due: "2022-07-05",
-      completed: false,
-      description: `Ab omnis mollitia voluptas. Quae voluptas ullam at et optio id alias dolorem. 
-        Omnis totam sit adipisci vero. Deleniti praesentium commodi incidunt. Reprehenderit 
-        animi doloremque quia voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero 
-        ossimus animi porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam 
-        aspernatur dolores. Vero consectetur maiores eaque incidunt consequatur tenetur neque 
-        dolore. A harum accusantium. Perferendis aut odio sunt asperiores repudiandae et. 
-        Eius et similique quidem voluptas nihil possimus natus commodi. Optio est quas. 
-        Tempora at ipsa ipsum deserunt dolorem explicabo. Ab omnis mollitia voluptas. 
-        Quae voluptas ullam at et optio id alias dolorem. Omnis totam sit adipisci vero. 
-        Deleniti praesentium commodi incidunt. Reprehenderit animi doloremque quia 
-        voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero possimus animi 
-        porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam aspernatur dolores. 
-        Vero consectetur maiores eaque incidunt consequatur tenetur neque dolore. A harum accusantium. 
-        Perferendis aut odio sunt asperiores repudiandae et. Eius et similique quidem voluptas nihil 
-        possimus natus commodi. Optio est quas. Tempora at ipsa ipsum deserunt dolorem explicabo.`,
-    },
-    {
-      id: "256",
-      name: "Learn Front End Development",
-      created: "2022-06-31",
-      due: "2022-07-05",
-      completed: true,
-      description: `Ab omnis mollitia voluptas. Quae voluptas ullam at et optio id alias dolorem. 
-        Omnis totam sit adipisci vero. Deleniti praesentium commodi incidunt. Reprehenderit 
-        animi doloremque quia voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero 
-        ossimus animi porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam 
-        aspernatur dolores. Vero consectetur maiores eaque incidunt consequatur tenetur neque 
-        dolore. A harum accusantium. Perferendis aut odio sunt asperiores repudiandae et. 
-        Eius et similique quidem voluptas nihil possimus natus commodi. Optio est quas. 
-        Tempora at ipsa ipsum deserunt dolorem explicabo. Ab omnis mollitia voluptas. 
-        Quae voluptas ullam at et optio id alias dolorem. Omnis totam sit adipisci vero. 
-        Deleniti praesentium commodi incidunt. Reprehenderit animi doloremque quia 
-        voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero possimus animi 
-        porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam aspernatur dolores. 
-        Vero consectetur maiores eaque incidunt consequatur tenetur neque dolore. A harum accusantium. 
-        Perferendis aut odio sunt asperiores repudiandae et. Eius et similique quidem voluptas nihil 
-        possimus natus commodi. Optio est quas. Tempora at ipsa ipsum deserunt dolorem explicabo.`,
-    },
-    {
-      id: "789",
-      name: "Learn Front End Development",
-      created: "2022-06-31",
-      due: "2022-07-05",
-      completed: false,
-      description: `Ab omnis mollitia voluptas. Quae voluptas ullam at et optio id alias dolorem. 
-        Omnis totam sit adipisci vero. Deleniti praesentium commodi incidunt. Reprehenderit 
-        animi doloremque quia voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero 
-        ossimus animi porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam 
-        aspernatur dolores. Vero consectetur maiores eaque incidunt consequatur tenetur neque 
-        dolore. A harum accusantium. Perferendis aut odio sunt asperiores repudiandae et. 
-        Eius et similique quidem voluptas nihil possimus natus commodi. Optio est quas. 
-        Tempora at ipsa ipsum deserunt dolorem explicabo. Ab omnis mollitia voluptas. 
-        Quae voluptas ullam at et optio id alias dolorem. Omnis totam sit adipisci vero. 
-        Deleniti praesentium commodi incidunt. Reprehenderit animi doloremque quia 
-        voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero possimus animi 
-        porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam aspernatur dolores. 
-        Vero consectetur maiores eaque incidunt consequatur tenetur neque dolore. A harum accusantium. 
-        Perferendis aut odio sunt asperiores repudiandae et. Eius et similique quidem voluptas nihil 
-        possimus natus commodi. Optio est quas. Tempora at ipsa ipsum deserunt dolorem explicabo.`,
-    },
-    {
-      id: "462",
-      name: "Learn Front End Development",
-      created: "2022-06-31",
-      due: "2022-07-05",
-      completed: false,
-      description: `Ab omnis mollitia voluptas. Quae voluptas ullam at et optio id alias dolorem. 
-        Omnis totam sit adipisci vero. Deleniti praesentium commodi incidunt. Reprehenderit 
-        animi doloremque quia voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero 
-        ossimus animi porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam 
-        aspernatur dolores. Vero consectetur maiores eaque incidunt consequatur tenetur neque 
-        dolore. A harum accusantium. Perferendis aut odio sunt asperiores repudiandae et. 
-        Eius et similique quidem voluptas nihil possimus natus commodi. Optio est quas. 
-        Tempora at ipsa ipsum deserunt dolorem explicabo. Ab omnis mollitia voluptas. 
-        Quae voluptas ullam at et optio id alias dolorem. Omnis totam sit adipisci vero. 
-        Deleniti praesentium commodi incidunt. Reprehenderit animi doloremque quia 
-        voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero possimus animi 
-        porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam aspernatur dolores. 
-        Vero consectetur maiores eaque incidunt consequatur tenetur neque dolore. A harum accusantium. 
-        Perferendis aut odio sunt asperiores repudiandae et. Eius et similique quidem voluptas nihil 
-        possimus natus commodi. Optio est quas. Tempora at ipsa ipsum deserunt dolorem explicabo.`,
-    },
-    {
-      id: "as1",
-      name: "Learn Front End Development",
-      created: "2022-06-31",
-      due: "2022-07-05",
-      completed: true,
-      description: `Ab omnis mollitia voluptas. Quae voluptas ullam at et optio id alias dolorem. 
-        Omnis totam sit adipisci vero. Deleniti praesentium commodi incidunt. Reprehenderit 
-        animi doloremque quia voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero 
-        ossimus animi porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam 
-        aspernatur dolores. Vero consectetur maiores eaque incidunt consequatur tenetur neque 
-        dolore. A harum accusantium. Perferendis aut odio sunt asperiores repudiandae et. 
-        Eius et similique quidem voluptas nihil possimus natus commodi. Optio est quas. 
-        Tempora at ipsa ipsum deserunt dolorem explicabo. Ab omnis mollitia voluptas. 
-        Quae voluptas ullam at et optio id alias dolorem. Omnis totam sit adipisci vero. 
-        Deleniti praesentium commodi incidunt. Reprehenderit animi doloremque quia 
-        voluptatem ratione. Eaque ut et aut cupiditate et. Aut vero possimus animi 
-        porro. Fugit dolorum quis quidem debitis natus explicabo quibusdam aspernatur dolores. 
-        Vero consectetur maiores eaque incidunt consequatur tenetur neque dolore. A harum accusantium. 
-        Perferendis aut odio sunt asperiores repudiandae et. Eius et similique quidem voluptas nihil 
-        possimus natus commodi. Optio est quas. Tempora at ipsa ipsum deserunt dolorem explicabo.`,
-    },
-  ]);
 
   return (
     <main className={`app theme-${theme} bg-color`}>
@@ -253,14 +255,30 @@ function App() {
                     <div className="flex gap-3 text-xs lg:text-sm">
                       {/* Clear Todo List */}
                       <div>
-                        <button className="text-white bg-red-600 hover:bg-red-500">
+                        <button className="p-2 text-white bg-red-600 lg:px-4 lg:py-2 hover:bg-red-500">
                           Clear All
+                        </button>
+                      </div>
+
+                      {/* Drag & ReArrange */}
+                      <div>
+                        <button
+                          disabled={expandedTodo ? true : false}
+                          onClick={() => setReOrderTodos(!reOrderTodos)}
+                          className={cn(
+                            "p-2 text-white bg-blue-500 lg:px-4 lg:py-2 ",
+                            expandedTodo
+                              ? "cursor-not-allowed"
+                              : "hover:bg-blue-400"
+                          )}
+                        >
+                          {reOrderTodos ? "Done" : "Re-Order"}
                         </button>
                       </div>
 
                       {/* Check Trash */}
                       <div>
-                        <button className="text-black bg-yellow-300 hover:bg-yellow-400">
+                        <button className="p-2 text-black bg-yellow-300 lg:px-4 lg:py-2 hover:bg-yellow-400">
                           View Trash
                         </button>
                       </div>
@@ -269,11 +287,25 @@ function App() {
                 </div>
 
                 {/* Todo List */}
-                <>
+                <div id="todos">
                   {todos.length ? (
                     todos.map((todo) => (
-                      <div id={todo.id} key={todo.id} className="todoItem">
-                        <div className="flex items-center justify-between h-12 pl-5 border-b-2">
+                      <div
+                        id={todo.id}
+                        key={todo.id}
+                        onDragEnd={handleDragEnd}
+                        draggable={reOrderTodos ? true : false}
+                        className={reOrderTodos && "cursor-grab"}
+                        onDragOver={(e) => handleDragOver(e, todo.id)}
+                        onDragStart={(e) => handleDragStart(e, todo.id)}
+                      >
+                        <div className="relative flex items-center justify-between h-12 pl-5 border-b-2">
+                          <div
+                            className={cn(
+                              "absolute inset-0 z-[5]",
+                              reOrderTodos ? "inline-block" : "hidden"
+                            )}
+                          ></div>
                           <div className="py-3 text-sm md:text-base">
                             <span>{todo.name}</span>
                             <span>&nbsp;&nbsp;</span>
@@ -424,7 +456,7 @@ function App() {
                       No Todos Found
                     </div>
                   )}
-                </>
+                </div>
               </div>
             </div>
 
