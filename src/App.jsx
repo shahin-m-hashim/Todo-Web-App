@@ -7,88 +7,7 @@ import { useContext, useEffect, useState } from "react";
 function App() {
   const { theme, setTheme } = useContext(ThemeContext);
 
-  const [todos, setTodos] = useState([
-    {
-      id: "123",
-      completed: false,
-      due: "2022-07-05",
-      created: "2022-06-31",
-      description: "Testing",
-      name: "Learn Front End Development",
-    },
-    {
-      id: "256",
-      completed: true,
-      due: "2022-07-05",
-      created: "2022-06-31",
-      description: "Testing",
-      name: "Play War",
-    },
-    {
-      id: "789",
-      completed: false,
-      due: "2022-07-05",
-      created: "2022-06-31",
-      description: "Testing",
-      name: "Learn Tailwind CSS",
-    },
-    {
-      id: "462",
-      completed: false,
-      due: "2022-07-05",
-      created: "2022-06-31",
-      description: "Testing",
-      name: "Learn Back End Development",
-    },
-    {
-      id: "as1",
-      completed: true,
-      due: "2022-07-05",
-      created: "2022-06-31",
-      description: "Testing",
-      name: "Learn Express Back End",
-    },
-    {
-      id: "456",
-      completed: false,
-      due: "2022-08-10",
-      created: "2022-07-30",
-      description: "Learn the basics of React",
-      name: "React Basics",
-    },
-    {
-      id: "321",
-      completed: false,
-      due: "2022-09-15",
-      created: "2022-09-01",
-      description: "Implement state management with Redux",
-      name: "Redux Implementation",
-    },
-    {
-      id: "654",
-      completed: true,
-      due: "2022-06-20",
-      created: "2022-06-15",
-      description: "Complete the Node.js API project",
-      name: "Node.js API Project",
-    },
-    {
-      id: "987",
-      completed: false,
-      due: "2022-10-05",
-      created: "2022-09-25",
-      description: "Create a responsive web design for the portfolio",
-      name: "Portfolio Design",
-    },
-    {
-      id: "135",
-      completed: true,
-      due: "2022-07-25",
-      created: "2022-07-20",
-      description: "Finish writing the blog post about JavaScript",
-      name: "JavaScript Blog Post",
-    },
-  ]);
+  const [todos, setTodos] = useState([]);
 
   const [expandedTodo, setExpandedTodo] = useState(null);
   const [showAddTodoForm, setShowAddTodoForm] = useState(false);
@@ -149,19 +68,27 @@ function App() {
             </div>
 
             <div className="flex items-center gap-3">
-              <img
-                alt="settings"
-                className="h-6 ml-2 mr-auto"
-                src="assets/icons/hamburger.png"
+              <button
+                className="ml-2 mr-auto"
                 onClick={() => setShowTodoListOptions(!showTodoListOptions)}
-              />
+              >
+                <img
+                  alt="settings"
+                  className="h-6"
+                  src="assets/icons/hamburger.png"
+                />
+              </button>
 
-              <img
-                alt="add-todo"
-                className="h-8 md:hidden"
-                src="assets/icons/add.png"
+              <button
+                className="md:hidden"
                 onClick={() => setShowAddTodoForm(true)}
-              />
+              >
+                <img
+                  alt="add-todo"
+                  className="h-8"
+                  src="assets/icons/add.png"
+                />
+              </button>
 
               <div className="text-sm md:text-base">
                 <span>{todos.filter((todo) => todo.completed).length}/</span>
@@ -195,10 +122,10 @@ function App() {
                     <div className="flex items-center gap-3">
                       <div>Sort By:</div>
                       <div className="flex gap-3">
-                        <button className="text-xs text-white bg-btn hover:bg-btn-hover">
+                        <button className="text-xs text-white btn bg-btn hover:bg-btn-hover">
                           Name
                         </button>
-                        <button className="text-xs text-white bg-btn hover:bg-btn-hover">
+                        <button className="text-xs text-white btn bg-btn hover:bg-btn-hover">
                           Date
                         </button>
                       </div>
@@ -208,10 +135,10 @@ function App() {
                     <div className="flex items-center gap-3">
                       <div>Filter By:</div>
                       <div className="flex gap-3">
-                        <button className="text-xs text-white bg-btn hover:bg-btn-hover">
+                        <button className="text-xs text-white btn bg-btn hover:bg-btn-hover">
                           Completed
                         </button>
-                        <button className="text-xs text-white bg-btn hover:bg-btn-hover">
+                        <button className="text-xs text-white btn bg-btn hover:bg-btn-hover">
                           Pending
                         </button>
                       </div>
@@ -237,7 +164,13 @@ function App() {
               </div>
 
               {/* Todo List */}
-              <div id="todos" className="overflow-auto">
+              <div
+                id="todos"
+                className={cn(
+                  "overflow-auto",
+                  !todos.length && "h-full flex justify-center items-center"
+                )}
+              >
                 {todos.length ? (
                   todos.map((todo) => (
                     <div id={todo.id} key={todo.id}>
@@ -253,19 +186,20 @@ function App() {
                         </div>
                         <div className="flex flex-shrink-0 h-full">
                           <div className="flex items-center px-3 bg-blue-400">
-                            <img
-                              alt="expand"
-                              src="assets/icons/expand-up.png"
-                              className="h-6 cursor-pointer"
-                              style={{
-                                transform:
-                                  expandedTodo === todo.id
-                                    ? "rotate(180deg)"
-                                    : "rotate(0)",
-                                transition: "transform 0.3s linear 0.1s",
-                              }}
-                              onClick={() => toggleExpand(todo.id)}
-                            />
+                            <button onClick={() => toggleExpand(todo.id)}>
+                              <img
+                                alt="expand-todo"
+                                src="assets/icons/expand-up.png"
+                                className="h-6"
+                                style={{
+                                  transform:
+                                    expandedTodo === todo.id
+                                      ? "rotate(180deg)"
+                                      : "rotate(0)",
+                                  transition: "transform 0.3s linear 0.1s",
+                                }}
+                              />
+                            </button>
                           </div>
 
                           <div
@@ -274,40 +208,42 @@ function App() {
                               todo.completed ? "bg-gray-300" : "bg-green-400"
                             )}
                           >
-                            {expandedTodo === todo.id ? (
-                              <img
-                                alt="edit"
-                                src="assets/icons/edit.svg"
-                                className={cn(
-                                  "h-6",
-                                  !todo.completed && "cursor-pointer"
-                                )}
+                            {expandedTodo === todo.id && !todo.completed ? (
+                              <button
                                 onClick={() =>
                                   setEditTodo({
                                     id: todo.id,
                                     isEditing: true,
                                   })
                                 }
-                              />
+                              >
+                                <img
+                                  alt="edit-todo"
+                                  className="h-6"
+                                  src="assets/icons/edit.svg"
+                                />
+                              </button>
                             ) : (
-                              <img
-                                alt="done"
-                                src="assets/icons/done.png"
-                                className={cn(
-                                  "h-6",
-                                  !todo.completed && "cursor-pointer"
-                                )}
-                              />
+                              <button
+                                disabled={todo.completed}
+                                className={todo.completed && "cursor-auto"}
+                              >
+                                <img
+                                  alt="done-todo"
+                                  src="assets/icons/done.png"
+                                  className="h-6"
+                                />
+                              </button>
                             )}
                           </div>
 
-                          <div className="relative flex items-center px-3 bg-red-400 group">
+                          <button className="flex items-center px-3 bg-red-400">
                             <img
-                              alt="delete"
+                              className="h-6"
+                              alt="delete-todo"
                               src="assets/icons/delete.svg"
-                              className="h-6 cursor-pointer"
                             />
-                          </div>
+                          </button>
                         </div>
                       </div>
 
@@ -330,14 +266,14 @@ function App() {
                               className="p-2 mb-3 border-2 rounded-md"
                             />
                             <div className="flex gap-3">
-                              <button className="text-white bg-btn hover:bg-btn-hover">
+                              <button className="text-white btn bg-btn hover:bg-btn-hover">
                                 Update
                               </button>
                               <button
                                 onClick={() =>
                                   setEditTodo({ id: null, isEditing: false })
                                 }
-                                className="text-white bg-btn hover:bg-btn-hover"
+                                className="text-white bg-btn btn hover:bg-btn-hover"
                               >
                                 Cancel
                               </button>
@@ -388,9 +324,7 @@ function App() {
                     </div>
                   ))
                 ) : (
-                  <div className="flex items-center justify-center h-full text-2xl text-gray-500">
-                    No Todos Found
-                  </div>
+                  <div className="text-3xl text-gray-500">No Todos Found</div>
                 )}
               </div>
             </div>
@@ -426,16 +360,12 @@ function App() {
                   placeholder="Description"
                   className="p-2 mb-3 border-2 rounded-md"
                 />
-                <input
-                  type="date"
-                  className="p-2 mb-3 border-2 rounded-md"
-                  placeholder="Date"
-                />
-                <button className="text-white bg-btn hover:bg-btn-hover">
+                <input type="date" className="p-2 mb-3 border-2 rounded-md" />
+                <button className="text-white btn bg-btn hover:bg-btn-hover">
                   Add
                 </button>
               </div>
-              <button className="text-white bg-btn-hover hover:bg-btn">
+              <button className="text-white btn bg-btn-hover hover:bg-btn">
                 Reset
               </button>
             </form>

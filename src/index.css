@@ -40,21 +40,15 @@ body,
 #root {
   height: 100vh;
   min-width: 320px;
+  overflow: hidden;
   scrollbar-width: none;
 }
 
-button {
-  cursor: pointer;
+.btn {
   padding: 0.5em 1em;
   border-radius: 0.2em;
 }
 
 textarea {
   resize: none;
-}
-
-.dragging {
-  opacity: 0.5;
-  border: 2px dashed black;
-  background-color: var(--bg-color);
 }
