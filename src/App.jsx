@@ -171,7 +171,7 @@ function App() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr]">
+          <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] relative">
             <div className="flex flex-col md:border-r-2 border-r-gray-300 h-[75vh]">
               {/* Todo List Options */}
               <div
@@ -399,7 +399,7 @@ function App() {
               className={cn(
                 "bg-[#fefdf8] static p-3 flex-col justify-between gap-3",
                 showAddTodoForm
-                  ? "flex absolute z-40 inset-5"
+                  ? "flex absolute md:static md:z-0 z-40 h-[75vh] inset-x-0"
                   : "hidden md:flex"
               )}
             >
@@ -407,15 +407,13 @@ function App() {
                 className="relative flex flex-col"
                 onClick={() => setShowAddTodoForm(false)}
               >
-                {showAddTodoForm && (
-                  <div className="absolute top-0 right-0 p-1 bg-red-400 rounded-full cursor-pointer hover:bg-red-300 ">
-                    <img
-                      alt="close"
-                      className="h-5"
-                      src="assets/icons/close.svg"
-                    />
-                  </div>
-                )}
+                <div className="absolute top-0 right-0 p-1 bg-red-400 rounded-full cursor-pointer md:hidden hover:bg-red-300 ">
+                  <img
+                    alt="close"
+                    className="h-5"
+                    src="assets/icons/close.svg"
+                  />
+                </div>
 
                 <h1 className="mb-3 text-lg">Add a todo</h1>
                 <input
