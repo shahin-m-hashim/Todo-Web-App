@@ -3,11 +3,43 @@ import { cn } from "./utils/cn";
 import ThemeBtn from "./components/ThemeBtn";
 import ThemeContext from "./providers/ThemeContext";
 import { useContext, useEffect, useState } from "react";
+import useMonitorWindow from "./hooks/useMonitorWindow";
 
 function App() {
   const { theme, setTheme } = useContext(ThemeContext);
 
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([
+    {
+      id: 1,
+      name: "Todo 1",
+      description: "This is the first todo",
+    },
+    {
+      id: 2,
+      name: "Todo 2",
+      description: "This is the second todo",
+    },
+    {
+      id: 3,
+      name: "Todo 3",
+      description: "This is the third todo",
+    },
+    {
+      id: 4,
+      name: "Todo 4",
+      description: "This is the fourth todo",
+    },
+    {
+      id: 5,
+      name: "Todo 5",
+      description: "This is the fifth todo",
+    },
+    {
+      id: 6,
+      name: "Todo 6",
+      description: "This is the sixth todo",
+    },
+  ]);
 
   const [expandedTodo, setExpandedTodo] = useState(null);
   const [showAddTodoForm, setShowAddTodoForm] = useState(false);
@@ -27,19 +59,7 @@ function App() {
     setExpandedTodo(expandedTodo === id ? null : id);
   };
 
-  useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      if (editTodo.isEditing) {
-        e.preventDefault();
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [editTodo.isEditing]);
+  useMonitorWindow(editTodo.isEditing);
 
   return (
     <main className={`app theme-${theme} bg-color`}>
@@ -84,8 +104,8 @@ function App() {
                 onClick={() => setShowAddTodoForm(true)}
               >
                 <img
-                  alt="add-todo"
                   className="h-8"
+                  alt="show-add-todo-form"
                   src="assets/icons/add.png"
                 />
               </button>
@@ -253,13 +273,13 @@ function App() {
                           <form className="flex flex-col">
                             <input
                               type="text"
-                              className="p-2 mb-3 border-2 rounded-md"
                               placeholder="Enter New Name"
+                              className="p-2 mb-3 border-2 rounded-md"
                             />
                             <textarea
                               rows={3}
-                              className="p-2 mb-3 border-2 rounded-md"
                               placeholder="Enter New Description"
+                              className="p-2 mb-3 border-2 rounded-md"
                             ></textarea>
                             <input
                               type="date"
@@ -337,17 +357,17 @@ function App() {
                   : "hidden md:flex"
               )}
             >
-              <div
-                className="relative flex flex-col"
-                onClick={() => setShowAddTodoForm(false)}
-              >
-                <div className="absolute top-0 right-0 p-1 bg-red-400 rounded-full cursor-pointer md:hidden hover:bg-red-300 ">
+              <div className="relative flex flex-col">
+                <button
+                  onClick={() => setShowAddTodoForm(false)}
+                  className="absolute top-0 right-0 p-1 bg-red-400 rounded-full md:hidden hover:bg-red-300 "
+                >
                   <img
                     alt="close"
                     className="h-5"
                     src="assets/icons/close.svg"
                   />
-                </div>
+                </button>
 
                 <h1 className="mb-3 text-lg">Add a todo</h1>
                 <input
