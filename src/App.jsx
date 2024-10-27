@@ -2,7 +2,7 @@ import "./index.css";
 import { cn } from "./utils/cn";
 import ThemeBtn from "./components/ThemeBtn";
 import ThemeContext from "./providers/ThemeContext";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 function App() {
   const { theme, setTheme } = useContext(ThemeContext);
@@ -98,40 +98,6 @@ function App() {
     id: null,
     isEditing: false,
   });
-
-  const draggedTodoId = useRef(null);
-  const [reOrderTodos, setReOrderTodos] = useState(false);
-
-  const handleDragStart = (e, id) => {
-    draggedTodoId.current = id;
-    e.target.classList.add("dragging");
-  };
-
-  const handleDragOver = (e, id) => {
-    e.preventDefault();
-
-    const draggedOverTodo = todos.find((todo) => todo.id === id);
-
-    if (draggedOverTodo.id === draggedTodoId.current) {
-      return;
-    }
-
-    const draggingTodo = todos.find(
-      (todo) => todo.id === draggedTodoId.current
-    );
-
-    const updatedTodos = todos.filter((todo) => todo.id !== draggingTodo.id);
-
-    const index = updatedTodos.indexOf(draggedOverTodo);
-    updatedTodos.splice(index, 0, draggingTodo);
-
-    setTodos(updatedTodos);
-  };
-
-  const handleDragEnd = (e) => {
-    draggedTodoId.current = null;
-    e.target.classList.remove("dragging");
-  };
 
   const toggleExpand = (id) => {
     if (editTodo.isEditing) {
@@ -260,22 +226,6 @@ function App() {
                         </button>
                       </div>
 
-                      {/* Drag & ReArrange */}
-                      <div>
-                        <button
-                          disabled={expandedTodo ? true : false}
-                          onClick={() => setReOrderTodos(!reOrderTodos)}
-                          className={cn(
-                            "p-2 text-white bg-blue-500 lg:px-4 lg:py-2 ",
-                            expandedTodo
-                              ? "cursor-not-allowed"
-                              : "hover:bg-blue-400"
-                          )}
-                        >
-                          {reOrderTodos ? "Done" : "Re-Order"}
-                        </button>
-                      </div>
-
                       {/* Check Trash */}
                       <div>
                         <button className="p-2 text-black bg-yellow-300 lg:px-4 lg:py-2 hover:bg-yellow-400">
@@ -290,22 +240,8 @@ function App() {
                 <div id="todos">
                   {todos.length ? (
                     todos.map((todo) => (
-                      <div
-                        id={todo.id}
-                        key={todo.id}
-                        onDragEnd={handleDragEnd}
-                        draggable={reOrderTodos ? true : false}
-                        className={reOrderTodos && "cursor-grab"}
-                        onDragOver={(e) => handleDragOver(e, todo.id)}
-                        onDragStart={(e) => handleDragStart(e, todo.id)}
-                      >
+                      <div id={todo.id} key={todo.id}>
                         <div className="relative flex items-center justify-between h-12 pl-5 border-b-2">
-                          <div
-                            className={cn(
-                              "absolute inset-0 z-[5]",
-                              reOrderTodos ? "inline-block" : "hidden"
-                            )}
-                          ></div>
                           <div className="py-3 text-sm md:text-base">
                             <span>{todo.name}</span>
                             <span>&nbsp;&nbsp;</span>
