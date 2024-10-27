@@ -172,227 +172,226 @@ function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr]">
-            <div className="relative flex flex-col md:border-r-2 border-r-gray-300">
-              <div className="overflow-auto h-[75vh]">
-                {/* Todo List Options */}
-                <div
-                  className="flex flex-col gap-3 overflow-hidden transition-all border-b-2 bg-slate-300"
-                  style={{
-                    maxHeight: showTodoListOptions ? "200px" : "0",
-                    padding: showTodoListOptions ? "1.25rem" : "0 1.25rem",
-                  }}
-                >
-                  {/* Search Todos  */}
-                  <input
-                    type="text"
-                    placeholder="Search Todos"
-                    className="p-1 border-2 rounded-md"
-                  />
+            <div className="flex flex-col md:border-r-2 border-r-gray-300 h-[75vh]">
+              {/* Todo List Options */}
+              <div
+                className={cn(
+                  "flex flex-col flex-shrink-0 gap-3 overflow-hidden transition-all border-b-2 bg-slate-300",
+                  showTodoListOptions
+                    ? "p-5 h-[200px] lg:h-[158px]"
+                    : "px-5 py-0 h-0"
+                )}
+              >
+                {/* Search Todos  */}
+                <input
+                  type="text"
+                  placeholder="Search Todos"
+                  className="p-1 mb-1 border-2 rounded-md"
+                />
 
-                  <div className="flex flex-col justify-between gap-3 lg:flex-row">
-                    <div className="flex flex-col gap-3">
-                      {/* Sort Todos */}
-                      <div className="flex items-center gap-3">
-                        <div>Sort By:</div>
-                        <div className="flex gap-3">
-                          <button className="text-xs text-white bg-btn hover:bg-btn-hover">
-                            Name
-                          </button>
-                          <button className="text-xs text-white bg-btn hover:bg-btn-hover">
-                            Date
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Filter Todos */}
-                      <div className="flex items-center gap-3">
-                        <div>Filter By:</div>
-                        <div className="flex gap-3">
-                          <button className="text-xs text-white bg-btn hover:bg-btn-hover">
-                            Completed
-                          </button>
-                          <button className="text-xs text-white bg-btn hover:bg-btn-hover">
-                            Pending
-                          </button>
-                        </div>
+                <div className="flex flex-col justify-between gap-3 lg:flex-row">
+                  <div className="flex flex-col gap-3">
+                    {/* Sort Todos */}
+                    <div className="flex items-center gap-3">
+                      <div>Sort By:</div>
+                      <div className="flex gap-3">
+                        <button className="text-xs text-white bg-btn hover:bg-btn-hover">
+                          Name
+                        </button>
+                        <button className="text-xs text-white bg-btn hover:bg-btn-hover">
+                          Date
+                        </button>
                       </div>
                     </div>
 
-                    <div className="flex gap-3 text-xs lg:text-sm">
-                      {/* Clear Todo List */}
-                      <div>
-                        <button className="p-2 text-white bg-red-600 lg:px-4 lg:py-2 hover:bg-red-500">
-                          Clear All
+                    {/* Filter Todos */}
+                    <div className="flex items-center gap-3">
+                      <div>Filter By:</div>
+                      <div className="flex gap-3">
+                        <button className="text-xs text-white bg-btn hover:bg-btn-hover">
+                          Completed
                         </button>
-                      </div>
-
-                      {/* Check Trash */}
-                      <div>
-                        <button className="p-2 text-black bg-yellow-300 lg:px-4 lg:py-2 hover:bg-yellow-400">
-                          View Trash
+                        <button className="text-xs text-white bg-btn hover:bg-btn-hover">
+                          Pending
                         </button>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Todo List */}
-                <div id="todos">
-                  {todos.length ? (
-                    todos.map((todo) => (
-                      <div id={todo.id} key={todo.id}>
-                        <div className="relative flex items-center justify-between h-12 pl-5 border-b-2">
-                          <div className="py-3 text-sm md:text-base">
-                            <span>{todo.name}</span>
-                            <span>&nbsp;&nbsp;</span>
-                            {todo.completed ? (
-                              <span className="px-2 text-xs text-white bg-green-400 rounded-full"></span>
+                  <div className="flex gap-3 text-xs lg:text-sm">
+                    {/* Clear Todo List */}
+                    <div>
+                      <button className="p-2 text-white bg-red-600 lg:px-4 lg:py-2 hover:bg-red-500">
+                        Clear All
+                      </button>
+                    </div>
+
+                    {/* Check Trash */}
+                    <div>
+                      <button className="p-2 text-black bg-yellow-300 lg:px-4 lg:py-2 hover:bg-yellow-400">
+                        View Trash
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Todo List */}
+              <div id="todos" className="overflow-auto">
+                {todos.length ? (
+                  todos.map((todo) => (
+                    <div id={todo.id} key={todo.id}>
+                      <div className="relative flex items-center justify-between h-12 pl-5 border-b-2">
+                        <div className="py-3 text-sm md:text-base">
+                          <span>{todo.name}</span>
+                          <span>&nbsp;&nbsp;</span>
+                          {todo.completed ? (
+                            <span className="px-2 text-xs text-white bg-green-400 rounded-full"></span>
+                          ) : (
+                            <span className="px-2 text-xs text-white bg-red-400 rounded-full"></span>
+                          )}
+                        </div>
+                        <div className="flex flex-shrink-0 h-full">
+                          <div className="flex items-center px-3 bg-blue-400">
+                            <img
+                              alt="expand"
+                              src="assets/icons/expand-up.png"
+                              className="h-6 cursor-pointer"
+                              style={{
+                                transform:
+                                  expandedTodo === todo.id
+                                    ? "rotate(180deg)"
+                                    : "rotate(0)",
+                                transition: "transform 0.3s linear 0.1s",
+                              }}
+                              onClick={() => toggleExpand(todo.id)}
+                            />
+                          </div>
+
+                          <div
+                            className={cn(
+                              "flex items-center px-3",
+                              todo.completed ? "bg-gray-300" : "bg-green-400"
+                            )}
+                          >
+                            {expandedTodo === todo.id ? (
+                              <img
+                                alt="edit"
+                                src="assets/icons/edit.svg"
+                                className={cn(
+                                  "h-6",
+                                  !todo.completed && "cursor-pointer"
+                                )}
+                                onClick={() =>
+                                  setEditTodo({
+                                    id: todo.id,
+                                    isEditing: true,
+                                  })
+                                }
+                              />
                             ) : (
-                              <span className="px-2 text-xs text-white bg-red-400 rounded-full"></span>
+                              <img
+                                alt="done"
+                                src="assets/icons/done.png"
+                                className={cn(
+                                  "h-6",
+                                  !todo.completed && "cursor-pointer"
+                                )}
+                              />
                             )}
                           </div>
-                          <div className="flex flex-shrink-0 h-full">
-                            <div className="flex items-center px-3 bg-blue-400">
-                              <img
-                                alt="expand"
-                                src="assets/icons/expand-up.png"
-                                className="h-6 cursor-pointer"
-                                style={{
-                                  transform:
-                                    expandedTodo === todo.id
-                                      ? "rotate(180deg)"
-                                      : "rotate(0)",
-                                  transition: "transform 0.3s linear 0.1s",
-                                }}
-                                onClick={() => toggleExpand(todo.id)}
-                              />
-                            </div>
 
-                            <div
-                              className={cn(
-                                "flex items-center px-3",
-                                todo.completed ? "bg-gray-300" : "bg-green-400"
-                              )}
-                            >
-                              {expandedTodo === todo.id ? (
-                                <img
-                                  alt="edit"
-                                  src="assets/icons/edit.svg"
-                                  className={cn(
-                                    "h-6",
-                                    !todo.completed && "cursor-pointer"
-                                  )}
-                                  onClick={() =>
-                                    setEditTodo({
-                                      id: todo.id,
-                                      isEditing: true,
-                                    })
-                                  }
-                                />
-                              ) : (
-                                <img
-                                  alt="done"
-                                  src="assets/icons/done.png"
-                                  className={cn(
-                                    "h-6",
-                                    !todo.completed && "cursor-pointer"
-                                  )}
-                                />
-                              )}
-                            </div>
-
-                            <div className="relative flex items-center px-3 bg-red-400 group">
-                              <img
-                                alt="delete"
-                                src="assets/icons/delete.svg"
-                                className="h-6 cursor-pointer"
-                              />
-                            </div>
+                          <div className="relative flex items-center px-3 bg-red-400 group">
+                            <img
+                              alt="delete"
+                              src="assets/icons/delete.svg"
+                              className="h-6 cursor-pointer"
+                            />
                           </div>
                         </div>
-
-                        {editTodo.id === todo.id && editTodo.isEditing ? (
-                          /* Expanded Todo Edit Form */
-                          <div className="p-5 overflow-hidden border-b-2 bg-slate-300">
-                            <form className="flex flex-col">
-                              <input
-                                type="text"
-                                className="p-2 mb-3 border-2 rounded-md"
-                                placeholder="Enter New Name"
-                              />
-                              <textarea
-                                rows={3}
-                                className="p-2 mb-3 border-2 rounded-md"
-                                placeholder="Enter New Description"
-                              ></textarea>
-                              <input
-                                type="date"
-                                className="p-2 mb-3 border-2 rounded-md"
-                              />
-                              <div className="flex gap-3">
-                                <button className="text-white bg-btn hover:bg-btn-hover">
-                                  Update
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    setEditTodo({ id: null, isEditing: false })
-                                  }
-                                  className="text-white bg-btn hover:bg-btn-hover"
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        ) : (
-                          /* Expanded Todo Details */
-                          <div
-                            className="overflow-hidden border-b-2 bg-slate-300"
-                            style={{
-                              maxHeight:
-                                expandedTodo === todo.id ? "2000px" : "0",
-                              padding:
-                                expandedTodo === todo.id
-                                  ? "1.25rem"
-                                  : "0 1.25rem 0 1.25rem",
-                              transition: "all 0.5s ease-in-out",
-                            }}
-                          >
-                            <div className="flex flex-col justify-between gap-3 mb-3 md:flex-row">
-                              <h4 className="text-lg font-semibold ">
-                                {todo.name}
-                              </h4>
-                              <div>
-                                <p>
-                                  <span className="font-semibold text-blue-500">
-                                    Created:&nbsp;
-                                  </span>
-                                  <span>{todo.created}</span>
-                                </p>
-                                {!todo.completed && (
-                                  <p>
-                                    <span className="font-semibold text-red-500">
-                                      Due:&nbsp;
-                                    </span>
-                                    <span>{todo.due}</span>
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                            <h5 className="mb-1 text-lg font-bold underline underline-offset-4">
-                              Description
-                            </h5>
-                            <p>{todo.description}</p>
-                          </div>
-                        )}
                       </div>
-                    ))
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-2xl text-gray-500">
-                      No Todos Found
+
+                      {editTodo.id === todo.id && editTodo.isEditing ? (
+                        /* Expanded Todo Edit Form */
+                        <div className="p-5 overflow-hidden border-b-2 bg-slate-300">
+                          <form className="flex flex-col">
+                            <input
+                              type="text"
+                              className="p-2 mb-3 border-2 rounded-md"
+                              placeholder="Enter New Name"
+                            />
+                            <textarea
+                              rows={3}
+                              className="p-2 mb-3 border-2 rounded-md"
+                              placeholder="Enter New Description"
+                            ></textarea>
+                            <input
+                              type="date"
+                              className="p-2 mb-3 border-2 rounded-md"
+                            />
+                            <div className="flex gap-3">
+                              <button className="text-white bg-btn hover:bg-btn-hover">
+                                Update
+                              </button>
+                              <button
+                                onClick={() =>
+                                  setEditTodo({ id: null, isEditing: false })
+                                }
+                                className="text-white bg-btn hover:bg-btn-hover"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      ) : (
+                        /* Expanded Todo Details */
+                        <div
+                          className="overflow-hidden border-b-2 bg-slate-300"
+                          style={{
+                            maxHeight:
+                              expandedTodo === todo.id ? "2000px" : "0",
+                            padding:
+                              expandedTodo === todo.id
+                                ? "1.25rem"
+                                : "0 1.25rem 0 1.25rem",
+                            transition: "all 0.5s ease-in-out",
+                          }}
+                        >
+                          <div className="flex flex-col justify-between gap-3 mb-3 md:flex-row">
+                            <h4 className="text-lg font-semibold ">
+                              {todo.name}
+                            </h4>
+                            <div>
+                              <p>
+                                <span className="font-semibold text-blue-500">
+                                  Created:&nbsp;
+                                </span>
+                                <span>{todo.created}</span>
+                              </p>
+                              {!todo.completed && (
+                                <p>
+                                  <span className="font-semibold text-red-500">
+                                    Due:&nbsp;
+                                  </span>
+                                  <span>{todo.due}</span>
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          <h5 className="mb-1 text-lg font-bold underline underline-offset-4">
+                            Description
+                          </h5>
+                          <p>{todo.description}</p>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  ))
+                ) : (
+                  <div className="flex items-center justify-center h-full text-2xl text-gray-500">
+                    No Todos Found
+                  </div>
+                )}
               </div>
             </div>
 
