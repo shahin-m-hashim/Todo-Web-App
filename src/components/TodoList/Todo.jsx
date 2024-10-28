@@ -1,9 +1,10 @@
+/* eslint-disable react/prop-types */
 import { useContext } from "react";
 import { cn } from "../../utils/cn";
 import TodoContext from "../../providers/TodosProvider";
 
-export default function Todo() {
-  const { todoUIStates, todo, toggleExpand, doneTodo, toggleEdit, deleteTodo } =
+export default function Todo({ todo }) {
+  const { todoUIStates, toggleExpand, doneTodo, toggleEdit, deleteTodo } =
     useContext(TodoContext);
 
   return (
@@ -21,9 +22,9 @@ export default function Todo() {
         <div className="flex items-center px-3 bg-blue-400">
           <button onClick={() => toggleExpand(todo.id)}>
             <img
+              className="h-6"
               alt="expand-todo"
               src="assets/icons/expand-up.png"
-              className="h-6"
               style={{
                 transform:
                   todoUIStates.expandedTodo === todo.id
@@ -42,7 +43,10 @@ export default function Todo() {
           )}
         >
           {todoUIStates.expandedTodo === todo.id && !todo.completed ? (
-            <button onClick={() => toggleEdit(todo.id)}>
+            <button
+              disabled={todo.completed}
+              onClick={() => toggleEdit(todo.id)}
+            >
               <img
                 alt="edit-todo"
                 className="h-6"
@@ -50,15 +54,11 @@ export default function Todo() {
               />
             </button>
           ) : (
-            <button
-              onClick={() => doneTodo(todo.id)}
-              disabled={todo.completed}
-              className={todo.completed && "cursor-auto"}
-            >
+            <button disabled={todo.completed} onClick={() => doneTodo(todo.id)}>
               <img
                 alt="done-todo"
-                src="assets/icons/done.png"
                 className="h-6"
+                src="assets/icons/done.png"
               />
             </button>
           )}

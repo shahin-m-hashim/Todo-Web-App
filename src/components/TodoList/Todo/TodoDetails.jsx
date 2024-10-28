@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useContext } from "react";
 import TodoContext from "../../../providers/TodosProvider";
 
-export default function TodoDetails() {
-  const { todoUIStates, todo } = useContext(TodoContext);
+export default function TodoDetails({ todo }) {
+  const { todoUIStates } = useContext(TodoContext);
 
   return (
     <div
@@ -17,16 +18,16 @@ export default function TodoDetails() {
       }}
     >
       <div className="flex flex-col justify-between gap-3 mb-3 md:flex-row">
-        <h4 className="text-lg font-semibold ">{todo.name}</h4>
+        <h4 className="text-lg font-semibold ">Name: {todo.name}</h4>
         <div>
           <p>
             <span className="font-semibold text-blue-500">Created:&nbsp;</span>
-            <span>{todo.created}</span>
+            <span>{todo.createdOn}</span>
           </p>
           {!todo.completed && (
             <p>
               <span className="font-semibold text-red-500">Due:&nbsp;</span>
-              <span>{todo.due}</span>
+              <span>{todo.dueDate}</span>
             </p>
           )}
         </div>

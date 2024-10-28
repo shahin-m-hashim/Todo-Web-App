@@ -1,17 +1,9 @@
 /* eslint-disable react/prop-types */
 import useMonitorWindow from "../hooks/useMonitorWindow";
-import { SpinnerContext } from "../components/LoadingSpinner";
 
-import {
-  useState,
-  useEffect,
-  useContext,
-  useReducer,
-  createContext,
-} from "react";
+import { useState, useEffect, useReducer, createContext } from "react";
 
 const TodoContext = createContext();
-const localTodos = localStorage.getItem("todos");
 
 const todoReducer = (state, action) => {
   switch (action.type) {
@@ -39,7 +31,6 @@ const todoReducer = (state, action) => {
 };
 
 export const TodosProvider = ({ children }) => {
-  const setShowSpinner = useContext(SpinnerContext);
   const [todos, dispatch] = useReducer(todoReducer, null);
 
   const [todoUIStates, setTodoUIStates] = useState({
@@ -110,18 +101,17 @@ export const TodosProvider = ({ children }) => {
     dispatch({ type: "DELETE_ALL_TODOS" });
   };
 
-  useMonitorWindow(todoUIStates.editingTodo || todoUIStates.expandedTodo);
+  useMonitorWindow(todoUIStates.editingTodo);
 
   useEffect(() => {
-    setShowSpinner(true);
+    const localTodos = JSON.parse(localStorage.getItem("todos"));
     if (!localTodos) {
       localStorage.setItem("todos", []);
       dispatch({ type: "SET_TODOS", payload: [] });
     } else {
-      dispatch({ type: "SET_TODOS", payload: JSON.parse(localTodos) });
+      dispatch({ type: "SET_TODOS", payload: localTodos });
     }
-    setShowSpinner(false);
-  }, [setShowSpinner, todos]);
+  }, []);
 
   return (
     <TodoContext.Provider

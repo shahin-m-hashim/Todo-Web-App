@@ -26,7 +26,6 @@ export default function LoadingSpinner({ children }) {
               fill="currentFill"
             />
           </svg>
-          <span className="sr-only">Loading...</span>
         </div>
       )}
       {children}

@@ -1,23 +1,118 @@
-export default function EditTodoForm() {
+/* eslint-disable react/prop-types */
+import { cn } from "../../../utils/cn";
+import { validateField } from "../../../utils/todo";
+import TodoContext from "../../../providers/TodosProvider";
+import { useContext, useEffect, useRef, useState } from "react";
+
+export default function EditTodoForm({ todo }) {
+  const disableUpdating = useRef(true);
+  const { todoUIStates, setTodoUIStates } = useContext(TodoContext);
+
+  const initialUpdateTodoForm = {
+    name: {
+      value: todo.name,
+      error: null,
+    },
+    description: {
+      value: todo.description,
+      error: null,
+    },
+    dueDate: {
+      value: todo.dueDate.split("/").reverse().join("-"),
+      error: null,
+    },
+  };
+
+  const [updateTodoFormInputs, setUpdateTodoFormInputs] = useState(
+    initialUpdateTodoForm
+  );
+
+  const handleChange = (field, value) => {
+    const error = validateField(field, value);
+
+    setUpdateTodoFormInputs((prevInputs) => ({
+      ...prevInputs,
+      [field]: { value, error },
+    }));
+  };
+
+  useEffect(() => {
+    disableUpdating.current = !Object.values(updateTodoFormInputs).every(
+      (input) => input.error === null && input.value != ""
+    );
+  }, [updateTodoFormInputs]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!disableUpdating.current) {
+      const updatedTodo = {
+        ...todo,
+        name: updateTodoFormInputs.name.value,
+        description: updateTodoFormInputs.description.value,
+        dueDate: updateTodoFormInputs.dueDate.value
+          .split("-")
+          .reverse()
+          .join("/"),
+      };
+
+      console.log(updatedTodo);
+
+      setUpdateTodoFormInputs(initialUpdateTodoForm);
+      setTodoUIStates({ ...todoUIStates, editingTodo: null });
+    }
+  };
+
   return (
     <form className="flex flex-col">
       <input
         type="text"
         placeholder="Enter New Name"
-        className="p-2 mb-3 border-2 rounded-md"
+        className={cn(
+          "p-2 border-2 rounded-md",
+          updateTodoFormInputs.name.error && "border-red-500"
+        )}
+        value={updateTodoFormInputs.name.value}
+        onChange={(e) => handleChange("name", e.target.value)}
       />
+      <p className="px-1 mb-3 text-red-500">
+        {updateTodoFormInputs.name.error}
+      </p>
       <textarea
         rows={3}
-        placeholder="Enter New Description"
-        className="p-2 mb-3 border-2 rounded-md"
+        placeholder="Description"
+        className={cn(
+          "p-2 border-2 rounded-md",
+          updateTodoFormInputs.description.error && "border-red-500"
+        )}
+        value={updateTodoFormInputs.description.value}
+        onChange={(e) => handleChange("description", e.target.value)}
       ></textarea>
-      <input type="date" className="p-2 mb-3 border-2 rounded-md" />
+      <p className="px-1 mb-3 text-red-500">
+        {updateTodoFormInputs.description.error}
+      </p>
+      <input
+        type="date"
+        value={updateTodoFormInputs.dueDate.value}
+        className={cn(
+          "p-2 border-2 rounded-md",
+          updateTodoFormInputs.dueDate.error && "border-red-500"
+        )}
+        onChange={(e) => handleChange("dueDate", e.target.value)}
+      />
+      <p className="px-1 mb-3 text-red-500">
+        {updateTodoFormInputs.dueDate.error}
+      </p>
       <div className="flex gap-3">
-        <button className="text-white btn bg-btn hover:bg-btn-hover">
+        <button
+          onClick={handleSubmit}
+          className="text-white btn bg-btn hover:bg-btn-hover"
+        >
           Update
         </button>
         <button
-          onClick={() => setEditTodo({ id: null, isEditing: false })}
+          onClick={() =>
+            setTodoUIStates({ ...todoUIStates, editingTodo: null })
+          }
           className="text-white bg-btn btn hover:bg-btn-hover"
         >
           Cancel

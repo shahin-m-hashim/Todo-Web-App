@@ -54,8 +54,8 @@ export default function TodoListHeader() {
         </button>
 
         <div className="text-sm md:text-base">
-          <span>{todos?.filter((todo) => todo.completed).length}/</span>
-          <span>{todos?.length}</span>
+          <span>{todos.filter((todo) => todo.completed).length}/</span>
+          <span>{todos.length}</span>
           <span>&nbsp;completed</span>
         </div>
       </div>

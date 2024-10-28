@@ -13,20 +13,20 @@ export default function TodoList() {
       id="todos"
       className={cn(
         "overflow-auto",
-        !todos?.length && "h-full flex justify-center items-center"
+        !todos.length && "h-full flex justify-center items-center"
       )}
     >
-      {todos?.length ? (
+      {todos.length ? (
         todos.map((todo) => (
-          <div id={todo.id} key={todo.id}>
-            <Todo />
+          <div key={todo.id}>
+            <Todo todo={todo} />
 
             {todoUIStates.editingTodo === todo.id ? (
               <div className="p-5 overflow-hidden border-b-2 bg-slate-300">
-                <EditTodoForm />
+                <EditTodoForm todo={todo} />
               </div>
             ) : (
-              <TodoDetails />
+              <TodoDetails todo={todo} />
             )}
           </div>
         ))
