@@ -3,10 +3,12 @@ import { cn } from "../../../utils/cn";
 import { validateField } from "../../../utils/todo";
 import TodoContext from "../../../providers/TodosProvider";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import UserInterfaceContext from "../../../providers/UserInterfaceProvider";
 
 export default function UpdateTodoForm({ todo }) {
   const disableUpdating = useRef(true);
-  const { todoUIStates, setTodoUIStates, updateTodo } = useContext(TodoContext);
+  const { updateTodo } = useContext(TodoContext);
+  const { UIStates, setUIStates } = useContext(UserInterfaceContext);
 
   const initialUpdateTodoForm = useMemo(
     () => ({
@@ -46,7 +48,6 @@ export default function UpdateTodoForm({ todo }) {
   }, [updateTodoFormInputs]);
 
   const handleSubmit = (e) => {
-    console.log("submitting", e);
     e.preventDefault();
     if (!disableUpdating.current) {
       const updatedTodo = {
@@ -60,7 +61,7 @@ export default function UpdateTodoForm({ todo }) {
       };
 
       setUpdateTodoFormInputs(initialUpdateTodoForm);
-      setTodoUIStates({ ...todoUIStates, editingTodo: null });
+      setUIStates({ ...UIStates, editingTodo: null });
 
       updateTodo(updatedTodo);
     }
@@ -115,9 +116,7 @@ export default function UpdateTodoForm({ todo }) {
         </button>
         <button
           type="button"
-          onClick={() =>
-            setTodoUIStates({ ...todoUIStates, editingTodo: null })
-          }
+          onClick={() => setUIStates({ ...UIStates, editingTodo: null })}
           className="text-white bg-btn btn hover:bg-btn-hover"
         >
           Cancel

@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useContext } from "react";
-import TodoContext from "../../../providers/TodosProvider";
+import UserInterfaceContext from "../../../providers/UserInterfaceProvider";
 
 export default function EditTodoBtn({ completed, todoId }) {
-  const { toggleEdit } = useContext(TodoContext);
+  const { toggleEdit } = useContext(UserInterfaceContext);
 
   return (
     <button

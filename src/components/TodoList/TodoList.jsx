@@ -4,9 +4,11 @@ import { cn } from "../../utils/cn";
 import TodoDetails from "./Todo/TodoDetails";
 import UpdateTodoForm from "./Form/UpdateTodoForm";
 import TodoContext from "../../providers/TodosProvider";
+import UserInterfaceContext from "../../providers/UserInterfaceProvider";
 
 export default function TodoList() {
-  const { todos, todoUIStates } = useContext(TodoContext);
+  const { todos } = useContext(TodoContext);
+  const { UIStates } = useContext(UserInterfaceContext);
 
   return (
     todos && (
@@ -22,7 +24,7 @@ export default function TodoList() {
             <div key={todo.id}>
               <Todo todo={todo} />
 
-              {todoUIStates.editingTodo === todo.id ? (
+              {UIStates.editingTodo === todo.id ? (
                 <div className="p-5 overflow-hidden border-b-2 bg-slate-300">
                   <UpdateTodoForm todo={todo} />
                 </div>

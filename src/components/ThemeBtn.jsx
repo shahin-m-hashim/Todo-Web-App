@@ -1,6 +1,11 @@
 /* eslint-disable react/prop-types */
 
-export default function ThemeBtn({ setTheme, theme, backgroundColor }) {
+import { useContext } from "react";
+import UserInterfaceContext from "../providers/UserInterfaceProvider";
+
+export default function ThemeBtn({ theme, backgroundColor }) {
+  const { setTheme } = useContext(UserInterfaceContext);
+
   return (
     <button
       type="button"

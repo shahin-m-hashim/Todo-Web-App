@@ -1,16 +1,16 @@
 import "./index.css";
 import { useContext } from "react";
-import ThemeContext from "./providers/ThemeContext";
 import TodoList from "./components/TodoList/TodoList";
 import AddTodoForm from "./components/TodoList/Form/AddTodoForm";
 import TodoListHeader from "./components/TodoList/TodoListHeader";
 import TodoListOptions from "./components/TodoList/TodoListOptions";
+import UserInterfaceContext from "./providers/UserInterfaceProvider";
 
 function App() {
-  const { theme } = useContext(ThemeContext);
+  const { UIStates } = useContext(UserInterfaceContext);
 
   return (
-    <main className={`app theme-${theme} bg-color`}>
+    <main className={`app theme-${UIStates.theme} bg-color`}>
       <div className="absolute inset-0 z-10 hidden backdrop-blur-sm"></div>
       <section className="h-full p-5 md:mx-16">
         <header className="mb-5">

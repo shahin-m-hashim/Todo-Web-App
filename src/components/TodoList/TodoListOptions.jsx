@@ -1,22 +1,22 @@
 import { useContext } from "react";
 import { cn } from "../../utils/cn";
-import TodoContext from "../../providers/TodosProvider";
 import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
 import SearchTodosInput from "./TodoListOptions/SearchTodosInput";
 import DeleteAllTodosBtn from "./TodoListOptions/DeleteAllTodosBtn";
 import SortTodosByNameBtn from "./TodoListOptions/SortTodosByNameBtn";
 import SortTodosByDatesBtn from "./TodoListOptions/SortTodosByDatesBtn";
+import UserInterfaceContext from "../../providers/UserInterfaceProvider";
 import FilterTodosByPendingBtn from "./TodoListOptions/FilterTodosByPendingBtn";
 import FilterTodosByCompletedBtn from "./TodoListOptions/FilterTodosByCompletedBtn";
 
 export default function TodoListOptions() {
-  const { todoUIStates } = useContext(TodoContext);
+  const { UIStates } = useContext(UserInterfaceContext);
 
   return (
     <div
       className={cn(
         "flex flex-col flex-shrink-0 gap-3 overflow-hidden transition-all border-b-2 bg-slate-300",
-        todoUIStates.showTodoListOptions
+        UIStates.showTodoListOptions
           ? "p-5 h-[200px] lg:h-[158px]"
           : "px-5 py-0 h-0"
       )}

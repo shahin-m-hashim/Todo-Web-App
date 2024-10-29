@@ -1,17 +1,11 @@
 import { useContext } from "react";
-import TodoContext from "../../../providers/TodosProvider";
+import UserInterfaceContext from "../../../providers/UserInterfaceProvider";
 
 export default function ShowAddTodoFormBtn() {
-  const { todoUIStates, setTodoUIStates } = useContext(TodoContext);
+  const { showAddTodoForm } = useContext(UserInterfaceContext);
 
   return (
-    <button
-      type="button"
-      className="md:hidden"
-      onClick={() =>
-        setTodoUIStates({ ...todoUIStates, showAddTodoForm: true })
-      }
-    >
+    <button type="button" className="md:hidden" onClick={showAddTodoForm}>
       <img
         className="h-8"
         alt="show-add-todo-form"

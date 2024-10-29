@@ -5,10 +5,10 @@ import DoneTodoBtn from "./Todo/DoneTodoBtn";
 import EditTodoBtn from "./Todo/EditTodoBtn";
 import ExpandTodoBtn from "./Todo/ExpandTodoBtn";
 import DeleteTodoBtn from "./Todo/DeleteTodoBtn";
-import TodoContext from "../../providers/TodosProvider";
+import UserInterfaceContext from "../../providers/UserInterfaceProvider";
 
 export default function Todo({ todo }) {
-  const { todoUIStates } = useContext(TodoContext);
+  const { UIStates } = useContext(UserInterfaceContext);
 
   return (
     <div className="relative flex items-center justify-between h-12 pl-5 border-b-2">
@@ -32,7 +32,7 @@ export default function Todo({ todo }) {
             todo.completed ? "bg-gray-300" : "bg-green-400"
           )}
         >
-          {todoUIStates.expandedTodo === todo.id && !todo.completed ? (
+          {UIStates.expandedTodo === todo.id && !todo.completed ? (
             <EditTodoBtn completed={todo.completed} todoId={todo.id} />
           ) : (
             <DoneTodoBtn completed={todo.completed} todoId={todo.id} />
