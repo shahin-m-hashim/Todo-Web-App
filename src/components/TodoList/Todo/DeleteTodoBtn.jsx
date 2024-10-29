@@ -7,6 +7,7 @@ export default function DeleteTodoBtn({ todoId }) {
 
   return (
     <button
+      type="button"
       onClick={() => deleteTodo(todoId)}
       className="flex items-center px-3 bg-red-400"
     >

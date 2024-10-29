@@ -7,7 +7,7 @@ export default function ExpandTodoBtn({ todoId }) {
   const { todoUIStates, toggleExpand } = useContext(TodoContext);
 
   return (
-    <button onClick={() => toggleExpand(todoId)}>
+    <button type="button" onClick={() => toggleExpand(todoId)}>
       <img
         className="h-6"
         alt="expand-todo"

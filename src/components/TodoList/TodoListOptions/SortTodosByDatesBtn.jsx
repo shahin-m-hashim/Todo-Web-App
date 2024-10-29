@@ -1,6 +1,9 @@
 export default function SortTodosByDatesBtn() {
   return (
-    <button className="text-xs text-white btn bg-btn hover:bg-btn-hover">
+    <button
+      type="button"
+      className="text-xs text-white btn bg-btn hover:bg-btn-hover"
+    >
       Date
     </button>
   );

@@ -6,6 +6,7 @@ export default function ShowAddTodoFormBtn() {
 
   return (
     <button
+      type="button"
       className="md:hidden"
       onClick={() =>
         setTodoUIStates({ ...todoUIStates, showAddTodoForm: true })

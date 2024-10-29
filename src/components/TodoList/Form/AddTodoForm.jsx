@@ -63,16 +63,17 @@ export default function AddTodoForm() {
 
   return (
     <form
-      onSubmit={handleSubmit}
       className={cn(
         "bg-[#fefdf8] static p-3 flex-col justify-between gap-3",
         todoUIStates.showAddTodoForm
           ? "flex absolute md:static md:z-0 z-40 h-[75vh] inset-x-0"
           : "hidden md:flex"
       )}
+      onSubmit={handleSubmit}
     >
       <div className="relative flex flex-col">
         <button
+          type="button"
           onClick={() =>
             setTodoUIStates({
               ...todoUIStates,
@@ -129,6 +130,7 @@ export default function AddTodoForm() {
         </button>
       </div>
       <button
+        type="reset"
         onClick={() => setAddTodoFormInputs(initialAddTodoForm)}
         className="text-white btn bg-btn-hover hover:bg-btn"
       >

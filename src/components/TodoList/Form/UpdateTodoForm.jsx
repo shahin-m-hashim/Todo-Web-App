@@ -2,26 +2,29 @@
 import { cn } from "../../../utils/cn";
 import { validateField } from "../../../utils/todo";
 import TodoContext from "../../../providers/TodosProvider";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 export default function UpdateTodoForm({ todo }) {
   const disableUpdating = useRef(true);
   const { todoUIStates, setTodoUIStates, updateTodo } = useContext(TodoContext);
 
-  const initialUpdateTodoForm = {
-    name: {
-      value: todo.name,
-      error: null,
-    },
-    description: {
-      value: todo.description,
-      error: null,
-    },
-    dueDate: {
-      value: todo.dueDate.split("/").reverse().join("-"),
-      error: null,
-    },
-  };
+  const initialUpdateTodoForm = useMemo(
+    () => ({
+      name: {
+        value: todo.name,
+        error: null,
+      },
+      description: {
+        value: todo.description,
+        error: null,
+      },
+      dueDate: {
+        value: todo.dueDate.split("/").reverse().join("-"),
+        error: null,
+      },
+    }),
+    [todo]
+  );
 
   const [updateTodoFormInputs, setUpdateTodoFormInputs] = useState(
     initialUpdateTodoForm
@@ -43,6 +46,7 @@ export default function UpdateTodoForm({ todo }) {
   }, [updateTodoFormInputs]);
 
   const handleSubmit = (e) => {
+    console.log("submitting", e);
     e.preventDefault();
     if (!disableUpdating.current) {
       const updatedTodo = {
@@ -63,7 +67,7 @@ export default function UpdateTodoForm({ todo }) {
   };
 
   return (
-    <form className="flex flex-col">
+    <form className="flex flex-col" onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="Enter New Name"
@@ -104,12 +108,13 @@ export default function UpdateTodoForm({ todo }) {
       </p>
       <div className="flex gap-3">
         <button
-          onClick={handleSubmit}
+          type="submit"
           className="text-white btn bg-btn hover:bg-btn-hover"
         >
           Update
         </button>
         <button
+          type="button"
           onClick={() =>
             setTodoUIStates({ ...todoUIStates, editingTodo: null })
           }

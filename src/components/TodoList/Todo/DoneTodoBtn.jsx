@@ -6,7 +6,7 @@ export default function DoneTodoBtn({ completed, todoId }) {
   const { doneTodo } = useContext(TodoContext);
 
   return (
-    <button disabled={completed} onClick={() => doneTodo(todoId)}>
+    <button type="button" disabled={completed} onClick={() => doneTodo(todoId)}>
       <img alt="done-todo" className="h-6" src="assets/icons/done.png" />
     </button>
   );

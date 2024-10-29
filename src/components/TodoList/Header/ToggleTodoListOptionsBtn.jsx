@@ -6,6 +6,7 @@ export default function ToggleTodoListOptionsBtn() {
 
   return (
     <button
+      type="button"
       className="ml-2 mr-auto"
       onClick={() =>
         setTodoUIStates({
