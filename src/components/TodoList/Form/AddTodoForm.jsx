@@ -1,7 +1,7 @@
 import { cn } from "../../../utils/cn";
+import { validateField } from "../../../utils/todo";
 import TodoContext from "../../../providers/TodosProvider";
 import { useContext, useEffect, useRef, useState } from "react";
-import { validateField } from "../../../utils/todo";
 
 const initialAddTodoForm = {
   name: {
@@ -26,8 +26,6 @@ export default function AddTodoForm() {
 
   const handleChange = (field, value) => {
     const error = validateField(field, value);
-
-    console.log(value);
 
     setAddTodoFormInputs((prevInputs) => ({
       ...prevInputs,
@@ -58,6 +56,7 @@ export default function AddTodoForm() {
       };
 
       setAddTodoFormInputs(initialAddTodoForm);
+
       addTodo(newTodo);
     }
   };

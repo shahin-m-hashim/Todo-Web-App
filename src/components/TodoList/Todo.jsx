@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useContext } from "react";
 import { cn } from "../../utils/cn";
+import DoneTodoBtn from "./Todo/DoneTodoBtn";
+import EditTodoBtn from "./Todo/EditTodoBtn";
+import ExpandTodoBtn from "./Todo/ExpandTodoBtn";
+import DeleteTodoBtn from "./Todo/DeleteTodoBtn";
 import TodoContext from "../../providers/TodosProvider";
 
 export default function Todo({ todo }) {
-  const { todoUIStates, toggleExpand, doneTodo, toggleEdit, deleteTodo } =
-    useContext(TodoContext);
+  const { todoUIStates } = useContext(TodoContext);
 
   return (
     <div className="relative flex items-center justify-between h-12 pl-5 border-b-2">
@@ -20,20 +23,7 @@ export default function Todo({ todo }) {
       </div>
       <div className="flex flex-shrink-0 h-full">
         <div className="flex items-center px-3 bg-blue-400">
-          <button onClick={() => toggleExpand(todo.id)}>
-            <img
-              className="h-6"
-              alt="expand-todo"
-              src="assets/icons/expand-up.png"
-              style={{
-                transform:
-                  todoUIStates.expandedTodo === todo.id
-                    ? "rotate(180deg)"
-                    : "rotate(0)",
-                transition: "transform 0.3s linear 0.1s",
-              }}
-            />
-          </button>
+          <ExpandTodoBtn todoId={todo.id} />
         </div>
 
         <div
@@ -43,37 +33,13 @@ export default function Todo({ todo }) {
           )}
         >
           {todoUIStates.expandedTodo === todo.id && !todo.completed ? (
-            <button
-              disabled={todo.completed}
-              onClick={() => toggleEdit(todo.id)}
-            >
-              <img
-                alt="edit-todo"
-                className="h-6"
-                src="assets/icons/edit.svg"
-              />
-            </button>
+            <EditTodoBtn completed={todo.completed} todoId={todo.id} />
           ) : (
-            <button disabled={todo.completed} onClick={() => doneTodo(todo.id)}>
-              <img
-                alt="done-todo"
-                className="h-6"
-                src="assets/icons/done.png"
-              />
-            </button>
+            <DoneTodoBtn completed={todo.completed} todoId={todo.id} />
           )}
         </div>
 
-        <button
-          onClick={() => deleteTodo(todo.id)}
-          className="flex items-center px-3 bg-red-400"
-        >
-          <img
-            className="h-6"
-            alt="delete-todo"
-            src="assets/icons/delete.svg"
-          />
-        </button>
+        <DeleteTodoBtn todoId={todo.id} />
       </div>
     </div>
   );

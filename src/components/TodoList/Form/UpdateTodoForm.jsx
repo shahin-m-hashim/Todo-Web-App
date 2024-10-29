@@ -4,9 +4,9 @@ import { validateField } from "../../../utils/todo";
 import TodoContext from "../../../providers/TodosProvider";
 import { useContext, useEffect, useRef, useState } from "react";
 
-export default function EditTodoForm({ todo }) {
+export default function UpdateTodoForm({ todo }) {
   const disableUpdating = useRef(true);
-  const { todoUIStates, setTodoUIStates } = useContext(TodoContext);
+  const { todoUIStates, setTodoUIStates, updateTodo } = useContext(TodoContext);
 
   const initialUpdateTodoForm = {
     name: {
@@ -55,10 +55,10 @@ export default function EditTodoForm({ todo }) {
           .join("/"),
       };
 
-      console.log(updatedTodo);
-
       setUpdateTodoFormInputs(initialUpdateTodoForm);
       setTodoUIStates({ ...todoUIStates, editingTodo: null });
+
+      updateTodo(updatedTodo);
     }
   };
 

@@ -13,7 +13,7 @@ const todoReducer = (state, action) => {
       return [...state, action.payload];
     case "UPDATE_TODO":
       return state.map((todo) =>
-        todo.id === action.payload.id ? action.payload : todo
+        todo.id === action.payload.id ? { ...action.payload } : todo
       );
     case "SET_TODO_COMPLETED":
       return state.map((todo) =>
@@ -40,11 +40,15 @@ export const TodosProvider = ({ children }) => {
     showTodoListOptions: true,
   });
 
-  const toggleExpand = (id) => {
+  const isEditing = () => {
     if (todoUIStates.editingTodo) {
       alert("Please cancel or complete pending edits first !!!");
-      return;
+      return true;
     }
+  };
+
+  const toggleExpand = (id) => {
+    if (isEditing()) return;
 
     setTodoUIStates({
       ...todoUIStates,
@@ -69,7 +73,7 @@ export const TodosProvider = ({ children }) => {
       "todos",
       JSON.stringify(
         todos.map((todo) =>
-          todo.id === id ? { ...todo, completed: !todo.completed } : todo
+          todo.id === id ? { ...todo, completed: true } : todo
         )
       )
     );
@@ -89,6 +93,8 @@ export const TodosProvider = ({ children }) => {
   };
 
   const deleteTodo = (id) => {
+    if (isEditing()) return;
+
     localStorage.setItem(
       "todos",
       JSON.stringify(todos.filter((todo) => todo.id !== id))
@@ -97,19 +103,24 @@ export const TodosProvider = ({ children }) => {
   };
 
   const deleteAllTodos = () => {
-    localStorage.setItem("todos", []);
-    dispatch({ type: "DELETE_ALL_TODOS" });
+    if (isEditing()) return;
+
+    const confirmed = confirm("All Todos will be moved to trash, OK ?");
+    if (confirmed) {
+      localStorage.setItem("todos", []);
+      dispatch({ type: "DELETE_ALL_TODOS" });
+    }
   };
 
   useMonitorWindow(todoUIStates.editingTodo);
 
   useEffect(() => {
-    const localTodos = JSON.parse(localStorage.getItem("todos"));
+    const localTodos = localStorage.getItem("todos");
     if (!localTodos) {
       localStorage.setItem("todos", []);
       dispatch({ type: "SET_TODOS", payload: [] });
     } else {
-      dispatch({ type: "SET_TODOS", payload: localTodos });
+      dispatch({ type: "SET_TODOS", payload: JSON.parse(localTodos) });
     }
   }, []);
 
