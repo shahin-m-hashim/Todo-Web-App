@@ -8,7 +8,7 @@ import DeleteTodoBtn from "./Todo/DeleteTodoBtn";
 import UserInterfaceContext from "../../providers/UserInterfaceProvider";
 
 export default function Todo({ todo }) {
-  const { UIStates } = useContext(UserInterfaceContext);
+  const { expandedTodo } = useContext(UserInterfaceContext);
 
   return (
     <div className="relative flex items-center justify-between h-12 pl-5 border-b-2">
@@ -32,7 +32,7 @@ export default function Todo({ todo }) {
             todo.completed ? "bg-gray-300" : "bg-green-400"
           )}
         >
-          {UIStates.expandedTodo === todo.id && !todo.completed ? (
+          {expandedTodo === todo.id && !todo.completed ? (
             <EditTodoBtn completed={todo.completed} todoId={todo.id} />
           ) : (
             <DoneTodoBtn completed={todo.completed} todoId={todo.id} />

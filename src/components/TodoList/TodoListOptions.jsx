@@ -10,15 +10,13 @@ import FilterTodosByPendingBtn from "./TodoListOptions/FilterTodosByPendingBtn";
 import FilterTodosByCompletedBtn from "./TodoListOptions/FilterTodosByCompletedBtn";
 
 export default function TodoListOptions() {
-  const { UIStates } = useContext(UserInterfaceContext);
+  const { showTodoListOptions } = useContext(UserInterfaceContext);
 
   return (
     <div
       className={cn(
         "flex flex-col flex-shrink-0 gap-3 overflow-hidden transition-all border-b-2 bg-slate-300",
-        UIStates.showTodoListOptions
-          ? "p-5 h-[200px] lg:h-[158px]"
-          : "px-5 py-0 h-0"
+        showTodoListOptions ? "p-5 h-[200px] lg:h-[158px]" : "px-5 py-0 h-0"
       )}
     >
       <SearchTodosInput />

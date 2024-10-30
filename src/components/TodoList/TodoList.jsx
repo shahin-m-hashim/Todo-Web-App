@@ -8,7 +8,7 @@ import UserInterfaceContext from "../../providers/UserInterfaceProvider";
 
 export default function TodoList() {
   const { todos } = useContext(TodoContext);
-  const { UIStates } = useContext(UserInterfaceContext);
+  const { editingTodo } = useContext(UserInterfaceContext);
 
   return (
     todos && (
@@ -24,7 +24,7 @@ export default function TodoList() {
             <div key={todo.id}>
               <Todo todo={todo} />
 
-              {UIStates.editingTodo === todo.id ? (
+              {editingTodo === todo.id ? (
                 <div className="p-5 overflow-hidden border-b-2 bg-slate-300">
                   <UpdateTodoForm todo={todo} />
                 </div>

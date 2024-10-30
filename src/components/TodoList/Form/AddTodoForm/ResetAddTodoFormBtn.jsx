@@ -2,12 +2,12 @@ import { useContext } from "react";
 import UserInterfaceContext from "../../../../providers/UserInterfaceProvider";
 
 export default function ResetAddTodoFormBtn() {
-  const { handleResetAddTodoForm } = useContext(UserInterfaceContext);
+  const { resetAddTodoForm } = useContext(UserInterfaceContext);
 
   return (
     <button
       type="reset"
-      onClick={handleResetAddTodoForm}
+      onClick={resetAddTodoForm}
       className="text-white btn bg-btn-hover hover:bg-btn"
     >
       Reset

@@ -3,15 +3,14 @@ import { useContext } from "react";
 import UserInterfaceContext from "../../../providers/UserInterfaceProvider";
 
 export default function TodoDetails({ todo }) {
-  const { UIStates } = useContext(UserInterfaceContext);
+  const { expandedTodo } = useContext(UserInterfaceContext);
 
   return (
     <div
       className="overflow-hidden border-b-2 bg-slate-300"
       style={{
-        maxHeight: UIStates.expandedTodo === todo.id ? "2000px" : "0",
-        padding:
-          UIStates.expandedTodo === todo.id ? "1.25rem" : "0 1.25rem 0 1.25rem",
+        maxHeight: expandedTodo === todo.id ? "2000px" : "0",
+        padding: expandedTodo === todo.id ? "1.25rem" : "0 1.25rem 0 1.25rem",
         transition: "all 0.5s ease-in-out",
       }}
     >

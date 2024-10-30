@@ -1,190 +1,152 @@
 /* eslint-disable react/prop-types */
+import {
+  useRef,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  createContext,
+} from "react";
+
 import TodoContext from "./TodosProvider";
 import { validateField } from "../utils/todo";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
 
-const theme = localStorage.getItem("theme") || "light";
+const localTheme = localStorage.getItem("theme") || "light";
 
 const UserInterfaceContext = createContext();
 
-const addTodoFormInputs = {
-  name: {
-    value: "",
-    error: null,
-  },
-  description: {
-    value: "",
-    error: null,
-  },
-  dueDate: {
-    value: "",
-    error: null,
-  },
+const initialAddTodoFormInputs = {
+  name: { value: "", error: null },
+  dueDate: { value: "", error: null },
+  description: { value: "", error: null },
 };
 
 export const UserInterfaceProvider = ({ children }) => {
   const disableAdding = useRef(true);
   const { addTodo, deleteTodo, deleteAllTodos } = useContext(TodoContext);
 
-  const [UIStates, setUIStates] = useState({
-    theme,
-    editingTodo: null,
-    addTodoFormInputs,
-    expandedTodo: null,
-    disableAdding: false,
-    showAddTodoForm: false,
-    showTodoListOptions: true,
-  });
+  const [theme, setTheme] = useState(localTheme);
+  const [editingTodo, setEditingTodo] = useState(null);
+  const [expandedTodo, setExpandedTodo] = useState(null);
+  const [showAddTodoForm, setShowAddTodoForm] = useState(false);
+  const [showTodoListOptions, setShowTodoListOptions] = useState(true);
 
-  const isEditing = () => {
-    if (UIStates.editingTodo) {
+  const [addTodoFormInputs, setAddTodoFormInputs] = useState(
+    initialAddTodoFormInputs
+  );
+
+  const isEditing = useCallback(() => {
+    if (editingTodo) {
       alert("Please cancel or complete pending edits first !!!");
       return true;
     }
-  };
+  }, [editingTodo]);
 
-  const toggleExpand = (id) => {
-    if (isEditing()) return;
+  const toggleExpand = useCallback(
+    (id) => {
+      if (isEditing()) return;
+      setExpandedTodo(expandedTodo === id ? null : id);
+    },
+    [expandedTodo, isEditing]
+  );
 
-    setUIStates({
-      ...UIStates,
-      expandedTodo: UIStates.expandedTodo === id ? null : id,
-    });
-  };
+  const toggleEdit = useCallback(
+    (id) => {
+      setEditingTodo(editingTodo === id ? null : id);
+    },
+    [editingTodo]
+  );
 
-  const toggleEdit = (id) => {
-    setUIStates({
-      ...UIStates,
-      editingTodo: UIStates.editingTodo === id ? null : id,
-    });
-  };
-
-  const handleAddTodoFormInputChange = (field, value) => {
+  const handleAddTodoFormInputChange = useCallback((field, value) => {
     const error = validateField(field, value);
-
-    setUIStates({
-      ...UIStates,
-      addTodoFormInputs: {
-        ...UIStates.addTodoFormInputs,
-        [field]: { value, error },
-      },
-    });
-  };
-
-  const handleResetAddTodoForm = () => {
-    setUIStates({
-      ...UIStates,
-      addTodoFormInputs,
-    });
-  };
+    setAddTodoFormInputs((prevInputs) => ({
+      ...prevInputs,
+      [field]: { value, error },
+    }));
+  }, []);
 
   const handleAddTodo = (e) => {
     e.preventDefault();
+    if (isEditing() || disableAdding.current) return;
 
+    const { name, description, dueDate } = addTodoFormInputs;
+    const newTodo = {
+      id: Date.now(),
+      completed: false,
+      createdOn: new Date().toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+      }),
+      name: name.value,
+      description: description.value,
+      dueDate: dueDate.value.split("-").reverse().join("/"),
+    };
+
+    addTodo(newTodo);
+    setAddTodoFormInputs(initialAddTodoFormInputs);
+  };
+
+  const handleDeleteTodo = useCallback(
+    (id) => {
+      if (isEditing()) return;
+      deleteTodo(id);
+    },
+    [deleteTodo, isEditing]
+  );
+
+  const handleDeleteAllTodos = useCallback(() => {
     if (isEditing()) return;
+    if (confirm("All Todos will be moved to trash, OK ?")) deleteAllTodos();
+  }, [deleteAllTodos, isEditing]);
 
-    if (!disableAdding.current) {
-      const { name, description, dueDate } = UIStates.addTodoFormInputs;
+  const resetAddTodoForm = useCallback(() => {
+    setAddTodoFormInputs(initialAddTodoFormInputs);
+  }, []);
 
-      const newTodo = {
-        id: Date.now(),
-        completed: false,
-        createdOn: new Date().toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "2-digit",
-        }),
-        name: name.value,
-        description: description.value,
-        dueDate: dueDate.value.split("-").reverse().join("/"),
-      };
-
-      setUIStates({
-        ...UIStates,
-        addTodoFormInputs,
-      });
-
-      addTodo(newTodo);
-    }
-  };
-
-  const handleDeleteTodo = (id) => {
-    if (isEditing()) return;
-    deleteTodo(id);
-  };
-
-  const handleDeleteAllTodos = () => {
-    if (isEditing()) return;
-    const confirmed = confirm("All Todos will be moved to trash, OK ?");
-    if (confirmed) deleteAllTodos();
-  };
-
-  const setTheme = (theme) => {
-    setUIStates({
-      ...UIStates,
-      theme,
-    });
-  };
-
-  const toggleTodoListOptions = () => {
-    setUIStates({
-      ...UIStates,
-      showTodoListOptions: !UIStates.showTodoListOptions,
-    });
-  };
-
-  const showAddTodoForm = () => {
-    setUIStates({
-      ...UIStates,
-      showAddTodoForm: true,
-    });
-  };
-
-  const closeAddTodoForm = () => {
-    setUIStates({
-      ...UIStates,
-      showAddTodoForm: false,
-    });
-  };
+  const toggleShowTodoListOptions = useCallback(() => {
+    setShowTodoListOptions((prev) => !prev);
+  }, []);
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
-      if (UIStates.editingTodo) {
+      if (editingTodo) {
         e.preventDefault();
         e.returnValue = "";
       }
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
-
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [UIStates.editingTodo]);
+  }, [editingTodo]);
+
+  useEffect(() => localStorage.setItem("theme", theme), [theme]);
 
   useEffect(() => {
-    localStorage.setItem("theme", UIStates.theme);
-  }, [UIStates.theme]);
-
-  useEffect(() => {
-    disableAdding.current = !Object.values(UIStates.addTodoFormInputs).every(
-      (input) => input.error === null && input.value != ""
+    disableAdding.current = !Object.values(addTodoFormInputs).every(
+      (input) => input.error === null && input.value !== ""
     );
-  }, [UIStates.addTodoFormInputs]);
+  }, [addTodoFormInputs]);
 
   return (
     <UserInterfaceContext.Provider
       value={{
-        UIStates,
+        theme,
         setTheme,
         toggleEdit,
-        setUIStates,
+        editingTodo,
+        expandedTodo,
         toggleExpand,
         handleAddTodo,
+        setEditingTodo,
         showAddTodoForm,
         handleDeleteTodo,
-        closeAddTodoForm,
+        resetAddTodoForm,
+        addTodoFormInputs,
+        setShowAddTodoForm,
+        showTodoListOptions,
         handleDeleteAllTodos,
-        toggleTodoListOptions,
-        handleResetAddTodoForm,
+        toggleShowTodoListOptions,
         handleAddTodoFormInputChange,
       }}
     >

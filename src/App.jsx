@@ -7,10 +7,10 @@ import TodoListOptions from "./components/TodoList/TodoListOptions";
 import UserInterfaceContext from "./providers/UserInterfaceProvider";
 
 function App() {
-  const { UIStates } = useContext(UserInterfaceContext);
+  const { theme } = useContext(UserInterfaceContext);
 
   return (
-    <main className={`app theme-${UIStates.theme} bg-color`}>
+    <main className={`app theme-${theme} bg-color`}>
       <div className="absolute inset-0 z-10 hidden backdrop-blur-sm"></div>
       <section className="h-full p-5 md:mx-16">
         <header className="mb-5">

@@ -8,7 +8,7 @@ import UserInterfaceContext from "../../../providers/UserInterfaceProvider";
 export default function UpdateTodoForm({ todo }) {
   const disableUpdating = useRef(true);
   const { updateTodo } = useContext(TodoContext);
-  const { UIStates, setUIStates } = useContext(UserInterfaceContext);
+  const { setEditingTodo } = useContext(UserInterfaceContext);
 
   const initialUpdateTodoForm = useMemo(
     () => ({
@@ -61,8 +61,7 @@ export default function UpdateTodoForm({ todo }) {
       };
 
       setUpdateTodoFormInputs(initialUpdateTodoForm);
-      setUIStates({ ...UIStates, editingTodo: null });
-
+      setEditingTodo(null);
       updateTodo(updatedTodo);
     }
   };
@@ -116,7 +115,7 @@ export default function UpdateTodoForm({ todo }) {
         </button>
         <button
           type="button"
-          onClick={() => setUIStates({ ...UIStates, editingTodo: null })}
+          onClick={() => setEditingTodo(null)}
           className="text-white bg-btn btn hover:bg-btn-hover"
         >
           Cancel

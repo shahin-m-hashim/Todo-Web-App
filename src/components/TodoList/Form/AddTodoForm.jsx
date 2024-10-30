@@ -8,13 +8,13 @@ import ResetAddTodoFormBtn from "./AddTodoForm/ResetAddTodoFormBtn";
 import UserInterfaceContext from "../../../providers/UserInterfaceProvider";
 
 export default function AddTodoForm() {
-  const { UIStates, handleAddTodo } = useContext(UserInterfaceContext);
+  const { showAddTodoForm, handleAddTodo } = useContext(UserInterfaceContext);
 
   return (
     <form
       className={cn(
         "bg-[#fefdf8] static p-3 flex-col justify-between gap-3",
-        UIStates.showAddTodoForm
+        showAddTodoForm
           ? "flex absolute md:static md:z-0 z-40 h-[75vh] inset-x-0"
           : "hidden md:flex"
       )}
