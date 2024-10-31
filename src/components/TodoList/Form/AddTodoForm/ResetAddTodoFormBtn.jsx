@@ -1,9 +1,6 @@
-import { useContext } from "react";
-import UserInterfaceContext from "../../../../providers/UserInterfaceProvider";
+/* eslint-disable react/prop-types */
 
-export default function ResetAddTodoFormBtn() {
-  const { resetAddTodoForm } = useContext(UserInterfaceContext);
-
+export default function ResetAddTodoFormBtn({ resetAddTodoForm }) {
   return (
     <button
       type="reset"

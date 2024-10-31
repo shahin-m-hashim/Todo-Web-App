@@ -69,8 +69,10 @@ export const TodosProvider = ({ children }) => {
   };
 
   const deleteAllTodos = () => {
-    localStorage.setItem("todos", []);
-    dispatch({ type: "DELETE_ALL_TODOS" });
+    if (confirm("All Todos will be moved to trash, OK ?")) {
+      localStorage.setItem("todos", []);
+      dispatch({ type: "DELETE_ALL_TODOS" });
+    }
   };
 
   useEffect(() => {

@@ -1,46 +1,51 @@
 /* eslint-disable react/prop-types */
-import { useContext } from "react";
-import { cn } from "../../utils/cn";
-import DoneTodoBtn from "./Todo/DoneTodoBtn";
-import EditTodoBtn from "./Todo/EditTodoBtn";
-import ExpandTodoBtn from "./Todo/ExpandTodoBtn";
-import DeleteTodoBtn from "./Todo/DeleteTodoBtn";
-import UserInterfaceContext from "../../providers/UserInterfaceProvider";
+
+import { useEffect, useState } from "react";
+import TodoCollapsed from "./TodoCollapsed";
+import UpdateTodoForm from "./Form/UpdateTodoForm";
+import TodoDetails from "./TodoCollapsed/TodoDetails";
 
 export default function Todo({ todo }) {
-  const { expandedTodo } = useContext(UserInterfaceContext);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanding = () => {
+    if (isEditing) {
+      alert("Please cancel or complete pending edits first !!!");
+      return;
+    }
+    setIsExpanded((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isEditing) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isEditing]);
 
   return (
-    <div className="relative flex items-center justify-between h-12 pl-5 border-b-2">
-      <div className="py-3 text-sm md:text-base">
-        <span>{todo.name}</span>
-        <span>&nbsp;&nbsp;</span>
-        {todo.completed ? (
-          <span className="px-2 text-xs text-white bg-green-400 rounded-full"></span>
-        ) : (
-          <span className="px-2 text-xs text-white bg-red-400 rounded-full"></span>
-        )}
-      </div>
-      <div className="flex flex-shrink-0 h-full">
-        <div className="flex items-center px-3 bg-blue-400">
-          <ExpandTodoBtn todoId={todo.id} />
-        </div>
+    <div>
+      <TodoCollapsed
+        todo={todo}
+        isEditing={isEditing}
+        isExpanded={isExpanded}
+        setIsEditing={setIsEditing}
+        toggleExpanding={() => toggleExpanding(todo.id)}
+      />
 
-        <div
-          className={cn(
-            "flex items-center px-3",
-            todo.completed ? "bg-gray-300" : "bg-green-400"
-          )}
-        >
-          {expandedTodo === todo.id && !todo.completed ? (
-            <EditTodoBtn completed={todo.completed} todoId={todo.id} />
-          ) : (
-            <DoneTodoBtn completed={todo.completed} todoId={todo.id} />
-          )}
+      {isEditing ? (
+        <div className="p-5 overflow-hidden border-b-2 bg-slate-300">
+          <UpdateTodoForm todo={todo} setIsEditing={setIsEditing} />
         </div>
-
-        <DeleteTodoBtn todoId={todo.id} />
-      </div>
+      ) : (
+        <TodoDetails isExpanded={isExpanded} todo={todo} />
+      )}
     </div>
   );
 }

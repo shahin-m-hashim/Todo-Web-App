@@ -1,17 +1,15 @@
-import { useContext } from "react";
+/* eslint-disable react/prop-types */
 import { cn } from "../../utils/cn";
 import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
 import SearchTodosInput from "./TodoListOptions/SearchTodosInput";
 import DeleteAllTodosBtn from "./TodoListOptions/DeleteAllTodosBtn";
 import SortTodosByNameBtn from "./TodoListOptions/SortTodosByNameBtn";
 import SortTodosByDatesBtn from "./TodoListOptions/SortTodosByDatesBtn";
-import UserInterfaceContext from "../../providers/UserInterfaceProvider";
+
 import FilterTodosByPendingBtn from "./TodoListOptions/FilterTodosByPendingBtn";
 import FilterTodosByCompletedBtn from "./TodoListOptions/FilterTodosByCompletedBtn";
 
-export default function TodoListOptions() {
-  const { showTodoListOptions } = useContext(UserInterfaceContext);
-
+export default function TodoListOptions({ showTodoListOptions }) {
   return (
     <div
       className={cn(

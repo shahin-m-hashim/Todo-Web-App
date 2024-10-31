@@ -1,9 +1,6 @@
-import { useContext } from "react";
-import UserInterfaceContext from "../../../../providers/UserInterfaceProvider";
+/* eslint-disable react/prop-types */
 
-export default function CloseAddTodoFormBtn() {
-  const { setShowAddTodoForm } = useContext(UserInterfaceContext);
-
+export default function CloseAddTodoFormBtn({ setShowAddTodoForm }) {
   return (
     <button
       type="button"

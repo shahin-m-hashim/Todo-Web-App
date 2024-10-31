@@ -1,11 +1,10 @@
-import { useContext } from "react";
+/* eslint-disable react/prop-types */
 import { cn } from "../../../../utils/cn";
-import UserInterfaceContext from "../../../../providers/UserInterfaceProvider";
 
-export default function NameInput() {
-  const { addTodoFormInputs, handleAddTodoFormInputChange } =
-    useContext(UserInterfaceContext);
-
+export default function NameInput({
+  addTodoFormInputs,
+  handleAddTodoFormInputChange,
+}) {
   return (
     <>
       <input

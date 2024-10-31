@@ -1,9 +1,5 @@
-import { useContext } from "react";
-import UserInterfaceContext from "../../../providers/UserInterfaceProvider";
-
-export default function ShowAddTodoFormBtn() {
-  const { setShowAddTodoForm } = useContext(UserInterfaceContext);
-
+/* eslint-disable react/prop-types */
+export default function ShowAddTodoFormBtn({ setShowAddTodoForm }) {
   return (
     <button
       type="button"

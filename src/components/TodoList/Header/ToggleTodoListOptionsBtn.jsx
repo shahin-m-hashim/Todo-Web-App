@@ -1,9 +1,7 @@
-import { useContext } from "react";
-import UserInterfaceContext from "../../../providers/UserInterfaceProvider";
-
-export default function ToggleTodoListOptionsBtn() {
-  const { toggleShowTodoListOptions } = useContext(UserInterfaceContext);
-
+/* eslint-disable react/prop-types */
+export default function ToggleTodoListOptionsBtn({
+  toggleShowTodoListOptions,
+}) {
   return (
     <button
       type="button"

@@ -1,13 +1,17 @@
 import "./index.css";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import ThemeContext from "./providers/ThemeProvider";
 import TodoList from "./components/TodoList/TodoList";
 import AddTodoForm from "./components/TodoList/Form/AddTodoForm";
 import TodoListHeader from "./components/TodoList/TodoListHeader";
 import TodoListOptions from "./components/TodoList/TodoListOptions";
-import UserInterfaceContext from "./providers/UserInterfaceProvider";
 
 function App() {
-  const { theme } = useContext(UserInterfaceContext);
+  const { theme } = useContext(ThemeContext);
+  const [showAddTodoForm, setShowAddTodoForm] = useState(false);
+  const [showTodoListOptions, setShowTodoListOptions] = useState(true);
+
+  const toggleTodoListOptions = () => setShowTodoListOptions((prev) => !prev);
 
   return (
     <main className={`app theme-${theme} bg-color`}>
@@ -19,13 +23,22 @@ function App() {
           </h1>
         </header>
         <div className="bg-white border-2 border-gray-100 ">
-          <TodoListHeader />
+          <TodoListHeader
+            setShowAddTodoForm={setShowAddTodoForm}
+            toggleTodoListOptions={toggleTodoListOptions}
+          />
           <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] relative">
             <div className="flex flex-col md:border-r-2 border-r-gray-300 h-[75vh]">
-              <TodoListOptions />
+              <TodoListOptions
+                showTodoListOptions={showTodoListOptions}
+                toggleTodoListOptions={toggleTodoListOptions}
+              />
               <TodoList />
             </div>
-            <AddTodoForm />
+            <AddTodoForm
+              showAddTodoForm={showAddTodoForm}
+              setShowAddTodoForm={setShowAddTodoForm}
+            />
           </div>
         </div>
       </section>

@@ -3,12 +3,10 @@ import { cn } from "../../../utils/cn";
 import { validateField } from "../../../utils/todo";
 import TodoContext from "../../../providers/TodosProvider";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import UserInterfaceContext from "../../../providers/UserInterfaceProvider";
 
-export default function UpdateTodoForm({ todo }) {
+export default function UpdateTodoForm({ todo, setIsEditing }) {
   const disableUpdating = useRef(true);
   const { updateTodo } = useContext(TodoContext);
-  const { setEditingTodo } = useContext(UserInterfaceContext);
 
   const initialUpdateTodoForm = useMemo(
     () => ({
@@ -61,8 +59,8 @@ export default function UpdateTodoForm({ todo }) {
       };
 
       setUpdateTodoFormInputs(initialUpdateTodoForm);
-      setEditingTodo(null);
       updateTodo(updatedTodo);
+      setIsEditing(false);
     }
   };
 
@@ -115,7 +113,7 @@ export default function UpdateTodoForm({ todo }) {
         </button>
         <button
           type="button"
-          onClick={() => setEditingTodo(null)}
+          onClick={() => setIsEditing(false)}
           className="text-white bg-btn btn hover:bg-btn-hover"
         >
           Cancel

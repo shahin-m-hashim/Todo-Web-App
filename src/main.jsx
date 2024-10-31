@@ -3,14 +3,14 @@ import App from "./App.jsx";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { TodosProvider } from "./providers/TodosProvider.jsx";
-import { UserInterfaceProvider } from "./providers/UserInterfaceProvider.jsx";
+import { ThemeProvider } from "./providers/ThemeProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <TodosProvider>
-      <UserInterfaceProvider>
+    <ThemeProvider>
+      <TodosProvider>
         <App />
-      </UserInterfaceProvider>
-    </TodosProvider>
+      </TodosProvider>
+    </ThemeProvider>
   </StrictMode>
 );
