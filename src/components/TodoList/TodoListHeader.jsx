@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
+import { memo } from "react";
 import TodoListLen from "./Header/TodoListLen";
 import ThemeSwitcher from "./Header/ThemeSwitcher";
 import ShowAddTodoFormBtn from "./Header/ShowAddTodoFormBtn";
 import ToggleTodoListOptionsBtn from "./Header/ToggleTodoListOptionsBtn";
 
-export default function TodoListHeader({
-  toggleAddTodoForm,
+const TodoListHeader = memo(function TodoListHeader({
+  setShowAddTodoForm,
   toggleTodoListOptions,
 }) {
   return (
@@ -15,9 +16,11 @@ export default function TodoListHeader({
         <ToggleTodoListOptionsBtn
           toggleShowTodoListOptions={toggleTodoListOptions}
         />
-        <ShowAddTodoFormBtn toggleShowAddTodoForm={toggleAddTodoForm} />
+        <ShowAddTodoFormBtn setShowAddTodoForm={setShowAddTodoForm} />
         <TodoListLen />
       </div>
     </div>
   );
-}
+});
+
+export default TodoListHeader;

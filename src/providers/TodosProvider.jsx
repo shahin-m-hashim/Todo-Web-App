@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useReducer, createContext } from "react";
+import { useEffect, useReducer, createContext, useRef } from "react";
 
 const TodoContext = createContext();
 
@@ -29,6 +29,7 @@ const todoReducer = (state, action) => {
 };
 
 export const TodosProvider = ({ children }) => {
+  const editingTodos = useRef(new Set());
   const [todos, dispatch] = useReducer(todoReducer, null);
 
   const addTodo = (todo) => {
@@ -69,11 +70,20 @@ export const TodosProvider = ({ children }) => {
   };
 
   const deleteAllTodos = () => {
+    if (editingTodos.current.size > 0) {
+      alert("Please cancel or complete pending edits first !!!");
+      return;
+    }
+
     if (confirm("All Todos will be moved to trash, OK ?")) {
       localStorage.setItem("todos", []);
       dispatch({ type: "DELETE_ALL_TODOS" });
     }
   };
+
+  const addEditingTodo = (id) => editingTodos.current.add(id);
+
+  const removeEditingTodo = (id) => editingTodos.current.delete(id);
 
   useEffect(() => {
     const localTodos = localStorage.getItem("todos");
@@ -83,6 +93,15 @@ export const TodosProvider = ({ children }) => {
       localStorage.setItem("todos", JSON.stringify([]));
       dispatch({ type: "SET_TODOS", payload: [] });
     }
+
+    const handleBeforeUnload = (e) => {
+      if (editingTodos.current.size > 0) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
 
   return (
@@ -93,7 +112,9 @@ export const TodosProvider = ({ children }) => {
         doneTodo,
         updateTodo,
         deleteTodo,
+        addEditingTodo,
         deleteAllTodos,
+        removeEditingTodo,
       }}
     >
       {children}

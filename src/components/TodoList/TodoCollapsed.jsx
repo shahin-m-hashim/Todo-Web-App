@@ -40,6 +40,7 @@ export default function TodoCollapsed({
           {isExpanded && !todo.completed ? (
             <EditTodoBtn
               todoId={todo.id}
+              isEditing={isEditing}
               completed={todo.completed}
               setIsEditing={setIsEditing}
             />

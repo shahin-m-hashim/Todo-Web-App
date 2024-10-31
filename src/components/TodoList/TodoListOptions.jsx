@@ -1,15 +1,16 @@
 /* eslint-disable react/prop-types */
+
+import { memo } from "react";
 import { cn } from "../../utils/cn";
 import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
 import SearchTodosInput from "./TodoListOptions/SearchTodosInput";
 import DeleteAllTodosBtn from "./TodoListOptions/DeleteAllTodosBtn";
 import SortTodosByNameBtn from "./TodoListOptions/SortTodosByNameBtn";
 import SortTodosByDatesBtn from "./TodoListOptions/SortTodosByDatesBtn";
-
 import FilterTodosByPendingBtn from "./TodoListOptions/FilterTodosByPendingBtn";
 import FilterTodosByCompletedBtn from "./TodoListOptions/FilterTodosByCompletedBtn";
 
-export default function TodoListOptions({ showTodoListOptions }) {
+const TodoListOptions = memo(function TodoListOptions({ showTodoListOptions }) {
   return (
     <div
       className={cn(
@@ -49,4 +50,6 @@ export default function TodoListOptions({ showTodoListOptions }) {
       </div>
     </div>
   );
-}
+});
+
+export default TodoListOptions;

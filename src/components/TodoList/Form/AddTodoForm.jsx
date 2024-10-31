@@ -5,9 +5,17 @@ import { validateField } from "../../../utils/todo";
 import DueDateInput from "./AddTodoForm/DueDateInput";
 import TodoContext from "../../../providers/TodosProvider";
 import DescriptionInput from "./AddTodoForm/DescriptionInput";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import CloseAddTodoFormBtn from "./AddTodoForm/CloseAddTodoFormBtn";
 import ResetAddTodoFormBtn from "./AddTodoForm/ResetAddTodoFormBtn";
+
+import {
+  memo,
+  useRef,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 
 const initialAddTodoFormInputs = {
   name: { value: "", error: null },
@@ -15,7 +23,10 @@ const initialAddTodoFormInputs = {
   description: { value: "", error: null },
 };
 
-export default function AddTodoForm({ showAddTodoForm }) {
+const AddTodoForm = memo(function AddTodoForm({
+  showAddTodoForm,
+  setShowAddTodoForm,
+}) {
   const disableAdding = useRef(true);
   const { addTodo } = useContext(TodoContext);
 
@@ -75,7 +86,7 @@ export default function AddTodoForm({ showAddTodoForm }) {
       onSubmit={handleAddTodo}
     >
       <div className="relative flex flex-col">
-        <CloseAddTodoFormBtn />
+        <CloseAddTodoFormBtn setShowAddTodoForm={setShowAddTodoForm} />
 
         <h1 className="mb-3 text-lg">Add a todo</h1>
         <NameInput
@@ -100,4 +111,6 @@ export default function AddTodoForm({ showAddTodoForm }) {
       <ResetAddTodoFormBtn resetAddTodoForm={resetAddTodoForm} />
     </form>
   );
-}
+});
+
+export default AddTodoForm;

@@ -7,10 +7,10 @@ import { ThemeProvider } from "./providers/ThemeProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider>
-      <TodosProvider>
+    <TodosProvider>
+      <ThemeProvider>
         <App />
-      </TodosProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </TodosProvider>
   </StrictMode>
 );

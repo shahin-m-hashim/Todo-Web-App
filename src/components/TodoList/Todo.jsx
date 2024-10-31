@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 
 import { useEffect, useState } from "react";
@@ -5,7 +6,9 @@ import TodoCollapsed from "./TodoCollapsed";
 import UpdateTodoForm from "./Form/UpdateTodoForm";
 import TodoDetails from "./TodoCollapsed/TodoDetails";
 
-export default function Todo({ todo }) {
+export default function Todo({ todo, addEditingTodo, removeEditingTodo }) {
+  console.log("Todo rendered: " + todo.id);
+
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -18,19 +21,15 @@ export default function Todo({ todo }) {
   };
 
   useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      if (isEditing) {
-        e.preventDefault();
-        e.returnValue = "";
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    if (isEditing) {
+      addEditingTodo(todo.id);
+    } else {
+      removeEditingTodo(todo.id);
+    }
   }, [isEditing]);
 
   return (
-    <div>
+    <div className="todo">
       <TodoCollapsed
         todo={todo}
         isEditing={isEditing}
