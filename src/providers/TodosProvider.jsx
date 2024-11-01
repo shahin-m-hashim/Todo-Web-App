@@ -1,5 +1,11 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useReducer, createContext, useRef } from "react";
+import {
+  useEffect,
+  useReducer,
+  createContext,
+  useRef,
+  useCallback,
+} from "react";
 
 const TodoContext = createContext();
 
@@ -32,6 +38,14 @@ export const TodosProvider = ({ children }) => {
   const editingTodos = useRef(new Set());
   const [todos, dispatch] = useReducer(todoReducer, null);
 
+  const isEditsPending = useCallback(() => {
+    if (editingTodos.current.size > 0) {
+      alert("Please cancel or complete pending edits first !!!");
+      return true;
+    }
+    return false;
+  }, []);
+
   const addTodo = (todo) => {
     localStorage.setItem("todos", JSON.stringify([...todos, todo]));
     dispatch({ type: "ADD_TODO", payload: todo });
@@ -62,22 +76,21 @@ export const TodosProvider = ({ children }) => {
   };
 
   const deleteTodo = (id) => {
-    localStorage.setItem(
-      "todos",
-      JSON.stringify(todos.filter((todo) => todo.id !== id))
-    );
-    dispatch({ type: "DELETE_TODO", payload: id });
+    if (!isEditsPending()) {
+      localStorage.setItem(
+        "todos",
+        JSON.stringify(todos.filter((todo) => todo.id !== id))
+      );
+      dispatch({ type: "DELETE_TODO", payload: id });
+    }
   };
 
   const deleteAllTodos = () => {
-    if (editingTodos.current.size > 0) {
-      alert("Please cancel or complete pending edits first !!!");
-      return;
-    }
-
-    if (confirm("All Todos will be moved to trash, OK ?")) {
-      localStorage.setItem("todos", []);
-      dispatch({ type: "DELETE_ALL_TODOS" });
+    if (!isEditsPending()) {
+      if (confirm("All Todos will be moved to trash, OK ?")) {
+        localStorage.setItem("todos", []);
+        dispatch({ type: "DELETE_ALL_TODOS" });
+      }
     }
   };
 

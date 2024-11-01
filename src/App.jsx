@@ -11,10 +11,9 @@ function App() {
   const [showAddTodoForm, setShowAddTodoForm] = useState(false);
   const [showTodoListOptions, setShowTodoListOptions] = useState(true);
 
-  const toggleTodoListOptions = useCallback(
-    () => setShowTodoListOptions((prev) => !prev),
-    []
-  );
+  const toggleTodoListOptions = useCallback(() => {
+    setShowTodoListOptions((prev) => !prev);
+  }, []);
 
   return (
     <main className={`app theme-${theme} bg-color`}>

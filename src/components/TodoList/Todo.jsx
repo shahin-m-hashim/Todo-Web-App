@@ -1,24 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TodoCollapsed from "./TodoCollapsed";
 import UpdateTodoForm from "./Form/UpdateTodoForm";
 import TodoDetails from "./TodoCollapsed/TodoDetails";
 
 export default function Todo({ todo, addEditingTodo, removeEditingTodo }) {
-  console.log("Todo rendered: " + todo.id);
-
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleExpanding = () => {
+  const toggleExpanding = useCallback(() => {
     if (isEditing) {
       alert("Please cancel or complete pending edits first !!!");
-      return;
+    } else {
+      setIsExpanded((prev) => !prev);
     }
-    setIsExpanded((prev) => !prev);
-  };
+  }, [isEditing]);
 
   useEffect(() => {
     if (isEditing) {
@@ -35,7 +33,7 @@ export default function Todo({ todo, addEditingTodo, removeEditingTodo }) {
         isEditing={isEditing}
         isExpanded={isExpanded}
         setIsEditing={setIsEditing}
-        toggleExpanding={() => toggleExpanding(todo.id)}
+        toggleExpanding={toggleExpanding}
       />
 
       {isEditing ? (
