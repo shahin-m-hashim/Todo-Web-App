@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 
-import { useCallback, useEffect, useState } from "react";
 import TodoCollapsed from "./TodoCollapsed";
 import UpdateTodoForm from "./Form/UpdateTodoForm";
 import TodoDetails from "./TodoCollapsed/TodoDetails";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Todo({ todo, addEditingTodo, removeEditingTodo }) {
   const [isEditing, setIsEditing] = useState(false);

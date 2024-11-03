@@ -1,64 +1,48 @@
 /* eslint-disable react/prop-types */
-import { cn } from "../../../utils/cn";
-import { validateField } from "../../../utils/todo";
+
+import InputField from "../../InputField";
+import { useContext, useRef } from "react";
+import TextAreaField from "../../TextAreaField";
 import TodoContext from "../../../providers/TodosProvider";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+
+import {
+  validateName,
+  validateDueDate,
+  validateDescription,
+} from "../../../utils/validator";
 
 export default function UpdateTodoForm({ todo, setIsEditing }) {
-  const disableUpdating = useRef(true);
+  const form = useRef({
+    name: todo.name,
+    dueDate: todo.dueDate.split("/").reverse().join("-"),
+    description: todo.description,
+  });
+  const inputRefs = useRef({});
   const { updateTodo } = useContext(TodoContext);
-
-  const initialUpdateTodoForm = useMemo(
-    () => ({
-      name: {
-        value: todo.name,
-        error: null,
-      },
-      description: {
-        value: todo.description,
-        error: null,
-      },
-      dueDate: {
-        value: todo.dueDate.split("/").reverse().join("-"),
-        error: null,
-      },
-    }),
-    [todo]
-  );
-
-  const [updateTodoFormInputs, setUpdateTodoFormInputs] = useState(
-    initialUpdateTodoForm
-  );
-
-  const handleChange = (field, value) => {
-    const error = validateField(field, value);
-
-    setUpdateTodoFormInputs((prevInputs) => ({
-      ...prevInputs,
-      [field]: { value, error },
-    }));
-  };
-
-  useEffect(() => {
-    disableUpdating.current = !Object.values(updateTodoFormInputs).every(
-      (input) => input.error === null && input.value != ""
-    );
-  }, [updateTodoFormInputs]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!disableUpdating.current) {
+
+    let isFormValid = true;
+
+    Object.entries(inputRefs.current).forEach(([key, inputRef]) => {
+      if (inputRef.validate && !inputRef.validate()) {
+        isFormValid = false;
+      } else {
+        form.current[key] = inputRef.getValue();
+      }
+    });
+
+    if (isFormValid) {
+      const { name, description, dueDate } = form.current;
+
       const updatedTodo = {
         ...todo,
-        name: updateTodoFormInputs.name.value,
-        description: updateTodoFormInputs.description.value,
-        dueDate: updateTodoFormInputs.dueDate.value
-          .split("-")
-          .reverse()
-          .join("/"),
+        name,
+        description,
+        dueDate: dueDate.split("-").reverse().join("/"),
       };
 
-      setUpdateTodoFormInputs(initialUpdateTodoForm);
       updateTodo(updatedTodo);
       setIsEditing(false);
     }
@@ -66,44 +50,29 @@ export default function UpdateTodoForm({ todo, setIsEditing }) {
 
   return (
     <form className="flex flex-col" onSubmit={handleSubmit}>
-      <input
+      <InputField
         type="text"
-        placeholder="Enter New Name"
-        className={cn(
-          "p-2 border-2 rounded-md",
-          updateTodoFormInputs.name.error && "border-red-500"
-        )}
-        value={updateTodoFormInputs.name.value}
-        onChange={(e) => handleChange("name", e.target.value)}
+        name="name"
+        placeholder="Name"
+        validate={validateName}
+        defaultValue={form.current.name}
+        ref={(el) => (inputRefs.current["name"] = el)}
       />
-      <p className="px-1 mb-3 text-red-500">
-        {updateTodoFormInputs.name.error}
-      </p>
-      <textarea
-        rows={3}
+      <TextAreaField
+        name="description"
         placeholder="Description"
-        className={cn(
-          "p-2 border-2 rounded-md",
-          updateTodoFormInputs.description.error && "border-red-500"
-        )}
-        value={updateTodoFormInputs.description.value}
-        onChange={(e) => handleChange("description", e.target.value)}
-      ></textarea>
-      <p className="px-1 mb-3 text-red-500">
-        {updateTodoFormInputs.description.error}
-      </p>
-      <input
-        type="date"
-        value={updateTodoFormInputs.dueDate.value}
-        className={cn(
-          "p-2 border-2 rounded-md",
-          updateTodoFormInputs.dueDate.error && "border-red-500"
-        )}
-        onChange={(e) => handleChange("dueDate", e.target.value)}
+        validate={validateDescription}
+        defaultValue={form.current.description}
+        ref={(el) => (inputRefs.current["description"] = el)}
       />
-      <p className="px-1 mb-3 text-red-500">
-        {updateTodoFormInputs.dueDate.error}
-      </p>
+      <InputField
+        type="date"
+        name="dueDate"
+        placeholder="Due Date"
+        validate={validateDueDate}
+        defaultValue={form.current.dueDate}
+        ref={(el) => (inputRefs.current["dueDate"] = el)}
+      />
       <div className="flex gap-3">
         <button
           type="submit"

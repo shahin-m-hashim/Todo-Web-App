@@ -1,79 +1,64 @@
 /* eslint-disable react/prop-types */
-import { cn } from "../../../utils/cn";
-import NameInput from "./AddTodoForm/NameInput";
-import { validateField } from "../../../utils/todo";
-import DueDateInput from "./AddTodoForm/DueDateInput";
-import TodoContext from "../../../providers/TodosProvider";
-import DescriptionInput from "./AddTodoForm/DescriptionInput";
-import CloseAddTodoFormBtn from "./AddTodoForm/CloseAddTodoFormBtn";
-import ResetAddTodoFormBtn from "./AddTodoForm/ResetAddTodoFormBtn";
 
 import {
-  memo,
-  useRef,
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-} from "react";
+  validateName,
+  validateDueDate,
+  validateDescription,
+} from "../../../utils/validator";
 
-const initialAddTodoFormInputs = {
-  name: { value: "", error: null },
-  dueDate: { value: "", error: null },
-  description: { value: "", error: null },
-};
+import { cn } from "../../../utils/cn";
+import InputField from "../../InputField";
+import TextAreaField from "../../TextAreaField";
+import { memo, useContext, useRef } from "react";
+import TodoContext from "../../../providers/TodosProvider";
 
 const AddTodoForm = memo(function AddTodoForm({
   showAddTodoForm,
   setShowAddTodoForm,
 }) {
-  const disableAdding = useRef(true);
+  const form = useRef({});
+  const inputRefs = useRef({});
   const { addTodo } = useContext(TodoContext);
 
-  const [addTodoFormInputs, setAddTodoFormInputs] = useState(
-    initialAddTodoFormInputs
-  );
-
-  const resetAddTodoForm = () => {
-    setAddTodoFormInputs(initialAddTodoFormInputs);
+  const handleReset = () => {
+    Object.values(inputRefs.current).forEach((inputRef) => {
+      inputRef.reset();
+    });
   };
 
-  const handleAddTodoFormInputChange = useCallback((field, value) => {
-    const error = validateField(field, value);
-    setAddTodoFormInputs((prevInputs) => ({
-      ...prevInputs,
-      [field]: { value, error },
-    }));
-  }, []);
-
-  const handleAddTodo = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (disableAdding.current) return;
+    let isFormValid = true;
 
-    const { name, description, dueDate } = addTodoFormInputs;
-    const newTodo = {
-      id: Date.now(),
-      completed: false,
-      createdOn: new Date().toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "2-digit",
-      }),
-      name: name.value,
-      description: description.value,
-      dueDate: dueDate.value.split("-").reverse().join("/"),
-    };
+    Object.entries(inputRefs.current).forEach(([key, inputRef]) => {
+      if (inputRef.validate && !inputRef.validate()) {
+        isFormValid = false;
+      } else {
+        form.current[key] = inputRef.getValue();
+      }
+    });
 
-    addTodo(newTodo);
-    resetAddTodoForm();
+    if (isFormValid) {
+      const { name, description, dueDate } = form.current;
+
+      const newTodo = {
+        id: Date.now(),
+        completed: false,
+        createdOn: new Date().toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+        }),
+        name,
+        description,
+        dueDate: dueDate.split("-").reverse().join("/"),
+      };
+
+      addTodo(newTodo);
+      handleReset();
+    }
   };
-
-  useEffect(() => {
-    disableAdding.current = !Object.values(addTodoFormInputs).every(
-      (input) => input.error === null && input.value !== ""
-    );
-  }, [addTodoFormInputs]);
 
   return (
     <form
@@ -83,23 +68,37 @@ const AddTodoForm = memo(function AddTodoForm({
           ? "flex absolute md:static md:z-0 z-40 h-[75vh] inset-x-0"
           : "hidden md:flex"
       )}
-      onSubmit={handleAddTodo}
+      onSubmit={handleSubmit}
     >
       <div className="relative flex flex-col">
-        <CloseAddTodoFormBtn setShowAddTodoForm={setShowAddTodoForm} />
+        <button
+          type="button"
+          onClick={() => setShowAddTodoForm(false)}
+          className="absolute top-0 right-0 z-40 p-1 bg-red-400 rounded-full md:hidden hover:bg-red-300 "
+        >
+          <img alt="close" className="h-5" src="assets/icons/close.svg" />
+        </button>
 
         <h1 className="mb-3 text-lg">Add a todo</h1>
-        <NameInput
-          addTodoFormInputs={addTodoFormInputs}
-          handleAddTodoFormInputChange={handleAddTodoFormInputChange}
+        <InputField
+          type="text"
+          name="name"
+          placeholder="Name"
+          validate={validateName}
+          ref={(el) => (inputRefs.current["name"] = el)}
         />
-        <DescriptionInput
-          addTodoFormInputs={addTodoFormInputs}
-          handleAddTodoFormInputChange={handleAddTodoFormInputChange}
+        <TextAreaField
+          name="description"
+          placeholder="Description"
+          validate={validateDescription}
+          ref={(el) => (inputRefs.current["description"] = el)}
         />
-        <DueDateInput
-          addTodoFormInputs={addTodoFormInputs}
-          handleAddTodoFormInputChange={handleAddTodoFormInputChange}
+        <InputField
+          type="date"
+          name="dueDate"
+          placeholder="Due Date"
+          validate={validateDueDate}
+          ref={(el) => (inputRefs.current["dueDate"] = el)}
         />
         <button
           type="submit"
@@ -108,7 +107,13 @@ const AddTodoForm = memo(function AddTodoForm({
           Add
         </button>
       </div>
-      <ResetAddTodoFormBtn resetAddTodoForm={resetAddTodoForm} />
+      <button
+        type="reset"
+        onClick={handleReset}
+        className="text-white btn bg-btn-hover hover:bg-btn"
+      >
+        Reset
+      </button>
     </form>
   );
 });

@@ -4,8 +4,6 @@ import { memo, useContext } from "react";
 import TodoContext from "../../providers/TodosProvider";
 
 const TodoList = memo(function TodoList() {
-  console.log("TodoList rendered");
-
   const { todos, addEditingTodo, removeEditingTodo } = useContext(TodoContext);
 
   return (
