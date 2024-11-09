@@ -4,19 +4,11 @@
 import TodoCollapsed from "./TodoCollapsed";
 import UpdateTodoForm from "./Form/UpdateTodoForm";
 import TodoDetails from "./TodoCollapsed/TodoDetails";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Todo({ todo, addEditingTodo, removeEditingTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const toggleExpanding = useCallback(() => {
-    if (isEditing) {
-      alert("Please cancel or complete pending edits first !!!");
-    } else {
-      setIsExpanded((prev) => !prev);
-    }
-  }, [isEditing]);
 
   useEffect(() => {
     if (isEditing) {
@@ -33,7 +25,7 @@ export default function Todo({ todo, addEditingTodo, removeEditingTodo }) {
         isEditing={isEditing}
         isExpanded={isExpanded}
         setIsEditing={setIsEditing}
-        toggleExpanding={toggleExpanding}
+        toggleExpanding={() => setIsExpanded((prev) => !prev)}
       />
 
       {isEditing ? (

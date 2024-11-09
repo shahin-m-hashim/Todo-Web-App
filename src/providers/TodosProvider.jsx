@@ -61,7 +61,13 @@ export const TodosProvider = ({ children }) => {
     dispatch({ type: "UPDATE_TODO", payload: updatedTodo });
   };
 
+  const moveToTrash = (todo) => {
+    const trashedTodos = JSON.parse(localStorage.getItem("todosTrash")) || [];
+    localStorage.setItem("todosTrash", JSON.stringify([...trashedTodos, todo]));
+  };
+
   const deleteTodo = (id) => {
+    moveToTrash(todos.find((todo) => todo.id === id));
     localStorage.setItem(
       "todos",
       JSON.stringify(todos.filter((todo) => todo.id !== id))
@@ -73,7 +79,8 @@ export const TodosProvider = ({ children }) => {
     if (editingTodos.current.size > 0) {
       alert("Please cancel or complete pending edits first !!!");
     } else if (confirm("All Todos will be moved to trash, OK ?")) {
-      localStorage.setItem("todos", []);
+      todos.forEach((todo) => moveToTrash(todo));
+      localStorage.setItem("todos", JSON.stringify([]));
       dispatch({ type: "DELETE_ALL_TODOS" });
     }
   };
