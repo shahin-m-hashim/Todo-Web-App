@@ -26,6 +26,7 @@ export default function TodoCollapsed({
       <div className="flex flex-shrink-0 h-full">
         <div className="flex items-center px-3 bg-blue-400">
           <ExpandTodoBtn
+            isEditing={isEditing}
             isExpanded={isExpanded}
             toggleExpanding={toggleExpanding}
           />

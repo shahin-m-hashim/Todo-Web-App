@@ -7,40 +7,25 @@ import {
 } from "../../../utils/validator";
 
 import { cn } from "../../../utils/cn";
-import InputField from "../../InputField";
-import TextAreaField from "../../TextAreaField";
-import { memo, useContext, useRef } from "react";
+import { memo, useContext } from "react";
 import TodoContext from "../../../providers/TodosProvider";
+import { InputField, TextAreaField, useHybridForm } from "react-hybrid-form";
 
 const AddTodoForm = memo(function AddTodoForm({
   showAddTodoForm,
   setShowAddTodoForm,
 }) {
-  const form = useRef({});
-  const inputRefs = useRef({});
   const { addTodo } = useContext(TodoContext);
 
-  const handleReset = () => {
-    Object.values(inputRefs.current).forEach((inputRef) => {
-      inputRef.reset();
-    });
-  };
+  const [register, getFormData, resetForm] = useHybridForm();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let isFormValid = true;
+    const data = getFormData();
 
-    Object.entries(inputRefs.current).forEach(([key, inputRef]) => {
-      if (inputRef.validate && !inputRef.validate()) {
-        isFormValid = false;
-      } else {
-        form.current[key] = inputRef.getValue();
-      }
-    });
-
-    if (isFormValid) {
-      const { name, description, dueDate } = form.current;
+    if (data) {
+      const { name, description, dueDate } = data;
 
       const newTodo = {
         id: Date.now(),
@@ -56,7 +41,7 @@ const AddTodoForm = memo(function AddTodoForm({
       };
 
       addTodo(newTodo);
-      handleReset();
+      resetForm();
     }
   };
 
@@ -81,24 +66,32 @@ const AddTodoForm = memo(function AddTodoForm({
 
         <h1 className="mb-3 text-lg">Add a todo</h1>
         <InputField
-          type="text"
           name="name"
+          fieldClass="mb-2"
           placeholder="Name"
+          ref={register("name")}
           validate={validateName}
-          ref={(el) => (inputRefs.current["name"] = el)}
+          errorClass="px-1 text-red-500 text-sm"
+          inputClass="p-2 border-2 rounded-md w-full"
         />
         <TextAreaField
+          fieldClass="mb-1"
           name="description"
           placeholder="Description"
+          ref={register("description")}
           validate={validateDescription}
-          ref={(el) => (inputRefs.current["description"] = el)}
+          errorClass="px-1 text-red-500 text-sm"
+          textareaClass="p-2 border-2 rounded-md w-full"
         />
         <InputField
           type="date"
           name="dueDate"
+          fieldClass="mb-2"
           placeholder="Due Date"
+          ref={register("dueDate")}
           validate={validateDueDate}
-          ref={(el) => (inputRefs.current["dueDate"] = el)}
+          errorClass="px-1 text-red-500 text-sm"
+          inputClass="p-2 border-2 rounded-md w-full"
         />
         <button
           type="submit"
@@ -109,7 +102,7 @@ const AddTodoForm = memo(function AddTodoForm({
       </div>
       <button
         type="reset"
-        onClick={handleReset}
+        onClick={resetForm}
         className="text-white btn bg-btn-hover hover:bg-btn"
       >
         Reset

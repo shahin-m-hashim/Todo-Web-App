@@ -1,8 +1,17 @@
 /* eslint-disable react/prop-types */
 
-export default function ExpandTodoBtn({ isExpanded, toggleExpanding }) {
+export default function ExpandTodoBtn({
+  isEditing,
+  isExpanded,
+  toggleExpanding,
+}) {
   return (
-    <button type="button" onClick={toggleExpanding}>
+    <button
+      type="button"
+      disabled={isEditing}
+      onClick={toggleExpanding}
+      className={isEditing ? "cursor-not-allowed" : "cursor-pointer"}
+    >
       <img
         className="h-6"
         alt="expand-todo"

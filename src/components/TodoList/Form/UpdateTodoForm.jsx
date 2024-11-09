@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 
-import InputField from "../../InputField";
-import { useContext, useRef } from "react";
-import TextAreaField from "../../TextAreaField";
+import { useContext } from "react";
 import TodoContext from "../../../providers/TodosProvider";
 
 import {
@@ -11,30 +9,20 @@ import {
   validateDescription,
 } from "../../../utils/validator";
 
+import { InputField, TextAreaField, useHybridForm } from "react-hybrid-form";
+
 export default function UpdateTodoForm({ todo, setIsEditing }) {
-  const form = useRef({
-    name: todo.name,
-    dueDate: todo.dueDate.split("/").reverse().join("-"),
-    description: todo.description,
-  });
-  const inputRefs = useRef({});
   const { updateTodo } = useContext(TodoContext);
+
+  const [register, getFormData, resetForm] = useHybridForm();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let isFormValid = true;
+    const data = getFormData();
 
-    Object.entries(inputRefs.current).forEach(([key, inputRef]) => {
-      if (inputRef.validate && !inputRef.validate()) {
-        isFormValid = false;
-      } else {
-        form.current[key] = inputRef.getValue();
-      }
-    });
-
-    if (isFormValid) {
-      const { name, description, dueDate } = form.current;
+    if (data) {
+      const { name, description, dueDate } = data;
 
       const updatedTodo = {
         ...todo,
@@ -44,6 +32,7 @@ export default function UpdateTodoForm({ todo, setIsEditing }) {
       };
 
       updateTodo(updatedTodo);
+      resetForm();
       setIsEditing(false);
     }
   };
@@ -51,27 +40,34 @@ export default function UpdateTodoForm({ todo, setIsEditing }) {
   return (
     <form className="flex flex-col" onSubmit={handleSubmit}>
       <InputField
-        type="text"
         name="name"
+        fieldClass="mb-2"
         placeholder="Name"
+        ref={register("name")}
         validate={validateName}
-        defaultValue={form.current.name}
-        ref={(el) => (inputRefs.current["name"] = el)}
+        defaultValue={todo.name}
+        errorClass="px-1 text-red-500 text-sm"
+        inputClass="p-2 border-2 rounded-md w-full"
       />
       <TextAreaField
         name="description"
         placeholder="Description"
+        ref={register("description")}
         validate={validateDescription}
-        defaultValue={form.current.description}
-        ref={(el) => (inputRefs.current["description"] = el)}
+        defaultValue={todo.description}
+        errorClass="px-1 text-red-500 text-sm"
+        textareaClass="p-2 border-2 rounded-md w-full"
       />
       <InputField
         type="date"
         name="dueDate"
+        fieldClass="mb-2"
         placeholder="Due Date"
+        ref={register("dueDate")}
         validate={validateDueDate}
-        defaultValue={form.current.dueDate}
-        ref={(el) => (inputRefs.current["dueDate"] = el)}
+        errorClass="px-1 text-red-500 text-sm"
+        inputClass="p-2 border-2 rounded-md w-full"
+        defaultValue={todo.dueDate.split("/").reverse().join("-")}
       />
       <div className="flex gap-3">
         <button
