@@ -1,19 +1,24 @@
 import "./index.css";
+import { useContext, useState } from "react";
 import ThemeContext from "./providers/ThemeProvider";
+import TrashedTodos from "./components/TrashedTodos";
 import TodoList from "./components/TodoList/TodoList";
-import { useCallback, useContext, useState } from "react";
 import AddTodoForm from "./components/TodoList/Form/AddTodoForm";
 import TodoListHeader from "./components/TodoList/TodoListHeader";
 import TodoListOptions from "./components/TodoList/TodoListOptions";
 
 function App() {
   const { theme } = useContext(ThemeContext);
+
   const [showAddTodoForm, setShowAddTodoForm] = useState(false);
+  const [showTrashedTodos, setShowTrashedTodos] = useState(false);
   const [showTodoListOptions, setShowTodoListOptions] = useState(true);
 
-  const toggleTodoListOptions = useCallback(() => {
-    setShowTodoListOptions((prev) => !prev);
-  }, []);
+  const toggleTodoListOptions = () => {
+    if (!showTrashedTodos) {
+      setShowTodoListOptions((prev) => !prev);
+    }
+  };
 
   return (
     <main className={`app theme-${theme} bg-color`}>
@@ -31,8 +36,17 @@ function App() {
           />
           <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] relative">
             <div className="flex flex-col md:border-r-2 border-r-gray-300 h-[75vh]">
-              <TodoListOptions showTodoListOptions={showTodoListOptions} />
-              <TodoList />
+              {showTrashedTodos ? (
+                <TrashedTodos setShowTrashedTodos={setShowTrashedTodos} />
+              ) : (
+                <>
+                  <TodoListOptions
+                    showTodoListOptions={showTodoListOptions}
+                    setShowTrashedTodos={setShowTrashedTodos}
+                  />
+                  <TodoList />
+                </>
+              )}
             </div>
             <AddTodoForm
               showAddTodoForm={showAddTodoForm}

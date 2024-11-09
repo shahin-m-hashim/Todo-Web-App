@@ -2,15 +2,18 @@
 
 import { memo } from "react";
 import { cn } from "../../utils/cn";
-import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
 import SearchTodosInput from "./TodoListOptions/SearchTodosInput";
 import DeleteAllTodosBtn from "./TodoListOptions/DeleteAllTodosBtn";
 import SortTodosByNameBtn from "./TodoListOptions/SortTodosByNameBtn";
 import SortTodosByDatesBtn from "./TodoListOptions/SortTodosByDatesBtn";
 import FilterTodosByPendingBtn from "./TodoListOptions/FilterTodosByPendingBtn";
 import FilterTodosByCompletedBtn from "./TodoListOptions/FilterTodosByCompletedBtn";
+import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
 
-const TodoListOptions = memo(function TodoListOptions({ showTodoListOptions }) {
+const TodoListOptions = memo(function TodoListOptions({
+  showTodoListOptions,
+  setShowTrashedTodos,
+}) {
   return (
     <div
       className={cn(
@@ -44,7 +47,7 @@ const TodoListOptions = memo(function TodoListOptions({ showTodoListOptions }) {
             <DeleteAllTodosBtn />
           </div>
           <div>
-            <ViewTrashBtn />
+            <ViewTrashBtn setShowTrashedTodos={setShowTrashedTodos} />
           </div>
         </div>
       </div>

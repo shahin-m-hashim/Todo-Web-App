@@ -5,8 +5,6 @@ const TodoContext = createContext();
 
 const todoReducer = (state, action) => {
   switch (action.type) {
-    case "SET_TODOS":
-      return action.payload;
     case "ADD_TODO":
       return [...state, action.payload];
     case "UPDATE_TODO":
@@ -23,6 +21,10 @@ const todoReducer = (state, action) => {
       return state.filter((todo) => todo.id !== action.payload);
     case "DELETE_ALL_TODOS":
       return [];
+    case "RESTORE_TODO":
+      return [...state, action.payload];
+    case "RESTORE_ALL_TODOS":
+      return [...state, ...action.payload];
     default:
       return state || [];
   }
@@ -30,7 +32,11 @@ const todoReducer = (state, action) => {
 
 export const TodosProvider = ({ children }) => {
   const editingTodos = useRef(new Set());
-  const [todos, dispatch] = useReducer(todoReducer, null);
+
+  const [todos, dispatch] = useReducer(
+    todoReducer,
+    JSON.parse(localStorage.getItem("todos")) || []
+  );
 
   const addTodo = (todo) => {
     localStorage.setItem("todos", JSON.stringify([...todos, todo]));
@@ -62,8 +68,11 @@ export const TodosProvider = ({ children }) => {
   };
 
   const moveToTrash = (todo) => {
-    const trashedTodos = JSON.parse(localStorage.getItem("todosTrash")) || [];
-    localStorage.setItem("todosTrash", JSON.stringify([...trashedTodos, todo]));
+    const trashedTodos = JSON.parse(localStorage.getItem("trashedTodos")) || [];
+    localStorage.setItem(
+      "trashedTodos",
+      JSON.stringify([...trashedTodos, todo])
+    );
   };
 
   const deleteTodo = (id) => {
@@ -90,20 +99,13 @@ export const TodosProvider = ({ children }) => {
   const removeEditingTodo = (id) => editingTodos.current.delete(id);
 
   useEffect(() => {
-    const localTodos = localStorage.getItem("todos");
-    if (localTodos) {
-      dispatch({ type: "SET_TODOS", payload: JSON.parse(localTodos) });
-    } else {
-      localStorage.setItem("todos", JSON.stringify([]));
-      dispatch({ type: "SET_TODOS", payload: [] });
-    }
-
     const handleBeforeUnload = (e) => {
       if (editingTodos.current.size > 0) {
         e.preventDefault();
         e.returnValue = "";
       }
     };
+
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, []);
@@ -114,8 +116,10 @@ export const TodosProvider = ({ children }) => {
         todos,
         addTodo,
         doneTodo,
+        dispatch,
         updateTodo,
         deleteTodo,
+        editingTodos,
         addEditingTodo,
         deleteAllTodos,
         removeEditingTodo,

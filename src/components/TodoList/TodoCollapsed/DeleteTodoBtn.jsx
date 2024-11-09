@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
+
 import { useContext } from "react";
-import TodoContext from "../../../providers/TodosProvider";
 import { cn } from "../../../utils/cn";
+import TodoContext from "../../../providers/TodosProvider";
 
 export default function DeleteTodoBtn({ todoId, isEditing }) {
   const { deleteTodo } = useContext(TodoContext);

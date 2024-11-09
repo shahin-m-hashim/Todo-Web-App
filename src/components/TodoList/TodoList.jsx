@@ -11,11 +11,11 @@ const TodoList = memo(function TodoList() {
       <div
         id="todos"
         className={cn(
-          "overflow-auto",
-          !todos.length && "h-full flex justify-center items-center"
+          "h-full overflow-auto",
+          todos.length === 0 && "flex justify-center items-center"
         )}
       >
-        {todos.length ? (
+        {todos.length > 0 ? (
           todos.map((todo) => (
             <Todo
               todo={todo}
