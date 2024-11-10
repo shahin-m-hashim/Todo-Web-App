@@ -17,12 +17,10 @@ export default function TodoDetails({ todo, isExpanded }) {
             <span className="font-semibold text-blue-500">Created:&nbsp;</span>
             <span>{todo.createdOn}</span>
           </p>
-          {!todo.completed && (
-            <p>
-              <span className="font-semibold text-red-500">Due:&nbsp;</span>
-              <span>{todo.dueDate}</span>
-            </p>
-          )}
+          <p>
+            <span className="font-semibold text-red-500">Due:&nbsp;</span>
+            <span>{todo.dueDate}</span>
+          </p>
         </div>
       </div>
       <h5 className="mb-1 text-lg font-bold underline underline-offset-4">

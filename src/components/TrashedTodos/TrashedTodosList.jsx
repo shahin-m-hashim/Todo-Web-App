@@ -39,7 +39,7 @@ const TrashedTodosList = memo(function TrashedTodosList({
           type="button"
           onClick={restoreAllTodos}
           disabled={trashedTodos.length === 0}
-          className="p-1 text-black bg-blue-300 min-w-[6.25em] hover:bg-blue-400"
+          className="p-1 flex-[1] bg-blue-300 hover:bg-blue-400"
         >
           Restore All
         </button>
@@ -47,14 +47,14 @@ const TrashedTodosList = memo(function TrashedTodosList({
           type="button"
           onClick={deleteAllTrashedTodos}
           disabled={trashedTodos.length === 0}
-          className=" text-black bg-red-400  min-w-[6.25em] hover:bg-red-500"
+          className="p-1 flex-1 bg-red-400 hover:bg-red-500"
         >
           Delete All
         </button>
         <button
           type="button"
           onClick={() => setShowTrashedTodos(false)}
-          className="p-1 text-black bg-yellow-300 min-w-[6.25em] hover:bg-yellow-400"
+          className="p-1 flex-1 bg-yellow-300 hover:bg-yellow-400"
         >
           Go Back
         </button>

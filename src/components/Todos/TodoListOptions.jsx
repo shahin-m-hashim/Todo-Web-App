@@ -2,13 +2,13 @@
 
 import { memo } from "react";
 import { cn } from "../../utils/cn";
+import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
+import SortByNameBtn from "./TodoListOptions/SortByNameBtn";
+import SortByDueDateBtn from "./TodoListOptions/SortByDueDateBtn";
 import SearchTodosInput from "./TodoListOptions/SearchTodosInput";
 import DeleteAllTodosBtn from "./TodoListOptions/DeleteAllTodosBtn";
-import SortTodosByNameBtn from "./TodoListOptions/SortTodosByNameBtn";
-import SortTodosByDatesBtn from "./TodoListOptions/SortTodosByDatesBtn";
-import FilterTodosByPendingBtn from "./TodoListOptions/FilterTodosByPendingBtn";
-import FilterTodosByCompletedBtn from "./TodoListOptions/FilterTodosByCompletedBtn";
-import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
+import FilterByPendingBtn from "./TodoListOptions/FilterByPendingBtn";
+import FilterByCompletedBtn from "./TodoListOptions/FilterByCompletedBtn";
 
 const TodoListOptions = memo(function TodoListOptions({
   showTodoListOptions,
@@ -30,16 +30,16 @@ const TodoListOptions = memo(function TodoListOptions({
           <div className="flex items-center gap-3">
             <div>Sort By:</div>
             <div className="flex gap-3">
-              <SortTodosByNameBtn />
-              <SortTodosByDatesBtn />
+              <SortByNameBtn />
+              <SortByDueDateBtn />
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <div>Filter By:</div>
             <div className="flex gap-3">
-              <FilterTodosByCompletedBtn />
-              <FilterTodosByPendingBtn />
+              <FilterByCompletedBtn />
+              <FilterByPendingBtn />
             </div>
           </div>
         </div>

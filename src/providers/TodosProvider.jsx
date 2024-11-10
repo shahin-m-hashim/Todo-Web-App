@@ -25,6 +25,14 @@ const todoReducer = (state, action) => {
       return [...state, action.payload];
     case "RESTORE_ALL_TODOS":
       return [...state, ...action.payload];
+    case "SORT_BY_NAME_ASC":
+      return [...state].sort((a, b) => a.name.localeCompare(b.name));
+    case "SORT_BY_NAME_DESC":
+      return [...state].sort((a, b) => b.name.localeCompare(a.name));
+    case "SORT_BY_DUE_DATE_ASC":
+      return [...state].sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+    case "SORT_BY_DUE_DATE_DESC":
+      return [...state].sort((a, b) => b.dueDate.localeCompare(a.dueDate));
     default:
       return state || [];
   }
