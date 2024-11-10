@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 
 import RestoreTodoBtn from "./RestoreTodoBtn";
-import DeleteTrashedTodo from "./DeleteTrashedTodo";
+import DeleteTrashedTodoBtn from "./DeleteTrashedTodoBtn";
+
 export default function TrashedTodo({ todo, trashedTodos, setTrashedTodos }) {
   return (
     <div className="flex items-center justify-between flex-1 h-12 pl-5 border-b-2">
@@ -20,7 +21,7 @@ export default function TrashedTodo({ todo, trashedTodos, setTrashedTodos }) {
           trashedTodos={trashedTodos}
           setTrashedTodos={setTrashedTodos}
         />
-        <DeleteTrashedTodo
+        <DeleteTrashedTodoBtn
           todoId={todo.id}
           trashedTodos={trashedTodos}
           setTrashedTodos={setTrashedTodos}

@@ -1,10 +1,14 @@
 /* eslint-disable react/prop-types */
+import { cn } from "../../utils/cn";
+import TrashedTodo from "./TrashedTodo";
 import { memo, useContext, useState } from "react";
-import TrashedTodo from "./TrashedTodoList.jsx/TrashedTodo";
-import { cn } from "../utils/cn";
-import TodoContext from "../providers/TodosProvider";
+import TodoContext from "../../providers/TodosProvider";
 
-const TrashedTodos = memo(function TrashedTodos({ setShowTrashedTodos }) {
+const TrashedTodosList = memo(function TrashedTodosList({
+  setShowTrashedTodos,
+}) {
+  console.log("TrashedTodosList rendered");
+
   const { dispatch } = useContext(TodoContext);
 
   const [trashedTodos, setTrashedTodos] = useState(
@@ -84,4 +88,4 @@ const TrashedTodos = memo(function TrashedTodos({ setShowTrashedTodos }) {
   );
 });
 
-export default TrashedTodos;
+export default TrashedTodosList;

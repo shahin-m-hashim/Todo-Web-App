@@ -14,6 +14,8 @@ const TodoListOptions = memo(function TodoListOptions({
   showTodoListOptions,
   setShowTrashedTodos,
 }) {
+  console.log("TodoListOptions rendered");
+
   return (
     <div
       className={cn(

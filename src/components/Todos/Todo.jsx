@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 
 import TodoCollapsed from "./TodoCollapsed";
-import UpdateTodoForm from "./Form/UpdateTodoForm";
+import UpdateTodoForm from "./Forms/UpdateTodoForm";
 import TodoDetails from "./TodoCollapsed/TodoDetails";
 import { useEffect, useState } from "react";
 

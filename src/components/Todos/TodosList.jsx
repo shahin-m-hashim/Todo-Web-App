@@ -3,7 +3,9 @@ import { cn } from "../../utils/cn";
 import { memo, useContext } from "react";
 import TodoContext from "../../providers/TodosProvider";
 
-const TodoList = memo(function TodoList() {
+const TodosList = memo(function TodosList() {
+  console.log("TodosList rendered");
+
   const { todos, addEditingTodo, removeEditingTodo } = useContext(TodoContext);
 
   return (
@@ -32,4 +34,4 @@ const TodoList = memo(function TodoList() {
   );
 });
 
-export default TodoList;
+export default TodosList;

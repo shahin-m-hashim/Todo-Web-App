@@ -1,11 +1,10 @@
-import "./index.css";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import ThemeContext from "./providers/ThemeProvider";
-import TrashedTodos from "./components/TrashedTodos";
-import TodoList from "./components/TodoList/TodoList";
-import AddTodoForm from "./components/TodoList/Form/AddTodoForm";
-import TodoListHeader from "./components/TodoList/TodoListHeader";
-import TodoListOptions from "./components/TodoList/TodoListOptions";
+import TodosList from "./components/Todos/TodosList";
+import AddTodoForm from "./components/Todos/Forms/AddTodoForm";
+import TodoListHeader from "./components/Todos/TodoListHeader";
+import TodoListOptions from "./components/Todos/TodoListOptions";
+import TrashedTodosList from "./components/TrashedTodos/TrashedTodosList";
 
 function App() {
   const { theme } = useContext(ThemeContext);
@@ -14,11 +13,11 @@ function App() {
   const [showTrashedTodos, setShowTrashedTodos] = useState(false);
   const [showTodoListOptions, setShowTodoListOptions] = useState(true);
 
-  const toggleTodoListOptions = () => {
+  const toggleShowTodoListOptions = useCallback(() => {
     if (!showTrashedTodos) {
       setShowTodoListOptions((prev) => !prev);
     }
-  };
+  }, [showTrashedTodos]);
 
   return (
     <main className={`app theme-${theme} bg-color`}>
@@ -32,19 +31,19 @@ function App() {
         <div className="bg-white border-2 border-gray-100 ">
           <TodoListHeader
             setShowAddTodoForm={setShowAddTodoForm}
-            toggleTodoListOptions={toggleTodoListOptions}
+            toggleShowTodoListOptions={toggleShowTodoListOptions}
           />
           <div className="grid grid-cols-1 md:grid-cols-[2fr,1fr] relative">
             <div className="flex flex-col md:border-r-2 border-r-gray-300 h-[75vh]">
               {showTrashedTodos ? (
-                <TrashedTodos setShowTrashedTodos={setShowTrashedTodos} />
+                <TrashedTodosList setShowTrashedTodos={setShowTrashedTodos} />
               ) : (
                 <>
                   <TodoListOptions
                     showTodoListOptions={showTodoListOptions}
                     setShowTrashedTodos={setShowTrashedTodos}
                   />
-                  <TodoList />
+                  <TodosList />
                 </>
               )}
             </div>
