@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useRef, useEffect, useReducer, createContext } from "react";
+import { useRef, useEffect, useReducer, createContext, useState } from "react";
 
 const TodoContext = createContext();
 
@@ -33,6 +33,16 @@ const todoReducer = (state, action) => {
       return [...state].sort((a, b) => a.dueDate.localeCompare(b.dueDate));
     case "SORT_BY_DUE_DATE_DESC":
       return [...state].sort((a, b) => b.dueDate.localeCompare(a.dueDate));
+    case "FILTER_BY_COMPLETED":
+      return (JSON.parse(localStorage.getItem("todos")) || []).filter(
+        (todo) => todo.completed
+      );
+    case "FILTER_BY_PENDING":
+      return (JSON.parse(localStorage.getItem("todos")) || []).filter(
+        (todo) => !todo.completed
+      );
+    case "CLEAR_FILTERS":
+      return JSON.parse(localStorage.getItem("todos")) || [];
     default:
       return state || [];
   }
@@ -40,14 +50,21 @@ const todoReducer = (state, action) => {
 
 export const TodosProvider = ({ children }) => {
   const editingTodos = useRef(new Set());
+  const [isFiltering, setIsFiltering] = useState(false);
 
-  const [todos, dispatch] = useReducer(
-    todoReducer,
-    JSON.parse(localStorage.getItem("todos")) || []
-  );
+  const getLocalTodos = () => {
+    try {
+      return JSON.parse(localStorage.getItem("todos")) || [];
+    } catch (error) {
+      console.error("Error retrieving todos from local storage:", error);
+      return [];
+    }
+  };
+
+  const [todos, dispatch] = useReducer(todoReducer, getLocalTodos());
 
   const addTodo = (todo) => {
-    localStorage.setItem("todos", JSON.stringify([...todos, todo]));
+    localStorage.setItem("todos", JSON.stringify([...getLocalTodos(), todo]));
     dispatch({ type: "ADD_TODO", payload: todo });
   };
 
@@ -55,7 +72,7 @@ export const TodosProvider = ({ children }) => {
     localStorage.setItem(
       "todos",
       JSON.stringify(
-        todos.map((todo) =>
+        getLocalTodos().map((todo) =>
           todo.id === id ? { ...todo, completed: true } : todo
         )
       )
@@ -67,7 +84,7 @@ export const TodosProvider = ({ children }) => {
     localStorage.setItem(
       "todos",
       JSON.stringify(
-        todos.map((todo) =>
+        getLocalTodos().map((todo) =>
           todo.id === updatedTodo.id ? { ...updatedTodo } : todo
         )
       )
@@ -87,7 +104,7 @@ export const TodosProvider = ({ children }) => {
     moveToTrash(todos.find((todo) => todo.id === id));
     localStorage.setItem(
       "todos",
-      JSON.stringify(todos.filter((todo) => todo.id !== id))
+      JSON.stringify(getLocalTodos().filter((todo) => todo.id !== id))
     );
     dispatch({ type: "DELETE_TODO", payload: id });
   };
@@ -96,7 +113,7 @@ export const TodosProvider = ({ children }) => {
     if (editingTodos.current.size > 0) {
       alert("Please cancel or complete pending edits first !!!");
     } else if (confirm("All Todos will be moved to trash, OK ?")) {
-      todos.forEach((todo) => moveToTrash(todo));
+      getLocalTodos().forEach((todo) => moveToTrash(todo));
       localStorage.setItem("todos", JSON.stringify([]));
       dispatch({ type: "DELETE_ALL_TODOS" });
     }
@@ -105,6 +122,21 @@ export const TodosProvider = ({ children }) => {
   const addEditingTodo = (id) => editingTodos.current.add(id);
 
   const removeEditingTodo = (id) => editingTodos.current.delete(id);
+
+  const filterByCompleted = () => {
+    setIsFiltering(true);
+    dispatch({ type: "FILTER_BY_COMPLETED" });
+  };
+
+  const filterByPending = () => {
+    setIsFiltering(true);
+    dispatch({ type: "FILTER_BY_PENDING" });
+  };
+
+  const clearFilters = () => {
+    setIsFiltering(false);
+    dispatch({ type: "CLEAR_FILTERS" });
+  };
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
@@ -127,9 +159,13 @@ export const TodosProvider = ({ children }) => {
         dispatch,
         updateTodo,
         deleteTodo,
+        isFiltering,
         editingTodos,
+        clearFilters,
         addEditingTodo,
         deleteAllTodos,
+        filterByPending,
+        filterByCompleted,
         removeEditingTodo,
       }}
     >

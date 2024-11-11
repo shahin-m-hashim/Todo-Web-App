@@ -17,6 +17,11 @@ export default function RestoreTodoBtn({
       )
     );
 
+    localStorage.setItem(
+      "todos",
+      JSON.stringify([...JSON.parse(localStorage.getItem("todos")), todo])
+    );
+
     setTrashedTodos(
       trashedTodos.filter((trashedTodo) => trashedTodo.id !== todo.id)
     );

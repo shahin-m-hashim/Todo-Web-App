@@ -15,8 +15,6 @@ const AddTodoForm = memo(function AddTodoForm({
   showAddTodoForm,
   setShowAddTodoForm,
 }) {
-  console.log("AddTodoForm rendered");
-
   const { addTodo } = useContext(TodoContext);
 
   const [register, getFormData, resetForm] = useHybridForm();

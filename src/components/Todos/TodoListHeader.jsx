@@ -8,8 +8,6 @@ const TodoListHeader = memo(function TodoListHeader({
   setShowAddTodoForm,
   toggleShowTodoListOptions,
 }) {
-  console.log("TodoListHeader rendered");
-
   return (
     <div className="flex justify-between md:grid grid-cols-[2fr,1fr] bg-[#fbf5ed] pl-5 p-3 border-b-2 border-b-gray-300">
       <ThemeSwitcher />

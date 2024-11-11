@@ -7,8 +7,6 @@ import TodoContext from "../../providers/TodosProvider";
 const TrashedTodosList = memo(function TrashedTodosList({
   setShowTrashedTodos,
 }) {
-  console.log("TrashedTodosList rendered");
-
   const { dispatch } = useContext(TodoContext);
 
   const [trashedTodos, setTrashedTodos] = useState(
@@ -47,14 +45,14 @@ const TrashedTodosList = memo(function TrashedTodosList({
           type="button"
           onClick={deleteAllTrashedTodos}
           disabled={trashedTodos.length === 0}
-          className="p-1 flex-1 bg-red-400 hover:bg-red-500"
+          className="flex-1 p-1 bg-red-400 hover:bg-red-500"
         >
           Delete All
         </button>
         <button
           type="button"
           onClick={() => setShowTrashedTodos(false)}
-          className="p-1 flex-1 bg-yellow-300 hover:bg-yellow-400"
+          className="flex-1 p-1 bg-yellow-300 hover:bg-yellow-400"
         >
           Go Back
         </button>

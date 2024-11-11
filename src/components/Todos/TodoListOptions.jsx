@@ -1,9 +1,11 @@
 /* eslint-disable react/prop-types */
 
-import { memo } from "react";
 import { cn } from "../../utils/cn";
+import { memo, useContext } from "react";
+import TodoContext from "../../providers/TodosProvider";
 import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
 import SortByNameBtn from "./TodoListOptions/SortByNameBtn";
+import ClearFiltersBtn from "./TodoListOptions/ClearFiltersBtn";
 import SortByDueDateBtn from "./TodoListOptions/SortByDueDateBtn";
 import SearchTodosInput from "./TodoListOptions/SearchTodosInput";
 import DeleteAllTodosBtn from "./TodoListOptions/DeleteAllTodosBtn";
@@ -14,7 +16,7 @@ const TodoListOptions = memo(function TodoListOptions({
   showTodoListOptions,
   setShowTrashedTodos,
 }) {
-  console.log("TodoListOptions rendered");
+  const { isFiltering } = useContext(TodoContext);
 
   return (
     <div
@@ -45,9 +47,15 @@ const TodoListOptions = memo(function TodoListOptions({
         </div>
 
         <div className="flex gap-3 text-xs lg:text-sm">
-          <div>
-            <DeleteAllTodosBtn />
-          </div>
+          {isFiltering ? (
+            <div>
+              <ClearFiltersBtn />
+            </div>
+          ) : (
+            <div>
+              <DeleteAllTodosBtn />
+            </div>
+          )}
           <div>
             <ViewTrashBtn setShowTrashedTodos={setShowTrashedTodos} />
           </div>

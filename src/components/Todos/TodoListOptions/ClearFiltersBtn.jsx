@@ -1,17 +1,16 @@
 import { useContext } from "react";
 import TodoContext from "../../../providers/TodosProvider";
 
-export default function DeleteAllTodosBtn() {
-  const { todos, deleteAllTodos } = useContext(TodoContext);
+export default function ClearFiltersBtn() {
+  const { clearFilters } = useContext(TodoContext);
 
   return (
     <button
       type="button"
-      disabled={!todos.length}
-      onClick={deleteAllTodos}
+      onClick={clearFilters}
       className="p-2 text-white bg-red-600 lg:px-4 lg:py-2 hover:bg-red-500"
     >
-      Delete All
+      Clear Filters
     </button>
   );
 }
