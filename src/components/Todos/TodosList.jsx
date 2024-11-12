@@ -4,7 +4,7 @@ import { useContext } from "react";
 import TodoContext from "../../providers/TodosProvider";
 
 export default function TodosList() {
-  const { todos, addEditingTodo, removeEditingTodo } = useContext(TodoContext);
+  const { todos } = useContext(TodoContext);
 
   return (
     <div
@@ -15,14 +15,7 @@ export default function TodosList() {
       )}
     >
       {todos.length > 0 ? (
-        todos.map((todo) => (
-          <Todo
-            todo={todo}
-            key={todo.id}
-            addEditingTodo={addEditingTodo}
-            removeEditingTodo={removeEditingTodo}
-          />
-        ))
+        todos.map((todo) => <Todo todo={todo} key={todo.id} />)
       ) : (
         <div className="text-3xl text-gray-500">No Todos Found</div>
       )}

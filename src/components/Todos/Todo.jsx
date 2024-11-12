@@ -1,22 +1,41 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import TodoCollapsed from "./TodoCollapsed";
 import UpdateTodoForm from "./Forms/UpdateTodoForm";
 import TodoDetails from "./TodoCollapsed/TodoDetails";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import TodoContext from "../../providers/TodosProvider";
 
-export default function Todo({ todo, addEditingTodo, removeEditingTodo }) {
+export default function Todo({ todo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const { hasEditingTodo, hasExpandedTodo, options } = useContext(TodoContext);
+
   useEffect(() => {
-    if (isEditing) {
-      addEditingTodo(todo.id);
-    } else {
-      removeEditingTodo(todo.id);
+    if (isExpanded && isEditing) {
+      if (!hasEditingTodo.current) {
+        hasEditingTodo.current = todo.id;
+      }
+    } else if (hasEditingTodo.current === todo.id) {
+      hasEditingTodo.current = false;
     }
   }, [isEditing]);
+
+  useEffect(() => {
+    if (isExpanded) {
+      if (!hasExpandedTodo.current) {
+        hasExpandedTodo.current = todo.id;
+      }
+    } else if (hasExpandedTodo.current === todo.id) {
+      hasExpandedTodo.current = false;
+    }
+  }, [isExpanded]);
+
+  useEffect(() => {
+    options.resetExpanded && setIsExpanded(false);
+  }, [options.resetExpanded]);
 
   return (
     <div className="todo">

@@ -67,10 +67,11 @@ export const TodosProvider = ({ children }) => {
 
   const tempTodos = useRef(null);
   const searchedTodos = useRef(null);
-  const editingTodos = useRef(new Set());
+
+  const hasEditingTodo = useRef(false);
+  const hasExpandedTodo = useRef(false);
 
   const [options, setOptions] = useState(initialOptions);
-
   const [todos, dispatch] = useReducer(todoReducer, getLocalTodos());
 
   const addTodo = (todo) => {
@@ -79,6 +80,16 @@ export const TodosProvider = ({ children }) => {
   };
 
   const doneTodo = (id) => {
+    if (searchedTodos.current || tempTodos.current) {
+      searchedTodos.current = searchedTodos.current.map((todo) =>
+        todo.id === id ? { ...todo, completed: true } : todo
+      );
+
+      tempTodos.current = tempTodos.current.map((todo) =>
+        todo.id === id ? { ...todo, completed: true } : todo
+      );
+    }
+
     localStorage.setItem(
       "todos",
       JSON.stringify(
@@ -91,6 +102,16 @@ export const TodosProvider = ({ children }) => {
   };
 
   const updateTodo = (updatedTodo) => {
+    if (searchedTodos.current || tempTodos.current) {
+      searchedTodos.current = searchedTodos.current.map((todo) =>
+        todo.id === updatedTodo.id ? { ...updatedTodo } : todo
+      );
+
+      tempTodos.current = tempTodos.current.map((todo) =>
+        todo.id === updatedTodo.id ? { ...updatedTodo } : todo
+      );
+    }
+
     localStorage.setItem(
       "todos",
       JSON.stringify(
@@ -130,7 +151,7 @@ export const TodosProvider = ({ children }) => {
   };
 
   const deleteAllTodos = () => {
-    if (editingTodos.current.size > 0) {
+    if (hasEditingTodo.current) {
       alert("Please cancel or complete pending edits first !!!");
     } else if (confirm("All Todos will be moved to trash, OK ?")) {
       getLocalTodos().forEach((todo) => moveToTrash(todo));
@@ -140,113 +161,146 @@ export const TodosProvider = ({ children }) => {
   };
 
   const handleSearch = (e) => {
-    if (!e.target.value) {
-      clearAllOptions();
+    if (hasEditingTodo.current) {
+      alert("Please cancel or complete pending edits first !!!");
+    } else if (hasExpandedTodo.current) {
+      alert("Please close all opened todos !!!");
     } else {
-      tempTodos.current = tempTodos.current || getLocalTodos();
+      if (!e.target.value) {
+        clearAllOptions();
+      } else {
+        tempTodos.current = tempTodos.current || getLocalTodos();
 
-      searchedTodos.current = tempTodos.current.filter((todo) =>
-        todo.name.toLowerCase().includes(e.target.value.toLowerCase())
-      );
+        searchedTodos.current = tempTodos.current.filter((todo) =>
+          todo.name.toLowerCase().includes(e.target.value.toLowerCase())
+        );
 
-      setOptions({
-        currentSort: "",
-        currentFilter: "",
-        searchQuery: e.target.value,
-      });
+        setOptions({
+          currentSort: "",
+          currentFilter: "",
+          searchQuery: e.target.value,
+        });
 
-      dispatch({ type: "SEARCH_TODOS", payload: searchedTodos.current });
+        dispatch({ type: "SEARCH_TODOS", payload: searchedTodos.current });
+      }
     }
   };
 
-  const toggleNameSort = () => {
-    if (options.currentSort.order === "ASC") {
-      setOptions({
-        ...options,
-        currentSort: {
-          type: "name",
-          order: "DESC",
-        },
-      });
-
-      dispatch({ type: "SORT/NAME_DESC" });
+  const toggleNameSort = async () => {
+    if (hasEditingTodo.current) {
+      alert("Please cancel or complete pending edits first !!!");
+    } else if (hasExpandedTodo.current) {
+      alert("Please close all opened todos !!!");
     } else {
-      setOptions({
-        ...options,
-        currentSort: {
-          type: "name",
-          order: "ASC",
-        },
-      });
+      if (options.currentSort.order === "ASC") {
+        setOptions({
+          ...options,
+          currentSort: {
+            type: "name",
+            order: "DESC",
+          },
+        });
 
-      dispatch({ type: "SORT/NAME_ASC" });
+        dispatch({ type: "SORT/NAME_DESC" });
+      } else {
+        setOptions({
+          ...options,
+          resetExpanded: true,
+          currentSort: {
+            type: "name",
+            order: "ASC",
+          },
+        });
+
+        dispatch({ type: "SORT/NAME_ASC" });
+      }
     }
   };
 
-  const toggleDueDateSort = () => {
-    if (options.currentSort.order === "ASC") {
-      setOptions({
-        ...options,
-        currentSort: {
-          type: "dueDate",
-          order: "DESC",
-        },
-      });
-
-      dispatch({ type: "SORT/DUE_DATE_DESC" });
+  const toggleDueDateSort = async () => {
+    if (hasEditingTodo.current) {
+      alert("Please cancel or complete pending edits first !!!");
+    } else if (hasExpandedTodo.current) {
+      alert("Please close all opened todos !!!");
     } else {
-      setOptions({
-        ...options,
-        currentSort: {
-          type: "dueDate",
-          order: "ASC",
-        },
-      });
+      if (options.currentSort.order === "ASC") {
+        setOptions({
+          ...options,
+          currentSort: {
+            type: "dueDate",
+            order: "DESC",
+          },
+        });
 
-      dispatch({ type: "SORT/DUE_DATE_ASC" });
+        dispatch({ type: "SORT/DUE_DATE_DESC" });
+      } else {
+        setOptions({
+          ...options,
+          currentSort: {
+            type: "dueDate",
+            order: "ASC",
+          },
+        });
+
+        dispatch({ type: "SORT/DUE_DATE_ASC" });
+      }
     }
   };
 
   const filterByCompleted = () => {
-    setOptions({
-      ...options,
-      currentFilter: "completed",
-      currentSort: initialOptions.currentSort,
-    });
-    dispatch({
-      type: "FILTER/COMPLETED",
-      payload: searchedTodos.current || getLocalTodos(),
-    });
+    if (hasEditingTodo.current) {
+      alert("Please cancel or complete pending edits first !!!");
+    } else if (hasExpandedTodo.current) {
+      alert("Please close all opened todos !!!");
+    } else {
+      setOptions({
+        ...options,
+        currentFilter: "completed",
+        currentSort: initialOptions.currentSort,
+      });
+      dispatch({
+        type: "FILTER/COMPLETED",
+        payload: searchedTodos.current || getLocalTodos(),
+      });
+    }
   };
 
   const filterByPending = () => {
-    setOptions({
-      ...options,
-      currentFilter: "pending",
-      currentSort: initialOptions.currentSort,
-    });
+    if (hasEditingTodo.current) {
+      alert("Please cancel or complete pending edits first !!!");
+    } else if (hasExpandedTodo.current) {
+      alert("Please close all opened todos !!!");
+    } else {
+      setOptions({
+        ...options,
+        currentFilter: "pending",
+        currentSort: initialOptions.currentSort,
+      });
 
-    dispatch({
-      type: "FILTER/PENDING",
-      payload: searchedTodos.current || getLocalTodos(),
-    });
+      dispatch({
+        type: "FILTER/PENDING",
+        payload: searchedTodos.current || getLocalTodos(),
+      });
+    }
   };
 
   const clearAllOptions = () => {
-    tempTodos.current = null;
-    searchedTodos.current = null;
+    if (hasEditingTodo.current) {
+      alert("Please cancel or complete pending edits first !!!");
+    } else if (hasExpandedTodo.current) {
+      alert("Please close all opened todos !!!");
+    } else {
+      tempTodos.current = null;
+      searchedTodos.current = null;
 
-    setOptions(initialOptions);
-    dispatch({ type: "CLEAR_ALL_OPTIONS" });
+      setOptions(initialOptions);
+      dispatch({ type: "CLEAR_ALL_OPTIONS" });
+    }
   };
-
-  const addEditingTodo = (id) => editingTodos.current.add(id);
-
-  const removeEditingTodo = (id) => editingTodos.current.delete(id);
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
-      if (editingTodos.current.size > 0) {
+      if (hasEditingTodo.current) {
         e.preventDefault();
         e.returnValue = "";
       }
@@ -267,16 +321,15 @@ export const TodosProvider = ({ children }) => {
         updateTodo,
         deleteTodo,
         handleSearch,
-        editingTodos,
         searchedTodos,
         toggleNameSort,
-        addEditingTodo,
         deleteAllTodos,
+        hasEditingTodo,
         clearAllOptions,
         filterByPending,
+        hasExpandedTodo,
         toggleDueDateSort,
         filterByCompleted,
-        removeEditingTodo,
       }}
     >
       {children}

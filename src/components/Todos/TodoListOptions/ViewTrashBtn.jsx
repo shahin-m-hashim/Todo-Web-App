@@ -3,10 +3,10 @@ import { useContext } from "react";
 import TodoContext from "../../../providers/TodosProvider";
 
 export default function ViewTrashBtn({ setShowTrashedTodos }) {
-  const { editingTodos } = useContext(TodoContext);
+  const { hasEditingTodo } = useContext(TodoContext);
 
   const handleClick = () => {
-    if (editingTodos.current.size > 0) {
+    if (hasEditingTodo) {
       alert("Please cancel or complete pending edits first !!!");
     } else {
       setShowTrashedTodos(true);
