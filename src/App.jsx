@@ -1,13 +1,13 @@
-import { useCallback, useContext, useState } from "react";
 import ThemeContext from "./providers/ThemeProvider";
 import TodosList from "./components/Todos/TodosList";
+import { useCallback, useContext, useState } from "react";
 import AddTodoForm from "./components/Todos/Forms/AddTodoForm";
 import TodoListHeader from "./components/Todos/TodoListHeader";
 import TodoListOptions from "./components/Todos/TodoListOptions";
 import TrashedTodosList from "./components/TrashedTodos/TrashedTodosList";
 
 function App() {
-  const { theme } = useContext(ThemeContext);
+  const { currentTheme } = useContext(ThemeContext);
 
   const [showAddTodoForm, setShowAddTodoForm] = useState(false);
   const [showTrashedTodos, setShowTrashedTodos] = useState(false);
@@ -20,7 +20,7 @@ function App() {
   }, [showTrashedTodos]);
 
   return (
-    <main className={`app theme-${theme} bg-color`}>
+    <main className={`app theme-${currentTheme} bg-color`}>
       <div className="absolute inset-0 z-10 hidden backdrop-blur-sm"></div>
       <section className="h-full p-5 md:mx-16">
         <header className="mb-5">

@@ -1,7 +1,25 @@
 /* eslint-disable react/prop-types */
-import { useRef, useEffect, useReducer, createContext, useState } from "react";
+import { useRef, useState, useEffect, useReducer, createContext } from "react";
 
 const TodoContext = createContext();
+
+const getLocalTodos = () => {
+  try {
+    return JSON.parse(localStorage.getItem("todos")) || [];
+  } catch (error) {
+    console.error("Error retrieving todos from local storage:", error);
+    return [];
+  }
+};
+
+const initialOptions = {
+  searchQuery: "",
+  currentFilter: "",
+  currentSort: {
+    type: "",
+    order: "",
+  },
+};
 
 const todoReducer = (state, action) => {
   switch (action.type) {
@@ -25,41 +43,33 @@ const todoReducer = (state, action) => {
       return [...state, action.payload];
     case "RESTORE_ALL_TODOS":
       return [...state, ...action.payload];
-    case "SORT_BY_NAME_ASC":
+    case "SORT/NAME_ASC":
       return [...state].sort((a, b) => a.name.localeCompare(b.name));
-    case "SORT_BY_NAME_DESC":
+    case "SORT/NAME_DESC":
       return [...state].sort((a, b) => b.name.localeCompare(a.name));
-    case "SORT_BY_DUE_DATE_ASC":
+    case "SORT/DUE_DATE_ASC":
       return [...state].sort((a, b) => a.dueDate.localeCompare(b.dueDate));
-    case "SORT_BY_DUE_DATE_DESC":
+    case "SORT/DUE_DATE_DESC":
       return [...state].sort((a, b) => b.dueDate.localeCompare(a.dueDate));
-    case "FILTER_BY_COMPLETED":
-      return (JSON.parse(localStorage.getItem("todos")) || []).filter(
-        (todo) => todo.completed
-      );
-    case "FILTER_BY_PENDING":
-      return (JSON.parse(localStorage.getItem("todos")) || []).filter(
-        (todo) => !todo.completed
-      );
-    case "CLEAR_FILTERS":
-      return JSON.parse(localStorage.getItem("todos")) || [];
+    case "FILTER/COMPLETED":
+      return action.payload.filter((todo) => todo.completed);
+    case "FILTER/PENDING":
+      return action.payload.filter((todo) => !todo.completed);
+    case "SEARCH_TODOS":
+      return action.payload;
     default:
-      return state || [];
+      return getLocalTodos();
   }
 };
 
 export const TodosProvider = ({ children }) => {
-  const editingTodos = useRef(new Set());
-  const [isFiltering, setIsFiltering] = useState(false);
+  console.log("Rendering Todos Provider");
 
-  const getLocalTodos = () => {
-    try {
-      return JSON.parse(localStorage.getItem("todos")) || [];
-    } catch (error) {
-      console.error("Error retrieving todos from local storage:", error);
-      return [];
-    }
-  };
+  const tempTodos = useRef(null);
+  const searchedTodos = useRef(null);
+  const editingTodos = useRef(new Set());
+
+  const [options, setOptions] = useState(initialOptions);
 
   const [todos, dispatch] = useReducer(todoReducer, getLocalTodos());
 
@@ -92,11 +102,21 @@ export const TodosProvider = ({ children }) => {
     dispatch({ type: "UPDATE_TODO", payload: updatedTodo });
   };
 
-  const moveToTrash = (todo) => {
+  const moveToTrash = (trashedTodo) => {
+    if (searchedTodos.current || tempTodos.current) {
+      searchedTodos.current = searchedTodos.current.filter(
+        (todo) => todo.id !== trashedTodo.id
+      );
+
+      tempTodos.current = tempTodos.current.filter(
+        (todo) => todo.id !== trashedTodo.id
+      );
+    }
+
     const trashedTodos = JSON.parse(localStorage.getItem("trashedTodos")) || [];
     localStorage.setItem(
       "trashedTodos",
-      JSON.stringify([...trashedTodos, todo])
+      JSON.stringify([...trashedTodos, trashedTodo])
     );
   };
 
@@ -119,24 +139,110 @@ export const TodosProvider = ({ children }) => {
     }
   };
 
-  const addEditingTodo = (id) => editingTodos.current.add(id);
+  const handleSearch = (e) => {
+    if (!e.target.value) {
+      clearAllOptions();
+    } else {
+      tempTodos.current = tempTodos.current || getLocalTodos();
 
-  const removeEditingTodo = (id) => editingTodos.current.delete(id);
+      searchedTodos.current = tempTodos.current.filter((todo) =>
+        todo.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+
+      setOptions({
+        currentSort: "",
+        currentFilter: "",
+        searchQuery: e.target.value,
+      });
+
+      dispatch({ type: "SEARCH_TODOS", payload: searchedTodos.current });
+    }
+  };
+
+  const toggleNameSort = () => {
+    if (options.currentSort.order === "ASC") {
+      setOptions({
+        ...options,
+        currentSort: {
+          type: "name",
+          order: "DESC",
+        },
+      });
+
+      dispatch({ type: "SORT/NAME_DESC" });
+    } else {
+      setOptions({
+        ...options,
+        currentSort: {
+          type: "name",
+          order: "ASC",
+        },
+      });
+
+      dispatch({ type: "SORT/NAME_ASC" });
+    }
+  };
+
+  const toggleDueDateSort = () => {
+    if (options.currentSort.order === "ASC") {
+      setOptions({
+        ...options,
+        currentSort: {
+          type: "dueDate",
+          order: "DESC",
+        },
+      });
+
+      dispatch({ type: "SORT/DUE_DATE_DESC" });
+    } else {
+      setOptions({
+        ...options,
+        currentSort: {
+          type: "dueDate",
+          order: "ASC",
+        },
+      });
+
+      dispatch({ type: "SORT/DUE_DATE_ASC" });
+    }
+  };
 
   const filterByCompleted = () => {
-    setIsFiltering(true);
-    dispatch({ type: "FILTER_BY_COMPLETED" });
+    setOptions({
+      ...options,
+      currentFilter: "completed",
+      currentSort: initialOptions.currentSort,
+    });
+    dispatch({
+      type: "FILTER/COMPLETED",
+      payload: searchedTodos.current || getLocalTodos(),
+    });
   };
 
   const filterByPending = () => {
-    setIsFiltering(true);
-    dispatch({ type: "FILTER_BY_PENDING" });
+    setOptions({
+      ...options,
+      currentFilter: "pending",
+      currentSort: initialOptions.currentSort,
+    });
+
+    dispatch({
+      type: "FILTER/PENDING",
+      payload: searchedTodos.current || getLocalTodos(),
+    });
   };
 
-  const clearFilters = () => {
-    setIsFiltering(false);
-    dispatch({ type: "CLEAR_FILTERS" });
+  const clearAllOptions = () => {
+    tempTodos.current = null;
+    searchedTodos.current = null;
+
+    setOptions(initialOptions);
+    dispatch({ type: "CLEAR_ALL_OPTIONS" });
   };
+
+  const addEditingTodo = (id) => editingTodos.current.add(id);
+
+  const removeEditingTodo = (id) => editingTodos.current.delete(id);
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
@@ -155,16 +261,20 @@ export const TodosProvider = ({ children }) => {
       value={{
         todos,
         addTodo,
+        options,
         doneTodo,
         dispatch,
         updateTodo,
         deleteTodo,
-        isFiltering,
+        handleSearch,
         editingTodos,
-        clearFilters,
+        searchedTodos,
+        toggleNameSort,
         addEditingTodo,
         deleteAllTodos,
+        clearAllOptions,
         filterByPending,
+        toggleDueDateSort,
         filterByCompleted,
         removeEditingTodo,
       }}

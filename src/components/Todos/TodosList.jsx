@@ -1,9 +1,9 @@
 import Todo from "./Todo";
 import { cn } from "../../utils/cn";
-import { memo, useContext } from "react";
+import { useContext } from "react";
 import TodoContext from "../../providers/TodosProvider";
 
-const TodosList = memo(function TodosList() {
+export default function TodosList() {
   const { todos, addEditingTodo, removeEditingTodo } = useContext(TodoContext);
 
   return (
@@ -28,6 +28,4 @@ const TodosList = memo(function TodosList() {
       )}
     </div>
   );
-});
-
-export default TodosList;
+}

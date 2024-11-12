@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useContext } from "react";
+import TodoContext from "../../../providers/TodosProvider";
 
 export default function SearchTodosInput() {
-  const [search, setSearch] = useState("");
+  const { searchQuery, handleSearch } = useContext(TodoContext);
 
   return (
     <input
       type="text"
-      value={search}
+      value={searchQuery}
+      onChange={handleSearch}
       placeholder="Search Todos"
       className="p-1 mb-1 border-2 rounded-md"
-      onChange={(e) => setSearch(e.target.value)}
     />
   );
 }

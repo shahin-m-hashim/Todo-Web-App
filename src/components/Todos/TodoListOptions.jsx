@@ -5,18 +5,18 @@ import { memo, useContext } from "react";
 import TodoContext from "../../providers/TodosProvider";
 import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
 import SortByNameBtn from "./TodoListOptions/SortByNameBtn";
-import ClearFiltersBtn from "./TodoListOptions/ClearFiltersBtn";
 import SortByDueDateBtn from "./TodoListOptions/SortByDueDateBtn";
 import SearchTodosInput from "./TodoListOptions/SearchTodosInput";
 import DeleteAllTodosBtn from "./TodoListOptions/DeleteAllTodosBtn";
 import FilterByPendingBtn from "./TodoListOptions/FilterByPendingBtn";
+import ClearAllOptionsBtn from "./TodoListOptions/ClearAllOptionsBtn";
 import FilterByCompletedBtn from "./TodoListOptions/FilterByCompletedBtn";
 
 const TodoListOptions = memo(function TodoListOptions({
   showTodoListOptions,
   setShowTrashedTodos,
 }) {
-  const { isFiltering } = useContext(TodoContext);
+  const { options } = useContext(TodoContext);
 
   return (
     <div
@@ -47,9 +47,11 @@ const TodoListOptions = memo(function TodoListOptions({
         </div>
 
         <div className="flex gap-3 text-xs lg:text-sm">
-          {isFiltering ? (
+          {options.searchQuery ||
+          options.currentFilter ||
+          Object.values(options.currentSort).some((sort) => sort) ? (
             <div>
-              <ClearFiltersBtn />
+              <ClearAllOptionsBtn />
             </div>
           ) : (
             <div>

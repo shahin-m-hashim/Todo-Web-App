@@ -5,12 +5,12 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const localTheme = localStorage.getItem("theme");
-  const [theme, setTheme] = useState(localTheme || "light");
+  const [currentTheme, setCurrentTheme] = useState(localTheme || "light");
 
-  useEffect(() => localStorage.setItem("theme", theme), [theme]);
+  useEffect(() => localStorage.setItem("theme", currentTheme), [currentTheme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ currentTheme, setCurrentTheme }}>
       {children}
     </ThemeContext.Provider>
   );

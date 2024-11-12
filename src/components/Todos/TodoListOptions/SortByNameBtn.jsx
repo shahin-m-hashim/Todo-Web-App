@@ -1,27 +1,36 @@
-import { useContext, useRef } from "react";
+import { useContext } from "react";
+import { cn } from "../../../utils/cn";
 import TodoContext from "../../../providers/TodosProvider";
 
 export default function SortTodosByNameBtn() {
-  let sortOrder = useRef("ASC");
-  const { dispatch } = useContext(TodoContext);
-
-  const toggleSortingName = () => {
-    if (sortOrder.current === "ASC") {
-      dispatch({ type: "SORT_BY_NAME_ASC" });
-      sortOrder.current = "DESC";
-    } else {
-      dispatch({ type: "SORT_BY_NAME_DESC" });
-      sortOrder.current = "ASC";
-    }
-  };
+  const { options, toggleNameSort } = useContext(TodoContext);
 
   return (
     <button
       type="button"
-      onClick={toggleSortingName}
-      className="text-xs text-white btn bg-btn hover:bg-btn-hover"
+      onClick={toggleNameSort}
+      style={{
+        paddingRight: options.currentSort.type === "name" && 0,
+      }}
+      className={cn(
+        "text-xs text-white btn",
+        options.currentSort.type === "name"
+          ? "bg-gray-500 hover:bg-gray-500"
+          : "bg-btn hover:bg-btn-hover"
+      )}
     >
-      Name
+      <span>Name</span>
+
+      {options.currentSort.type === "name" &&
+        (options.currentSort.order === "ASC" ? (
+          <span style={{ fontWeight: "bolder" }} className="mx-2 text-red-500">
+            &uArr;
+          </span>
+        ) : (
+          <span style={{ fontWeight: "bolder" }} className="mx-2 text-red-500">
+            &dArr;
+          </span>
+        ))}
     </button>
   );
 }

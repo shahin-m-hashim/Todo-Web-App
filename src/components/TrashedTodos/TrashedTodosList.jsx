@@ -1,13 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { cn } from "../../utils/cn";
 import TrashedTodo from "./TrashedTodo";
-import { memo, useContext, useState } from "react";
 import TodoContext from "../../providers/TodosProvider";
+import { memo, useContext, useEffect, useState } from "react";
 
 const TrashedTodosList = memo(function TrashedTodosList({
   setShowTrashedTodos,
 }) {
-  const { dispatch } = useContext(TodoContext);
+  const { dispatch, clearAllOptions } = useContext(TodoContext);
 
   const [trashedTodos, setTrashedTodos] = useState(
     JSON.parse(localStorage.getItem("trashedTodos")) || []
@@ -29,6 +30,8 @@ const TrashedTodosList = memo(function TrashedTodosList({
       setTrashedTodos([]);
     }
   };
+
+  useEffect(() => clearAllOptions(), []);
 
   return (
     <>
