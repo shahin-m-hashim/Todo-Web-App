@@ -11,7 +11,7 @@ export default function Todo({ todo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { hasEditingTodo, hasExpandedTodo, options } = useContext(TodoContext);
+  const { hasEditingTodo, hasExpandedTodo } = useContext(TodoContext);
 
   useEffect(() => {
     if (isExpanded && isEditing) {
@@ -32,10 +32,6 @@ export default function Todo({ todo }) {
       hasExpandedTodo.current = false;
     }
   }, [isExpanded]);
-
-  useEffect(() => {
-    options.resetExpanded && setIsExpanded(false);
-  }, [options.resetExpanded]);
 
   return (
     <div className="todo">

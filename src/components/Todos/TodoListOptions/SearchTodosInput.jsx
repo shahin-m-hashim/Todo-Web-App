@@ -7,10 +7,11 @@ export default function SearchTodosInput() {
   return (
     <input
       type="text"
+      id="searchTodos"
       onChange={handleSearch}
       placeholder="Search Todos"
       value={options.searchQuery}
-      className="p-1 mb-1 border-2 rounded-md"
+      className="p-2 mb-4 border-2 rounded-md"
     />
   );
 }

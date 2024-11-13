@@ -13,6 +13,7 @@ const getLocalTodos = () => {
 };
 
 const initialOptions = {
+  isSelecting: false,
   searchQuery: "",
   currentFilter: "",
   currentSort: {
@@ -39,6 +40,8 @@ const todoReducer = (state, action) => {
       return state.filter((todo) => todo.id !== action.payload);
     case "DELETE_ALL_TODOS":
       return [];
+    case "DELETE_SELECTED":
+      return state.filter((todo) => !action.payload.includes(todo.id));
     case "RESTORE_TODO":
       return [...state, action.payload];
     case "RESTORE_ALL_TODOS":
@@ -63,10 +66,11 @@ const todoReducer = (state, action) => {
 };
 
 export const TodosProvider = ({ children }) => {
-  console.log("Rendering Todos Provider");
+  console.log("Todos Provider rendered");
 
   const tempTodos = useRef(null);
   const searchedTodos = useRef(null);
+  const selectedTodos = useRef(new Set());
 
   const hasEditingTodo = useRef(false);
   const hasExpandedTodo = useRef(false);
@@ -80,12 +84,8 @@ export const TodosProvider = ({ children }) => {
   };
 
   const doneTodo = (id) => {
-    if (searchedTodos.current || tempTodos.current) {
+    if (searchedTodos.current) {
       searchedTodos.current = searchedTodos.current.map((todo) =>
-        todo.id === id ? { ...todo, completed: true } : todo
-      );
-
-      tempTodos.current = tempTodos.current.map((todo) =>
         todo.id === id ? { ...todo, completed: true } : todo
       );
     }
@@ -98,16 +98,13 @@ export const TodosProvider = ({ children }) => {
         )
       )
     );
+
     dispatch({ type: "SET_TODO_COMPLETED", payload: { id, completed: true } });
   };
 
   const updateTodo = (updatedTodo) => {
-    if (searchedTodos.current || tempTodos.current) {
+    if (searchedTodos.current) {
       searchedTodos.current = searchedTodos.current.map((todo) =>
-        todo.id === updatedTodo.id ? { ...updatedTodo } : todo
-      );
-
-      tempTodos.current = tempTodos.current.map((todo) =>
         todo.id === updatedTodo.id ? { ...updatedTodo } : todo
       );
     }
@@ -123,30 +120,26 @@ export const TodosProvider = ({ children }) => {
     dispatch({ type: "UPDATE_TODO", payload: updatedTodo });
   };
 
-  const moveToTrash = (trashedTodo) => {
-    if (searchedTodos.current || tempTodos.current) {
-      searchedTodos.current = searchedTodos.current.filter(
-        (todo) => todo.id !== trashedTodo.id
-      );
-
-      tempTodos.current = tempTodos.current.filter(
-        (todo) => todo.id !== trashedTodo.id
-      );
-    }
-
+  const moveToTrash = (id) => {
     const trashedTodos = JSON.parse(localStorage.getItem("trashedTodos")) || [];
-    localStorage.setItem(
-      "trashedTodos",
-      JSON.stringify([...trashedTodos, trashedTodo])
-    );
+    trashedTodos.push(getLocalTodos().find((todo) => todo.id === id));
+    localStorage.setItem("trashedTodos", JSON.stringify(trashedTodos));
   };
 
   const deleteTodo = (id) => {
-    moveToTrash(todos.find((todo) => todo.id === id));
+    if (searchedTodos.current) {
+      searchedTodos.current = searchedTodos.current.filter(
+        (todo) => todo.id !== id
+      );
+    }
+
+    moveToTrash(id);
+
     localStorage.setItem(
       "todos",
       JSON.stringify(getLocalTodos().filter((todo) => todo.id !== id))
     );
+
     dispatch({ type: "DELETE_TODO", payload: id });
   };
 
@@ -154,9 +147,60 @@ export const TodosProvider = ({ children }) => {
     if (hasEditingTodo.current) {
       alert("Please cancel or complete pending edits first !!!");
     } else if (confirm("All Todos will be moved to trash, OK ?")) {
-      getLocalTodos().forEach((todo) => moveToTrash(todo));
+      const localTodos = getLocalTodos();
+
+      const trashedTodos =
+        JSON.parse(localStorage.getItem("trashedTodos")) || [];
+
       localStorage.setItem("todos", JSON.stringify([]));
+
+      localStorage.setItem(
+        "trashedTodos",
+        JSON.stringify([...trashedTodos, ...localTodos])
+      );
+
       dispatch({ type: "DELETE_ALL_TODOS" });
+    }
+  };
+
+  const deleteSelectedTodos = () => {
+    if (hasEditingTodo.current) {
+      alert("Please cancel or complete pending edits first !!!");
+    } else if (confirm("Selected Todos will be moved to trash, OK ?")) {
+      const localTodos = getLocalTodos();
+
+      const trashedTodos =
+        JSON.parse(localStorage.getItem("trashedTodos")) || [];
+
+      const todosToTrash = localTodos.filter((todo) =>
+        selectedTodos.current.has(todo.id)
+      );
+
+      const remainingTodos = localTodos.filter(
+        (todo) => !selectedTodos.current.has(todo.id)
+      );
+
+      localStorage.setItem("todos", JSON.stringify(remainingTodos));
+
+      localStorage.setItem(
+        "trashedTodos",
+        JSON.stringify([...todosToTrash, ...trashedTodos])
+      );
+
+      if (searchedTodos.current) {
+        searchedTodos.current = searchedTodos.current.filter((todo) =>
+          selectedTodos.current.has(todo.id)
+        );
+      }
+
+      setOptions({ ...options, isSelecting: false });
+
+      dispatch({
+        type: "DELETE_SELECTED",
+        payload: [...selectedTodos.current],
+      });
+
+      selectedTodos.current.clear();
     }
   };
 
@@ -176,8 +220,7 @@ export const TodosProvider = ({ children }) => {
         );
 
         setOptions({
-          currentSort: "",
-          currentFilter: "",
+          ...initialOptions,
           searchQuery: e.target.value,
         });
 
@@ -189,8 +232,6 @@ export const TodosProvider = ({ children }) => {
   const toggleNameSort = async () => {
     if (hasEditingTodo.current) {
       alert("Please cancel or complete pending edits first !!!");
-    } else if (hasExpandedTodo.current) {
-      alert("Please close all opened todos !!!");
     } else {
       if (options.currentSort.order === "ASC") {
         setOptions({
@@ -205,7 +246,6 @@ export const TodosProvider = ({ children }) => {
       } else {
         setOptions({
           ...options,
-          resetExpanded: true,
           currentSort: {
             type: "name",
             order: "ASC",
@@ -220,8 +260,6 @@ export const TodosProvider = ({ children }) => {
   const toggleDueDateSort = async () => {
     if (hasEditingTodo.current) {
       alert("Please cancel or complete pending edits first !!!");
-    } else if (hasExpandedTodo.current) {
-      alert("Please close all opened todos !!!");
     } else {
       if (options.currentSort.order === "ASC") {
         setOptions({
@@ -254,9 +292,9 @@ export const TodosProvider = ({ children }) => {
       alert("Please close all opened todos !!!");
     } else {
       setOptions({
-        ...options,
+        ...initialOptions,
         currentFilter: "completed",
-        currentSort: initialOptions.currentSort,
+        searchQuery: options.searchQuery,
       });
       dispatch({
         type: "FILTER/COMPLETED",
@@ -272,9 +310,9 @@ export const TodosProvider = ({ children }) => {
       alert("Please close all opened todos !!!");
     } else {
       setOptions({
-        ...options,
+        ...initialOptions,
         currentFilter: "pending",
-        currentSort: initialOptions.currentSort,
+        searchQuery: options.searchQuery,
       });
 
       dispatch({
@@ -287,8 +325,6 @@ export const TodosProvider = ({ children }) => {
   const clearAllOptions = () => {
     if (hasEditingTodo.current) {
       alert("Please cancel or complete pending edits first !!!");
-    } else if (hasExpandedTodo.current) {
-      alert("Please close all opened todos !!!");
     } else {
       tempTodos.current = null;
       searchedTodos.current = null;
@@ -297,6 +333,15 @@ export const TodosProvider = ({ children }) => {
       dispatch({ type: "CLEAR_ALL_OPTIONS" });
     }
   };
+
+  const handleSelect = (id) => {
+    if (!options.isSelecting) setOptions({ ...options, isSelecting: true });
+    selectedTodos.current.has(id)
+      ? selectedTodos.current.delete(id)
+      : selectedTodos.current.add(id);
+  };
+
+  const clearSelection = () => setOptions({ ...options, isSelecting: false });
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
@@ -320,8 +365,10 @@ export const TodosProvider = ({ children }) => {
         dispatch,
         updateTodo,
         deleteTodo,
+        handleSelect,
         handleSearch,
         searchedTodos,
+        clearSelection,
         toggleNameSort,
         deleteAllTodos,
         hasEditingTodo,
@@ -330,6 +377,7 @@ export const TodosProvider = ({ children }) => {
         hasExpandedTodo,
         toggleDueDateSort,
         filterByCompleted,
+        deleteSelectedTodos,
       }}
     >
       {children}

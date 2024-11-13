@@ -68,6 +68,7 @@ const AddTodoForm = memo(function AddTodoForm({
         <InputField
           name="name"
           fieldClass="mb-2"
+          autoComplete="on"
           placeholder="Name"
           ref={register("name")}
           validate={validateName}

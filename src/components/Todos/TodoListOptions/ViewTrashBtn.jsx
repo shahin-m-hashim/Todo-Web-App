@@ -6,7 +6,7 @@ export default function ViewTrashBtn({ setShowTrashedTodos }) {
   const { hasEditingTodo } = useContext(TodoContext);
 
   const handleClick = () => {
-    if (hasEditingTodo) {
+    if (hasEditingTodo.current) {
       alert("Please cancel or complete pending edits first !!!");
     } else {
       setShowTrashedTodos(true);

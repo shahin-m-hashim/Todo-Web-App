@@ -7,9 +7,11 @@ import ViewTrashBtn from "./TodoListOptions/ViewTrashBtn";
 import SortByNameBtn from "./TodoListOptions/SortByNameBtn";
 import SortByDueDateBtn from "./TodoListOptions/SortByDueDateBtn";
 import SearchTodosInput from "./TodoListOptions/SearchTodosInput";
+import ClearSelectionBtn from "./TodoListOptions/ClearSelectionBtn";
 import DeleteAllTodosBtn from "./TodoListOptions/DeleteAllTodosBtn";
 import FilterByPendingBtn from "./TodoListOptions/FilterByPendingBtn";
 import ClearAllOptionsBtn from "./TodoListOptions/ClearAllOptionsBtn";
+import DeleteSelectedTodos from "./TodoListOptions/DeleteSelectedTodos";
 import FilterByCompletedBtn from "./TodoListOptions/FilterByCompletedBtn";
 
 const TodoListOptions = memo(function TodoListOptions({
@@ -21,13 +23,13 @@ const TodoListOptions = memo(function TodoListOptions({
   return (
     <div
       className={cn(
-        "flex flex-col flex-shrink-0 gap-3 overflow-hidden transition-all border-b-2 bg-slate-300",
-        showTodoListOptions ? "p-5 h-[200px] lg:h-[158px]" : "px-5 py-0 h-0"
+        "flex flex-col flex-shrink-0 overflow-hidden transition-all border-b-2 bg-slate-300",
+        showTodoListOptions ? "p-5 h-[215px] lg:h-[180px]" : "px-5 py-0 h-0"
       )}
     >
       <SearchTodosInput />
 
-      <div className="flex flex-col justify-between gap-3 lg:flex-row">
+      <div className="flex flex-col justify-between gap-5 lg:flex-row">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-3">
             <div>Sort By:</div>
@@ -47,20 +49,37 @@ const TodoListOptions = memo(function TodoListOptions({
         </div>
 
         <div className="flex gap-3 text-xs lg:text-sm">
-          {options.searchQuery ||
-          options.currentFilter ||
-          Object.values(options.currentSort).some((sort) => sort) ? (
-            <div>
-              <ClearAllOptionsBtn />
-            </div>
+          {options.isSelecting ? (
+            <>
+              <div>
+                <DeleteSelectedTodos />
+              </div>
+              <div>
+                <ClearSelectionBtn
+                  bg={"bg-yellow-300"}
+                  color={"text-black"}
+                  bgHover={"hover:bg-yellow-400"}
+                />
+              </div>
+            </>
           ) : (
-            <div>
-              <DeleteAllTodosBtn />
-            </div>
+            <>
+              {options.searchQuery ||
+              options.currentFilter ||
+              Object.values(options.currentSort).some((sort) => sort) ? (
+                <div>
+                  <ClearAllOptionsBtn />
+                </div>
+              ) : (
+                <div>
+                  <DeleteAllTodosBtn />
+                </div>
+              )}
+              <div>
+                <ViewTrashBtn setShowTrashedTodos={setShowTrashedTodos} />
+              </div>
+            </>
           )}
-          <div>
-            <ViewTrashBtn setShowTrashedTodos={setShowTrashedTodos} />
-          </div>
         </div>
       </div>
     </div>
