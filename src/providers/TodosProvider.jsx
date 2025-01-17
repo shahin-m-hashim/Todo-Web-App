@@ -66,8 +66,6 @@ const todoReducer = (state, action) => {
 };
 
 export const TodosProvider = ({ children }) => {
-  console.log("Todos Provider rendered");
-
   const tempTodos = useRef(null);
   const searchedTodos = useRef(null);
   const selectedTodos = useRef(new Set());
@@ -335,10 +333,15 @@ export const TodosProvider = ({ children }) => {
   };
 
   const handleSelect = (id) => {
-    if (!options.isSelecting) setOptions({ ...options, isSelecting: true });
     selectedTodos.current.has(id)
       ? selectedTodos.current.delete(id)
       : selectedTodos.current.add(id);
+
+    if (selectedTodos.current.size > 0) {
+      setOptions({ ...options, isSelecting: true });
+    } else {
+      setOptions({ ...options, isSelecting: false });
+    }
   };
 
   const clearSelection = () => setOptions({ ...options, isSelecting: false });

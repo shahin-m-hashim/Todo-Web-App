@@ -1,0 +1,139 @@
+[
+    {
+        "id": 1737091413694,
+        "completed": false,
+        "createdOn": "12/01/25",
+        "name": "Buy Groceries",
+        "description": "Purchase vegetables, fruits, milk, and bread from the supermarket.",
+        "dueDate": "18/01/2025"
+    },
+    {
+        "id": 1737091413695,
+        "completed": true,
+        "createdOn": "10/01/25",
+        "name": "Call Mom",
+        "description": "Check in with Mom and see how she is doing.",
+        "dueDate": "15/01/2025"
+    },
+    {
+        "id": 1737091413696,
+        "completed": false,
+        "createdOn": "14/01/25",
+        "name": "Finish Report",
+        "description": "Complete the monthly performance report for work.",
+        "dueDate": "20/01/2025"
+    },
+    {
+        "id": 1737091413697,
+        "completed": true,
+        "createdOn": "08/01/25",
+        "name": "Pay Electricity Bill",
+        "description": "Log in to the online banking portal and pay the electricity bill.",
+        "dueDate": "12/01/2025"
+    },
+    {
+        "id": 1737091413698,
+        "completed": false,
+        "createdOn": "16/01/25",
+        "name": "Schedule Doctor Appointment",
+        "description": "Book an appointment with the doctor for a routine checkup.",
+        "dueDate": "22/01/2025"
+    },
+    {
+        "id": 1737091413699,
+        "completed": false,
+        "createdOn": "11/01/25",
+        "name": "Clean the House",
+        "description": "Vacuum the living room, mop the floors, and tidy up the kitchen.",
+        "dueDate": "19/01/2025"
+    },
+    {
+        "id": 1737091413700,
+        "completed": true,
+        "createdOn": "09/01/25",
+        "name": "Workout",
+        "description": "Go for a 30-minute run and do strength training exercises.",
+        "dueDate": "10/01/2025"
+    },    {
+        "id": 1737091413701,
+        "completed": false,
+        "createdOn": "13/01/25",
+        "name": "Read a Book",
+        "description": "Read at least 30 pages of a book before bedtime.",
+        "dueDate": "21/01/2025"
+    },
+    {
+        "id": 1737091413702,
+        "completed": true,
+        "createdOn": "07/01/25",
+        "name": "Water the Plants",
+        "description": "Water all indoor and outdoor plants to keep them healthy.",
+        "dueDate": "09/01/2025"
+    },
+    {
+        "id": 1737091413703,
+        "completed": false,
+        "createdOn": "15/01/25",
+        "name": "Plan Weekend Trip",
+        "description": "Research destinations, book a hotel, and create an itinerary for the trip.",
+        "dueDate": "24/01/2025"
+    },
+    {
+        "id": 1737091413704,
+        "completed": false,
+        "createdOn": "10/01/25",
+        "name": "Reply to Emails",
+        "description": "Respond to all pending emails from work and personal inbox.",
+        "dueDate": "16/01/2025"
+    },
+    {
+        "id": 1737091413705,
+        "completed": true,
+        "createdOn": "05/01/25",
+        "name": "Wash the Car",
+        "description": "Take the car to a car wash or clean it at home.",
+        "dueDate": "08/01/2025"
+    },
+    {
+        "id": 1737091413706,
+        "completed": false,
+        "createdOn": "14/01/25",
+        "name": "Cook Dinner",
+        "description": "Prepare a homemade meal for the family.",
+        "dueDate": "17/01/2025"
+    },
+    {
+        "id": 1737091413707,
+        "completed": false,
+        "createdOn": "12/01/25",
+        "name": "Organize Closet",
+        "description": "Sort out clothes, donate unused items, and rearrange the closet.",
+        "dueDate": "20/01/2025"
+    },
+    {
+        "id": 1737091413708,
+        "completed": true,
+        "createdOn": "09/01/25",
+        "name": "Meditate",
+        "description": "Practice meditation for 15 minutes to reduce stress.",
+        "dueDate": "10/01/2025"
+    },
+    {
+        "id": 1737091413709,
+        "completed": false,
+        "createdOn": "11/01/25",
+        "name": "Fix Leaky Faucet",
+        "description": "Check the kitchen faucet and repair any leaks.",
+        "dueDate": "23/01/2025"
+    },
+    {
+        "id": 1737091413710,
+        "completed": false,
+        "createdOn": "16/01/25",
+        "name": "Write Journal Entry",
+        "description": "Write about the day's experiences and thoughts in a journal.",
+        "dueDate": "18/01/2025"
+    }
+]
+
+

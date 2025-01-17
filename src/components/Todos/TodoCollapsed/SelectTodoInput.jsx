@@ -13,12 +13,14 @@ export default function SelectTodoInput({ id }) {
   }, [options.isSelecting]);
 
   return (
-    <input
-      ref={ref}
-      type="checkbox"
-      id={"checkbox" + id}
-      onChange={() => handleSelect(id)}
-      className="absolute transform scale-150 top-5"
-    />
+    <div className="flex items-center h-full px-3 bg-[#85d6f0]">
+      <input
+        ref={ref}
+        type="checkbox"
+        className="size-5"
+        id={"checkbox" + id}
+        onChange={() => handleSelect(id)}
+      />
+    </div>
   );
 }
