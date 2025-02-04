@@ -35,12 +35,12 @@ const TrashedTodosList = memo(function TrashedTodosList({
 
   return (
     <>
-      <div className="flex flex-wrap gap-2 px-5 py-3 border-b-2 bg-slate-400 ">
+      <div className="flex flex-wrap gap-2 px-5 py-3 text-xs border-b-2 xs:text-base bg-slate-400 ">
         <button
           type="button"
           onClick={restoreAllTodos}
           disabled={trashedTodos.length === 0}
-          className="p-1 flex-[1] bg-blue-300 hover:bg-blue-400"
+          className="flex-1 p-1 bg-blue-300 hover:bg-blue-400"
         >
           Restore All
         </button>

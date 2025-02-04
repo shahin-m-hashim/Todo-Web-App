@@ -32,9 +32,9 @@ export default function RestoreTodoBtn({
   return (
     <button type="button" className="flex items-center px-3 bg-blue-400">
       <img
-        className="h-6"
-        alt="delete-todo"
         onClick={restoreTodo}
+        alt="restore-trashed-todo"
+        className="size-4 xs:size-6"
         src="assets/icons/restore.png"
       />
     </button>

@@ -13,6 +13,9 @@ export default {
         color: "var(--bg-color)",
         "btn-hover": "var(--bg-btn-hover)",
       },
+      screens: {
+        xs: "486px",
+      },
     },
   },
   plugins: [],

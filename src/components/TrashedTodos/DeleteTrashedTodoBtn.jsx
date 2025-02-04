@@ -20,7 +20,11 @@ export default function DeleteTrashedTodoBtn({
       onClick={() => deleteTrashedTodo(todoId)}
       className="flex items-center px-3 bg-red-400"
     >
-      <img className="h-6" alt="delete-todo" src="assets/icons/delete.svg" />
+      <img
+        alt="delete-trashed-todo"
+        className="size-4 xs:size-6"
+        src="assets/icons/delete.svg"
+      />
     </button>
   );
 }

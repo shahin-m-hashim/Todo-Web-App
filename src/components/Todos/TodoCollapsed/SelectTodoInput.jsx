@@ -13,7 +13,7 @@ export default function SelectTodoInput({ id }) {
   }, [options.isSelecting]);
 
   return (
-    <div className="flex items-center h-full px-3 bg-[#85d6f0]">
+    <div className="flex items-center h-full px-1.5 xs:px-3 bg-[#85d6f0]">
       <input
         ref={ref}
         type="checkbox"

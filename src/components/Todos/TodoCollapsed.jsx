@@ -15,21 +15,20 @@ export default function TodoCollapsed({
   toggleExpanding,
 }) {
   return (
-    <div className="relative flex items-center h-12 border-b-2">
+    <div className="relative flex items-center h-10 border-b-2 xs:h-12">
       <SelectTodoInput id={todo.id} />
 
-      <div className="py-3 text-sm md:text-base">
-        <span className="ml-3">{todo.name}</span>
-        <span>&nbsp;&nbsp;</span>
+      <div className="flex items-center gap-2 py-3 text-sm md:text-base">
+        <span className="ml-3 text-sm xs:text-base">{todo.name}</span>
         {todo.completed ? (
-          <span className="px-2 text-xs text-white bg-green-400 rounded-full"></span>
+          <div className="bg-green-400 rounded-full size-3" />
         ) : (
-          <span className="px-2 text-xs text-white bg-red-400 rounded-full"></span>
+          <div className="bg-red-400 rounded-full size-3" />
         )}
       </div>
 
       <div className="flex h-full ml-auto">
-        <div className="flex items-center px-3 bg-blue-400">
+        <div className="flex items-center px-1.5 bg-blue-400 xs:px-3">
           <ExpandTodoBtn
             isEditing={isEditing}
             isExpanded={isExpanded}
@@ -39,7 +38,7 @@ export default function TodoCollapsed({
 
         <div
           className={cn(
-            "flex items-center px-3",
+            "flex items-center px-1.5 xs:px-3",
             todo.completed ? "bg-gray-300" : "bg-green-400"
           )}
         >

@@ -10,7 +10,11 @@ export default function EditTodoBtn({ completed, isEditing, setIsEditing }) {
       }
       onClick={() => setIsEditing(true)}
     >
-      <img alt="edit-todo" className="h-6" src="assets/icons/edit.svg" />
+      <img
+        alt="edit-todo"
+        className="size-4 xs:size-6"
+        src="assets/icons/edit.svg"
+      />
     </button>
   );
 }

@@ -13,7 +13,7 @@ export default function ExpandTodoBtn({
       className={isEditing ? "cursor-not-allowed" : "cursor-pointer"}
     >
       <img
-        className="h-6"
+        className="size-4 xs:size-6"
         alt="expand-todo"
         src="assets/icons/expand-up.png"
         style={{

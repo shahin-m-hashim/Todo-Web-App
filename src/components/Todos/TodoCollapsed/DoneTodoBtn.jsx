@@ -7,7 +7,11 @@ export default function DoneTodoBtn({ completed, todoId }) {
 
   return (
     <button type="button" disabled={completed} onClick={() => doneTodo(todoId)}>
-      <img alt="done-todo" className="h-6" src="assets/icons/done.png" />
+      <img
+        alt="done-todo"
+        src="assets/icons/done.png"
+        className="size-4 xs:size-6"
+      />
     </button>
   );
 }

@@ -13,11 +13,15 @@ export default function DeleteTodoBtn({ todoId, isEditing }) {
       disabled={isEditing}
       onClick={() => deleteTodo(todoId)}
       className={cn(
-        "flex items-center px-3 bg-red-400",
+        "flex items-center px-1.5 xs:px-3 bg-red-400",
         isEditing && "cursor-not-allowed"
       )}
     >
-      <img className="h-6" alt="delete-todo" src="assets/icons/delete.svg" />
+      <img
+        alt="delete-todo"
+        className="size-4 xs:size-6"
+        src="assets/icons/delete.svg"
+      />
     </button>
   );
 }
